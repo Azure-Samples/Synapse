@@ -24,8 +24,10 @@ Give a short description for your sample here. What does it do and why is it imp
 
 Outline the file contents of the repository. It helps users navigate the codebase, build configuration and any related assets.
 
-*  `SQL`  SQL scripts [link](https://github.com/Azure-Samples/Synapse/tree/master/SQL)  
-*  `Notebooks`  SQL scripts [link](https://github.com/Azure-Samples/Synapse/tree/master/Notebooks)  
+*  [Data] ps://github.com/Azure-Samples/Synapse/tree/master/Data] - Sample data
+*  [SQL](https://github.com/Azure-Samples/Synapse/tree/master/SQL) - SQL scripts 
+*  [Notebooks](https://github.com/Azure-Samples/Synapse/tree/master/Notebooks) - Notebook files
+
 
 ## Contributing
 
