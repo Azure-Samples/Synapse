@@ -24,14 +24,8 @@ Give a short description for your sample here. What does it do and why is it imp
 
 Outline the file contents of the repository. It helps users navigate the codebase, build configuration and any related assets.
 
-| File/folder       | Description                                |
-|-------------------|--------------------------------------------|
-| `SQL`             | SQL scripts [link](https://github.com/Azure-Samples/Synapse/tree/master/SQL)  |
-| `.gitignore`      | Define what to ignore at commit time.      |
-| `CHANGELOG.md`    | List of changes to the sample.             |
-| `CONTRIBUTING.md` | Guidelines for contributing to the sample. |
-| `README.md`       | This README file.                          |
-| `LICENSE`         | The license for the sample.                |
+*  `SQL`  SQL scripts [link](https://github.com/Azure-Samples/Synapse/tree/master/SQL)  
+*  `Notebooks`  SQL scripts [link](https://github.com/Azure-Samples/Synapse/tree/master/Notebooks)  
 
 ## Contributing
 
