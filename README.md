@@ -12,7 +12,7 @@ urlFragment: "update-this-to-unique-url-stub"
 
 ## Resources
 * Documentation - [aka.ms/SynapseDocs](https:/aka.ms//SynapseDocs)
-* Samples - [aka.ms/SynapseSamples//aka.ms//Synapsesamples)
+* Samples - [aka.ms/SynapseSamples](https://aka.ms//Synapsesamples)
 
 ## Contents
 
