@@ -11,7 +11,7 @@ urlFragment: "update-this-to-unique-url-stub"
 # Samples for Azure Synapse (workspace preview)
 
 ## Resources
-* Documentation - [aka.ms/SynapseDocs](https:/aka.ms//SynapseDocs)
+* Documentation - [aka.ms/SynapseDocs](https://aka.ms//SynapseDocs)
 * Samples - [aka.ms/SynapseSamples](https://aka.ms//Synapsesamples)
 
 ## Contents
