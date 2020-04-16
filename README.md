@@ -4,11 +4,11 @@ languages:
 - csharp
 products:
 - dotnet
-description: "Add 150 character max description"
+description: "Samples for Azure Synapse Analytics (workspace preview)"
 urlFragment: "update-this-to-unique-url-stub"
 ---
 
-# Samples for Azure Synapse (workspace preview)
+# Samples for Azure Synapse Analytics (workspace preview)
 
 ## Resources
 * Documentation - [aka.ms/SynapseDocs](https://aka.ms/SynapseDocs)
