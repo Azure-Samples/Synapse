@@ -8,7 +8,11 @@ description: "Add 150 character max description"
 urlFragment: "update-this-to-unique-url-stub"
 ---
 
-# Sample for Azure Synapse
+# Samples for Azure Synapse (workspace preview)
+
+## Resources
+* Documentation - [aka.ms][https:/aka.ms//SynapseDocs]
+* Samples - [aka.ms][http://aka.ms//Synapsesamples]
 
 ## Contents
 
