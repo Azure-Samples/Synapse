@@ -7,3 +7,5 @@ $role = "Storage Blob Data Contributor" # Leave this alone
 $scope = "/subscriptions/" + $stg_subid  + "/resourceGroups/shared/providers/Microsoft.Storage/storageAccounts/"
 $scope = $scope + $stg_account + "/blobServices/default/containers/" + "users"
 New-AzRoleAssignment -ObjectId $wsmsi_objid -RoleDefinitionName $role -Scope $scope 
+
+# cmment
