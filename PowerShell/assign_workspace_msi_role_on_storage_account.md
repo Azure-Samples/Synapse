@@ -1,6 +1,8 @@
-# This code will set your Workspace enable your Worksapce MSI to use the storage account
 
-# You'll need to collect this information
+## Summary
+This code will set your Workspace enable your Worksapce MSI to use the storage account
+
+## You'll need to collect this information
 
 ```
 $wsname = "name of your workspace"
@@ -10,8 +12,7 @@ $stg_subid = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" # Replace with ID of Subscri
 $stg_rg = "shared"
 $role = "Storage Blob Data Contributor" # Leave this alone
 ```
-
-# Then run this code
+## Then run this code
 
 ```
 $wsmsi = Get-AzureADServicePrincipal -SearchString $wsname
