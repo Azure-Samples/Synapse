@@ -7,7 +7,7 @@ This code will enable your workspace's identity to use the primary Data Lake Sto
 ## Prerequisite
 
 You need Azure CLI in order to run this sample. There are two options:
-* [Install Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) and open a Terminal / Command Prompt window.
+* [Install Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) and open a Bash prompt.
 * [Use Azure Cloud Shell](https://shell.azure.com/) in **Bash** mode.
 
 ## Collect some information
