@@ -138,14 +138,14 @@ schema = sqltypes.StructType([
 
 df = spark.createDataFrame(data, schema)
 
-def col_to_timestamp(df_, colname):
-    return df_.withColumn("NewCol__", df[colname].cast(sqltypes.TimestampType())).drop(colname).withColumnRenamed("NewCol__",colname)
+def col_to_type(df_, colname, t):
+    df_ = df_.withColumn("NewCol__", df[colname].cast(t))
+    df_ = df_.drop(colname)
+    df_ = df_.withColumnRenamed("NewCol__",colname)
+    return df_
 
-def col_to_date(df_, colname):
-    return df_.withColumn("NewCol__", df[colname].cast(sqltypes.DateType())).drop(colname).withColumnRenamed("NewCol__",colname)
-
-df = col_to_date(df, "startdate")
-df = col_to_timestamp(df, "startts")
+df = col_to_type(df, "startdate", sqltypes.DateType() )
+df = col_to_type(df, "startts", sqltypes.TimestampType() )
 
 df.show()
 df.printSchema()
