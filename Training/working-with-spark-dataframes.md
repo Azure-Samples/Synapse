@@ -39,13 +39,42 @@ The specific magic we used indicates that this cell will use the Python language
 
 ## Manually creating a dataframe
 
-For debuggin and learning, it's very useful to have a dataset available that:
+For debugging and learning, it's very useful to have a dataset available that:
 * doesn't require permissions to access
 * is guartanteed to always be available to the notebook
 * is not too large
 
-What we'll learn now is how to build a dataframe manually in python and then rendering that dataframe.
+What we'll learn now is how to build a dataframe manually in python and then render that dataframe.
 
+
+```
+%%pyspark
+
+df = spark.createDataFrame(
+    [
+        (1, 'foo'), 
+        (2, 'bar'),
+    ],
+    ['id', 'txt'] )
+
+df.show()
+```
+
+It should be pretty obvious what is going on here. We are building a dataframe df adding the rows via python code.
+
+Calling df.show() causes the output to be seen in the cell output. You should see:
+
+```
++---+---+
+| id|txt|
++---+---+
+|  1|foo|
+|  2|bar|
++---+---+
+```
+
+
+## Finding out the schema of a dataframe
 
 
 
