@@ -91,6 +91,26 @@ root
 ```
 
 
+## Creating a dataframe with types
+
+```
+import pyspark.sql.types as sqltypes
+
+data = [
+        (1, 'foo', True), 
+        (2, 'bar', True),
+]
+
+schema = st.StructType([
+    st.StructField('id', sqltypes.IntegerType(), True),
+    st.StructField('name', sqltypes.StringType(), True),
+    st.StructField('open', sqltypes.BooleanType(), True)
+])
+
+df = spark.createDataFrame(data, schema)
+df.show()
+
+
 
 
 
