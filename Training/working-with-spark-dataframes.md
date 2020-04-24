@@ -99,14 +99,15 @@ Sometimes it's very useful to be specific about the schemas involved. You can do
 import pyspark.sql.types as sqltypes
 
 data = [
-        (1, 'foo', True), 
-        (2, 'bar', True),
+        (1, 'foo', True, '2019-10-15T11:13:04Z'), 
+        (2, 'bar', True, '2019-10-15T11:51:43Z'),
 ]
 
 schema = sqltypes.StructType([
     sqltypes.StructField('id', sqltypes.IntegerType(), True),
     sqltypes.StructField('name', sqltypes.StringType(), True),
-    sqltypes.StructField('open', sqltypes.BooleanType(), True)
+    sqltypes.StructField('open', sqltypes.BooleanType(), True),
+    sqltypes.StructField('open', sqltypes.StringType(), True)
 ])
 
 df = spark.createDataFrame(data, schema)
@@ -114,7 +115,41 @@ df.show()
 df.printSchema()
 ```
 
+There's no direct way to create datetime values, so we use StringType for now.
 
+## Converting strings to datetimes
+
+
+```
+import pyspark.sql.types as sqltypes
+
+data = [
+        (1, 'foo', True, '2019-10-15', '2019-10-15T11:13:04Z'), 
+        (2, 'bar', True, '2019-10-15', '2019-10-15T11:51:43Z'),
+]
+
+schema = sqltypes.StructType([
+    sqltypes.StructField('id', sqltypes.IntegerType(), True),
+    sqltypes.StructField('name', sqltypes.StringType(), True),
+    sqltypes.StructField('open', sqltypes.BooleanType(), True),
+    sqltypes.StructField('startdate', sqltypes.StringType(), True),
+    sqltypes.StructField('startts', sqltypes.StringType(), True)
+])
+
+df = spark.createDataFrame(data, schema)
+
+def col_to_timestamp(df_, colname):
+    return df_.withColumn("NewCol__", df[colname].cast(sqltypes.TimestampType())).drop(colname).withColumnRenamed("NewCol__",colname)
+
+def col_to_date(df_, colname):
+    return df_.withColumn("NewCol__", df[colname].cast(sqltypes.DateType())).drop(colname).withColumnRenamed("NewCol__",colname)
+
+df = col_to_date(df, "startdate")
+df = col_to_timestamp(df, "startts")
+
+df.show()
+df.printSchema()
+```
 
 
 
