@@ -101,7 +101,7 @@ data = [
         (2, 'bar', True),
 ]
 
-schema = st.StructType([
+schema = sqltypes.StructType([
     st.StructField('id', sqltypes.IntegerType(), True),
     st.StructField('name', sqltypes.StringType(), True),
     st.StructField('open', sqltypes.BooleanType(), True)
