@@ -93,6 +93,8 @@ root
 
 ## Creating a dataframe with types
 
+Sometimes it's very useful to be specific about the schemas involved. You can do that also
+
 ```
 import pyspark.sql.types as sqltypes
 
@@ -102,13 +104,15 @@ data = [
 ]
 
 schema = sqltypes.StructType([
-    st.StructField('id', sqltypes.IntegerType(), True),
-    st.StructField('name', sqltypes.StringType(), True),
-    st.StructField('open', sqltypes.BooleanType(), True)
+    sqltypes.StructField('id', sqltypes.IntegerType(), True),
+    sqltypes.StructField('name', sqltypes.StringType(), True),
+    sqltypes.StructField('open', sqltypes.BooleanType(), True)
 ])
 
 df = spark.createDataFrame(data, schema)
 df.show()
+df.printSchema()
+```
 
 
 
