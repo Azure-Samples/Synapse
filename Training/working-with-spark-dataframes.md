@@ -77,7 +77,18 @@ Calling df.show() causes the output to be seen in the cell output. You should se
 ## Finding out the schema of a dataframe
 
 
+```
+%%pyspark
+for col in df.schema:
+    print(col)
+```
 
+you'll see:
+
+```
+StructField(id,LongType,true)
+StructField(txt,StringType,true)
+```
 
 
 
