@@ -1,5 +1,7 @@
 
 ## Summary
+
+To enable your workspace to orechstrate activities that require reading or writing data 
 This code will set your Workspace enable your Worksapce MSI to use the storage account or a container
 
 ## You'll need to collect this information
