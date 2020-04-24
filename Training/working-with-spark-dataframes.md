@@ -31,7 +31,23 @@ print("Hello World!")
 
 This notebook does almost nothing, but running it ensuresthat the worksapce is configured correctly at some minumum level.
 
-You see that the first line in the cell is `%%pyspark` this is called a **cell magic**. Notebooks have a default language, and this magic override the language in the that cell. We'll use cell magics in this doc because we'll be mixing languages often.
+## A note about cell magics
+
+You see that the first line in the cell is `%%pyspark` this is called a **cell magic**. Notebooks have a default language, and this magic override the language in the that cell. We'll use cell magics in this doc because we'll be mixing languages often. 
+
+The specific magic we used indicates that this cell will use the Python language to work with spark.
+
+## Manually creating a dataframe
+
+For debuggin and learning, it's very useful to have a dataset available that:
+* doesn't require permissions to access
+* is guartanteed to always be available to the notebook
+* is not too large
+
+What we'll learn now is how to build a dataframe manually in python and then rendering that dataframe.
+
+
+
 
 
 
