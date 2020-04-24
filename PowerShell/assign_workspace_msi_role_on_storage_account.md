@@ -10,7 +10,7 @@ $wsname = "name of your workspace"
 $stg_account = "name_of_storage_account" # Replace with Storage account name
 $stg_subid = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" # Replace with ID of Subscription that the Storage Account is in
 $stg_rg = "name_of_reosurce_group_containing_the_storage_account"
-$stg_container = $null # or replace with the container to give the MSI access to
+$stg_container = $null # null = assign the role to the account, otherwise it will assign to that container
 $role = "Storage Blob Data Contributor" # Leave this alone
 ```
 
