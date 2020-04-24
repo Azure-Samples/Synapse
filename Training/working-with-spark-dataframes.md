@@ -79,15 +79,15 @@ Calling df.show() causes the output to be seen in the cell output. You should se
 
 ```
 %%pyspark
-for col in df.schema:
-    print(col)
+df.printSchema()
 ```
 
 you'll see:
 
 ```
-StructField(id,LongType,true)
-StructField(txt,StringType,true)
+root
+ |-- id: long (nullable = true)
+ |-- txt: string (nullable = true)
 ```
 
 
