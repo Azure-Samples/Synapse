@@ -151,7 +151,21 @@ df.show()
 df.printSchema()
 ```
 
+```
++---+----+----+----------+-------------------+
+| id|name|open| startdate|            startts|
++---+----+----+----------+-------------------+
+|  1| foo|true|2019-10-15|2019-10-15 11:13:04|
+|  2| bar|true|2019-10-15|2019-10-15 11:51:43|
++---+----+----+----------+-------------------+
 
+root
+ |-- id: integer (nullable = true)
+ |-- name: string (nullable = true)
+ |-- open: boolean (nullable = true)
+ |-- startdate: date (nullable = true)
+ |-- startts: timestamp (nullable = true)
+```
 
 
 
