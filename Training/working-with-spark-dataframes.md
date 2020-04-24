@@ -25,10 +25,16 @@ Add a new cell.
 In the cell put this code
 
 ```
+%%pyspark
 print("Hello World!")
 ```
 
 This notebook does almost nothing, but running it ensuresthat the worksapce is configured correctly at some minumum level.
+
+You see that the first line in the cell is `%%pyspark` this is called a **cell magic**. Notebooks have a default language, and this magic override the language in the that cell. We'll use cell magics in this doc because we'll be mixing languages often.
+
+
+
 
 
 
