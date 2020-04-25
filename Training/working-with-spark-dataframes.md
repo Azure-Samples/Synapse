@@ -589,3 +589,28 @@ df.show()
 +------+--------------------+--------------------+
 only showing top 20 rows
 ```
+%% C# UDF
+```
+%%csharp
+using static Microsoft.Spark.Sql.Functions;
+
+public static class Helpers
+{
+    public static string MyUpper(string s)
+    {
+        return s.ToUpper();
+    }
+}
+var UDF_MyUpper = Udf<string, string>(Helpers.MyUpper);
+
+
+string query = @"
+SELECT 
+    id, 
+    links,
+    UDF_MyUpper(links) AS linksupper 
+FROM searchlog
+";
+var df = spark.Sql(query);
+df.Show();
+```
