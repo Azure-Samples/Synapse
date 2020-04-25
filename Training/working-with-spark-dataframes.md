@@ -44,132 +44,12 @@ For debugging and learning, it's very useful to have a dataset available that:
 * is guartanteed to always be available to the notebook
 * is not too large
 
-What we'll learn now is how to build a dataframe manually in python and then render that dataframe.
-
-
-```
-%%pyspark
-
-df = spark.createDataFrame(
-    [
-        (1, 'foo'), 
-        (2, 'bar'),
-    ],
-    ['id', 'txt'] )
-
-df.show()
-```
-
-It should be pretty obvious what is going on here. We are building a dataframe df adding the rows via python code.
-
-Calling df.show() causes the output to be seen in the cell output. You should see:
-
-```
-+---+---+
-| id|txt|
-+---+---+
-|  1|foo|
-|  2|bar|
-+---+---+
-```
-
-
-## Finding out the schema of a dataframe
-
-
-```
-%%pyspark
-df.printSchema()
-```
-
-you'll see:
-
-```
-root
- |-- id: long (nullable = true)
- |-- txt: string (nullable = true)
-```
-
-
-## Creating a dataframe with types
-
-Sometimes it's very useful to be specific about the schemas involved. You can do that also
-
-```
-import pyspark.sql.types as sqltypes
-
-data = [
-        (1, 'foo', True, '2019-10-15T11:13:04Z'), 
-        (2, 'bar', True, '2019-10-15T11:51:43Z'),
-]
-
-schema = sqltypes.StructType([
-    sqltypes.StructField('id', sqltypes.IntegerType(), True),
-    sqltypes.StructField('name', sqltypes.StringType(), True),
-    sqltypes.StructField('open', sqltypes.BooleanType(), True),
-    sqltypes.StructField('open', sqltypes.StringType(), True)
-])
-
-df = spark.createDataFrame(data, schema)
-df.show()
-df.printSchema()
-```
-
-There's no direct way to create datetime values, so we use StringType for now.
-
-## Converting strings to timestamps and dates
-
-
-```
-import pyspark.sql.types as sqltypes
-
-data = [
-        (1, 'foo', True, '2019-10-15', '2019-10-15T11:13:04Z'), 
-        (2, 'bar', True, '2019-10-15', '2019-10-15T11:51:43Z'),
-]
-
-schema = sqltypes.StructType([
-    sqltypes.StructField('id', sqltypes.IntegerType(), True),
-    sqltypes.StructField('name', sqltypes.StringType(), True),
-    sqltypes.StructField('open', sqltypes.BooleanType(), True),
-    sqltypes.StructField('startdate', sqltypes.StringType(), True),
-    sqltypes.StructField('startts', sqltypes.StringType(), True)
-])
-
-df = spark.createDataFrame(data, schema)
-
-def col_to_type(df_, colname, t):
-    df_ = df_.withColumn("NewCol__", df[colname].cast(t))
-    df_ = df_.drop(colname)
-    df_ = df_.withColumnRenamed("NewCol__",colname)
-    return df_
-
-df = col_to_type(df, "startdate", sqltypes.DateType() )
-df = col_to_type(df, "startts", sqltypes.TimestampType() )
-
-df.show()
-df.printSchema()
-```
-
-```
-+---+----+----+----------+-------------------+
-| id|name|open| startdate|            startts|
-+---+----+----+----------+-------------------+
-|  1| foo|true|2019-10-15|2019-10-15 11:13:04|
-|  2| bar|true|2019-10-15|2019-10-15 11:51:43|
-+---+----+----+----------+-------------------+
-
-root
- |-- id: integer (nullable = true)
- |-- name: string (nullable = true)
- |-- open: boolean (nullable = true)
- |-- startdate: date (nullable = true)
- |-- startts: timestamp (nullable = true)
-```
 
 ## The Searchlog dataset
 
 ```
+import pyspark.sql.types as sqltypes
+
 searchlog_data = [ 
     [399266 , "2019-10-15T11:53:04Z" , "en-us" , "how to make nachos" , 73 , "www.nachos.com;www.wikipedia.com" , "NULL" ], 
     [382045 , "2019-10-15T11:53:25Z" , "en-gb" , "best ski resorts" , 614 , "skiresorts.com;ski-europe.com;www.travelersdigest.com/ski_resorts.htm" , "ski-europe.com;www.travelersdigest.com/ski_resorts.htm" ], 
@@ -208,34 +88,182 @@ searchog_schema = sqltypes.StructType([
 ])
 
  
-searchlog_df = spark.createDataFrame(searchlog_data, searchog_schema)
+df_searchlog = spark.createDataFrame(searchlog_data, searchog_schema)
 
 def col_to_type(df_, colname, t):
-    df_ = df_.withColumn("NewCol__", df[colname].cast(t))
+    df_ = df_.withColumn("NewCol__", df_[colname].cast(t))
     df_ = df_.drop(colname)
     df_ = df_.withColumnRenamed("NewCol__",colname)
     return df_
 
-searchlog_df = col_to_type(df, "time", sqltypes.TimestampType() )
+df_searchlog = col_to_type(df_searchlog, "time", sqltypes.TimestampType() )
+df_searchlog.createOrReplaceTempView("searchlog") 
+df_searchlog.show()
+```
 
-searchlog_df.show()
-searchlog_df.printSchema()
+Run a cell with this in it and you should see this as the output
+
+```
++------+------+--------------------+-------+--------------------+--------------------+-------------------+
+|    id|market|          searchtext|latency|               links|        clickedlinks|               time|
++------+------+--------------------+-------+--------------------+--------------------+-------------------+
+|399266| en-us|  how to make nachos|     73|www.nachos.com;ww...|                NULL|2019-10-15 11:53:04|
+|382045| en-gb|    best ski resorts|    614|skiresorts.com;sk...|ski-europe.com;ww...|2019-10-15 11:53:25|
+|382045| en-gb|          broken leg|     74|mayoclinic.com/he...|mayoclinic.com/he...|2019-10-16 11:53:42|
+|106479| en-ca| south park episodes|     24|southparkstudios....|southparkstudios.com|2019-10-16 11:53:10|
+|906441| en-us|              cosmos|   1213|cosmos.com;wikipe...|                NULL|2019-10-16 11:54:18|
+|351530| en-fr|           microsoft|    241|microsoft.com;wik...|                NULL|2019-10-16 11:54:29|
+|640806| en-us| wireless headphones|    502|www.amazon.com;re...|www.amazon.com;st...|2019-10-16 11:54:32|
+|304305| en-us|       dominos pizza|     60|dominos.com;wikip...|         dominos.com|2019-10-16 11:54:45|
+|460748| en-us|                yelp|   1270|yelp.com;apple.co...|            yelp.com|2019-10-16 11:54:58|
+|354841| en-us|          how to run|    610|running.about.com...|running.about.com...|2019-10-16 11:59:00|
+|354068| en-mx|         what is sql|    422|wikipedia.org/wik...|wikipedia.org/wik...|2019-10-16 12:00:07|
+|674364| en-us|mexican food redmond|    283|eltoreador.com;ye...|                NULL|2019-10-16 12:00:21|
+|347413| en-gr|           microsoft|    305|microsoft.com;wik...|                NULL|2019-10-16 12:11:34|
+|848434| en-ch|            facebook|     10|facebook.com;face...|        facebook.com|2019-10-16 12:12:14|
+|604846| en-us|           wikipedia|    612|wikipedia.org;en....|       wikipedia.org|2019-10-16 12:13:18|
+|840614| en-us|                xbox|   1220|xbox.com;en.wikip...|    xbox.com/xbox360|2019-10-16 12:13:41|
+|656666| en-us|             hotmail|    691|hotmail.com;login...|                NULL|2019-10-16 12:15:19|
+|951513| en-us|             pokemon|     63|pokemon.com;pokem...|         pokemon.com|2019-10-16 12:17:37|
+|350350| en-us|             wolfram|     30|wolframalpha.com;...|                NULL|2019-10-16 12:18:17|
+|641615| en-us|                kahn|    119|khanacademy.org;e...|     khanacademy.org|2019-10-16 12:19:21|
++------+------+--------------------+-------+--------------------+--------------------+-------------------+
+only showing top 20 rows
 
 ```
 
-## Preparing to use SparkSQL
 
 ```
-searchlog_df.createTempView("searchlog") 
-```
-
-
-## Useing SparkSQL
-
-```
+%%pyspark
 df = spark.sql("select * from searchlog")
 df.show()
 ```
+
+you'll see:
+
+```
++------+------+--------------------+-------+--------------------+--------------------+-------------------+
+|    id|market|          searchtext|latency|               links|        clickedlinks|               time|
++------+------+--------------------+-------+--------------------+--------------------+-------------------+
+|399266| en-us|  how to make nachos|     73|www.nachos.com;ww...|                NULL|2019-10-15 11:53:04|
+|382045| en-gb|    best ski resorts|    614|skiresorts.com;sk...|ski-europe.com;ww...|2019-10-15 11:53:25|
+|382045| en-gb|          broken leg|     74|mayoclinic.com/he...|mayoclinic.com/he...|2019-10-16 11:53:42|
+|106479| en-ca| south park episodes|     24|southparkstudios....|southparkstudios.com|2019-10-16 11:53:10|
+|906441| en-us|              cosmos|   1213|cosmos.com;wikipe...|                NULL|2019-10-16 11:54:18|
+|351530| en-fr|           microsoft|    241|microsoft.com;wik...|                NULL|2019-10-16 11:54:29|
+|640806| en-us| wireless headphones|    502|www.amazon.com;re...|www.amazon.com;st...|2019-10-16 11:54:32|
+|304305| en-us|       dominos pizza|     60|dominos.com;wikip...|         dominos.com|2019-10-16 11:54:45|
+|460748| en-us|                yelp|   1270|yelp.com;apple.co...|            yelp.com|2019-10-16 11:54:58|
+|354841| en-us|          how to run|    610|running.about.com...|running.about.com...|2019-10-16 11:59:00|
+|354068| en-mx|         what is sql|    422|wikipedia.org/wik...|wikipedia.org/wik...|2019-10-16 12:00:07|
+|674364| en-us|mexican food redmond|    283|eltoreador.com;ye...|                NULL|2019-10-16 12:00:21|
+|347413| en-gr|           microsoft|    305|microsoft.com;wik...|                NULL|2019-10-16 12:11:34|
+|848434| en-ch|            facebook|     10|facebook.com;face...|        facebook.com|2019-10-16 12:12:14|
+|604846| en-us|           wikipedia|    612|wikipedia.org;en....|       wikipedia.org|2019-10-16 12:13:18|
+|840614| en-us|                xbox|   1220|xbox.com;en.wikip...|    xbox.com/xbox360|2019-10-16 12:13:41|
+|656666| en-us|             hotmail|    691|hotmail.com;login...|                NULL|2019-10-16 12:15:19|
+|951513| en-us|             pokemon|     63|pokemon.com;pokem...|         pokemon.com|2019-10-16 12:17:37|
+|350350| en-us|             wolfram|     30|wolframalpha.com;...|                NULL|2019-10-16 12:18:17|
+|641615| en-us|                kahn|    119|khanacademy.org;e...|     khanacademy.org|2019-10-16 12:19:21|
++------+------+--------------------+-------+--------------------+--------------------+-------------------+
+only showing top 20 rows
+```
+
+## Finding out the schema of a dataframe
+
+```
+df.printSchema()
+```
+
+```
+root
+ |-- id: integer (nullable = true)
+ |-- market: string (nullable = true)
+ |-- searchtext: string (nullable = true)
+ |-- latency: string (nullable = true)
+ |-- links: string (nullable = true)
+ |-- clickedlinks: string (nullable = true)
+ |-- time: timestamp (nullable = true)
+
+```
+
+
+## SELECT
+
+### Pick which columns to show
+```
+df = spark.sql("select id,market from searchlog")
+df.show()
+```
+
+```
++------+------+
+|    id|market|
++------+------+
+|399266| en-us|
+|382045| en-gb|
+|382045| en-gb|
+|106479| en-ca|
+|906441| en-us|
+|351530| en-fr|
+|640806| en-us|
+|304305| en-us|
+|460748| en-us|
+|354841| en-us|
+|354068| en-mx|
+|674364| en-us|
+|347413| en-gr|
+|848434| en-ch|
+|604846| en-us|
+|840614| en-us|
+|656666| en-us|
+|951513| en-us|
+|350350| en-us|
+|641615| en-us|
++------+------+
+only showing top 20 rows
+
+```
+
+### Calculate a colum
+
+```
+query =  """
+select latency,latency/1000 as latencysec from searchlog
+"""
+df = spark.sql(query)
+df.show()
+```
+
+```
++-------+----------+
+|latency|latencysec|
++-------+----------+
+|     73|     0.073|
+|    614|     0.614|
+|     74|     0.074|
+|     24|     0.024|
+|   1213|     1.213|
+|    241|     0.241|
+|    502|     0.502|
+|     60|      0.06|
+|   1270|      1.27|
+|    610|      0.61|
+|    422|     0.422|
+|    283|     0.283|
+|    305|     0.305|
+|     10|      0.01|
+|    612|     0.612|
+|   1220|      1.22|
+|    691|     0.691|
+|     63|     0.063|
+|     30|      0.03|
+|    119|     0.119|
++-------+----------+
+only showing top 20 rows
+
+```
+
 
 
 
