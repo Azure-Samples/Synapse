@@ -135,7 +135,12 @@ only showing top 20 rows
 
 ```
 %%pyspark
-df = spark.sql("select * from searchlog")
+query =  """
+select * 
+from searchlog
+"""
+
+df = spark.sql(query)
 df.show()
 ```
 
@@ -192,7 +197,12 @@ root
 
 ### Pick which columns to show
 ```
-df = spark.sql("select id,market from searchlog")
+query =  """
+select id,market 
+from searchlog
+"""
+
+df = spark.sql(query)
 df.show()
 ```
 
@@ -341,7 +351,8 @@ only showing top 20 rows
 
 ```
 query =  """
-SELECT market, COUNT(*) AS sessioncount 
+SELECT market, 
+       COUNT(*) AS sessioncount 
 FROM searchlog
 GROUP BY market
 """
