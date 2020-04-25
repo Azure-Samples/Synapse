@@ -225,12 +225,13 @@ only showing top 20 rows
 
 ```
 
-### Calculate a colum
+### Calculate a column
 
 ```
 query =  """
 select latency,latency/1000 as latencysec from searchlog
 """
+
 df = spark.sql(query)
 df.show()
 ```
@@ -264,6 +265,90 @@ only showing top 20 rows
 
 ```
 
+
+### Limiting the number of records returned
+
+```
+query =  """
+SELECT latency, 
+       latency/1000 AS latencysec
+FROM searchlog
+LIMIT 5
+"""
+
+df = spark.sql(query)
+df.show()
+```
+
+```
++-------+----------+
+|latency|latencysec|
++-------+----------+
+|     74|     0.074|
+|     24|     0.024|
+|   1213|     1.213|
+|    241|     0.241|
+|   1270|      1.27|
++-------+----------+
+
+```
+
+
+### Sorting the rows
+
+
+```
+query =  """
+SELECT latency, 
+       latency/1000 AS latencysec
+FROM searchlog
+ORDER BY latency DESC
+"""
+
+df = spark.sql(query)
+df.show()
+```
+
+```
++-------+----------+
+|latency|latencysec|
++-------+----------+
+|     74|     0.074|
+|    732|     0.732|
+|     73|     0.073|
+|    691|     0.691|
+|    630|      0.63|
+|     63|     0.063|
+|    614|     0.614|
+|    612|     0.612|
+|    610|      0.61|
+|     60|      0.06|
+|    502|     0.502|
+|    422|     0.422|
+|    305|     0.305|
+|     30|      0.03|
+|    283|     0.283|
+|    241|     0.241|
+|     24|     0.024|
+|    183|     0.183|
+|   1270|      1.27|
+|   1220|      1.22|
++-------+----------+
+only showing top 20 rows
+```
+
+# Basic grouping and aggregations
+
+```
+query =  """
+SELECT market, COUNT(*) AS sessioncount 
+FROM searchlog
+GROUP BY market
+"""
+
+df = spark.sql(query)
+df.show()
+```
 
 
 
