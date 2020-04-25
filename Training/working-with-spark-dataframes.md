@@ -90,13 +90,13 @@ searchog_schema = sqltypes.StructType([
  
 df_searchlog = spark.createDataFrame(searchlog_data, searchog_schema)
 
-def col_to_type(df_, colname, t):
+def cast_column(df_, colname, t):
     df_ = df_.withColumn("NewCol__", df_[colname].cast(t))
     df_ = df_.drop(colname)
     df_ = df_.withColumnRenamed("NewCol__",colname)
     return df_
 
-df_searchlog = col_to_type(df_searchlog, "time", sqltypes.TimestampType() )
+df_searchlog = cast_column(df_searchlog, "time", sqltypes.TimestampType() )
 df_searchlog.createOrReplaceTempView("searchlog") 
 df_searchlog.show()
 ```
@@ -136,8 +136,8 @@ only showing top 20 rows
 ```
 %%pyspark
 query =  """
-select * 
-from searchlog
+SELECT * 
+FROM searchlog
 """
 
 df = spark.sql(query)
@@ -198,8 +198,8 @@ root
 ### Pick which columns to show
 ```
 query =  """
-select id,market 
-from searchlog
+SELECT id, market 
+FROM searchlog
 """
 
 df = spark.sql(query)
@@ -360,6 +360,51 @@ GROUP BY market
 df = spark.sql(query)
 df.show()
 ```
+
+
+# string functions - capitilization
+
+```
+query =  """
+SELECT searchtext, 
+       UPPER(searchtext) AS uc_searchtext, 
+       LOWER(searchtext) AS lc_searchtext,
+       INITCAP(searchtext) AS ic_searchtext
+FROM searchlog
+"""
+
+
+df = spark.sql(query)
+df.show()
+```
+
++--------------------+--------------------+--------------------+
+|          searchtext|       uc_searchtext|       lc_searchtext|
++--------------------+--------------------+--------------------+
+|  how to make nachos|  HOW TO MAKE NACHOS|  how to make nachos|
+|    best ski resorts|    BEST SKI RESORTS|    best ski resorts|
+|          broken leg|          BROKEN LEG|          broken leg|
+| south park episodes| SOUTH PARK EPISODES| south park episodes|
+|              cosmos|              COSMOS|              cosmos|
+|           microsoft|           MICROSOFT|           microsoft|
+| wireless headphones| WIRELESS HEADPHONES| wireless headphones|
+|       dominos pizza|       DOMINOS PIZZA|       dominos pizza|
+|                yelp|                YELP|                yelp|
+|          how to run|          HOW TO RUN|          how to run|
+|         what is sql|         WHAT IS SQL|         what is sql|
+|mexican food redmond|MEXICAN FOOD REDMOND|mexican food redmond|
+|           microsoft|           MICROSOFT|           microsoft|
+|            facebook|            FACEBOOK|            facebook|
+|           wikipedia|           WIKIPEDIA|           wikipedia|
+|                xbox|                XBOX|                xbox|
+|             hotmail|             HOTMAIL|             hotmail|
+|             pokemon|             POKEMON|             pokemon|
+|             wolfram|             WOLFRAM|             wolfram|
+|                kahn|                KAHN|                kahn|
++--------------------+--------------------+--------------------+
+only showing top 20 rows
+
+
 
 
 
