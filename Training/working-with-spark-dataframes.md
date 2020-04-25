@@ -450,7 +450,7 @@ only showing top 20 rows
 ```
 
 
-# Exploding arrows to rows
+## Exploding arrows to rows
 
 ```
 query =  """
@@ -589,7 +589,7 @@ df.show()
 +------+--------------------+--------------------+
 only showing top 20 rows
 ```
-%% C# UDF
+## C# UDF
 ```
 %%csharp
 
