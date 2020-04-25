@@ -223,7 +223,19 @@ searchlog_df.printSchema()
 
 ```
 
+## Preparing to use SparkSQL
 
+```
+searchlog_df.createTempView("searchlog") 
+```
+
+
+## Useing SparkSQL
+
+```
+df = spark.sql("select * from searchlog")
+df.show()
+```
 
 
 
