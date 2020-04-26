@@ -29,6 +29,7 @@ If you don't already have, one create a spark pool. For this document, we'll ass
 * The name Azure Subscription that your Synapse workspace is in
 * The name of the Primary ADLSGEN2 account your Synapse uses
 * The name of the default container in that ADLSGEN2 account used by your Synapse workspace
+* The name of the spark pool you will use
 
 # Launch Synapse Studio
 
@@ -50,9 +51,8 @@ Choose the appropriate:
 print("Hello World!")
 ```
 
-In the notebook, ensure that Attach to is set to **spark1**
-
-Then click **Run all** or click the **Run** icon on that cell.
+* In the notebook, set **Attach to** to **spark1**
+* Click **Run all** or click the **Run** icon on that cell.
 
 This notebook does almost nothing, but running it ensures that the worksapce is configured correctly at some minumum level.
 
@@ -61,6 +61,12 @@ This notebook does almost nothing, but running it ensures that the worksapce is 
 You see that the first line in the cell is `%%pyspark` this is called a **cell magic**. Notebooks have a default language, and this magic override the language in the that cell. We'll use cell magics in this doc because we'll be mixing languages often. 
 
 The specific magic we used indicates that this cell will use the Python language to work with spark.
+
+In this tutorial we will use these magics:
+
+* `%%pyspark`
+* `%%sql`
+* `%%csharp`
 
 
 ## The Searchlog dataset
@@ -197,7 +203,7 @@ var df = spark.Sql(query);
 df.Show();
 ```
 
-## Finding out the schema of a dataframe
+## Find the dataframe schema
 
 ```
 %%pyspark
@@ -215,6 +221,26 @@ root
  |-- time: timestamp (nullable = true)
 
 ```
+
+
+## Understanding the SearchLog dataset
+
+The SearchLog dataset is hand-built to teach how to do basic, real-world operations
+on data that developers will most commonly need to do. 
+
+The "story" behind the SearchLog dataset is that there's is a search enginer (like Bing).
+Users search for things. When they search for something they spend some amount of time seeing links, some of which they click on or not. The time they spend looking through the search results are a user session. The users may be searching from different markets - that is geographical regions. 
+
+Every row in the dataset represents a search session. The schema is shown below:
+
+Now we look at the schema:
+* id - integer - the session  
+* market - string - the geographical region
+* searchtext -  string - what the user searched for
+* latency - int - how long the search engine took to get the results in milliseconds
+* links - string - semicolon-separated list of all the links the user was presented 
+* clickedlinks - string - semicolon-separated list of all the links the user actually clicked on
+* time - timestamp - when the search was issued
 
 ## Finding out the schema of a table or view
 
@@ -243,24 +269,6 @@ df.show()
 
 ```
 
-## Understanding the SearchLog dataset
-
-The SearchLog dataset is hand-built to teach how to do basic, real-world operations
-on data that developers will most commonly need to do. 
-
-The "Story" behind the SearchLog dataset is that there's is a search enginer (like Bing).
-Users search for things. When they search for something they spend some amount of time seeing links, some of which they click on or not. The time they spend looking through the search results are a user session. The users may be searching from different markets - that is geographical regions. 
-
-Every row in the dataset represents a search session. The schema is shown below:
-
-Now we look at the schema:
-* id - integer - the session  
-* market - string - the geographical region
-* searchtext -  string - what the user searched for
-* latency - int - how long the search engine took to get the results in milliseconds
-* links - string - semicolon-separated list of all the links the user was presented 
-* clickedlinks - string - semicolon-separated list of all the links the user actually clicked on
-* time - timestamp - when the search was issued
 
 ## SELECT
 
