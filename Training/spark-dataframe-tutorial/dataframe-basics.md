@@ -180,7 +180,9 @@ only showing top 20 rows
 
 ```
 query =  """
-select latency,latency/1000 as latencysec from searchlog
+SELECT latency, 
+       latency/1000 AS latencysec
+FROM searchlog
 """
 
 df = spark.sql(query)
