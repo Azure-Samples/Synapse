@@ -30,7 +30,7 @@ df.show()
 df.createOrReplaceTempView("searchlog_en_us") 
 ```
 
-### with .NET
+### With .NET
 ```
 %%csharp
 string query = @"
@@ -64,8 +64,16 @@ AS
 spark.catalog.dropTempView("searchlog_en_us")
 ```
 
+### with .NET for Spark
+
+```
+%%csharp
+spark.Catalog().DropTempView("searchlog_en_us");
+```
+
 ### with Spark SQL
 
 ```
 drop view searchlog_en_us
 ```
+
