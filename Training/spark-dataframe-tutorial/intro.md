@@ -37,15 +37,10 @@ You see that the first line in the cell is `%%pyspark` this is called a **cell m
 
 The specific magic we used indicates that this cell will use the Python language to work with spark.
 
-## Manually creating a dataframe
-
-For debugging and learning, it's very useful to have a dataset available that:
-* doesn't require permissions to access
-* is guartanteed to always be available to the notebook
-* is not too large
-
 
 ## The Searchlog dataset
+
+Run the folllowing code to create the searchlog dataset
 
 ```
 import pyspark.sql.types as sqltypes
@@ -98,10 +93,18 @@ def cast_column(df_, colname, t):
 
 df_searchlog = cast_column(df_searchlog, "time", sqltypes.TimestampType() )
 df_searchlog.createOrReplaceTempView("searchlog") 
+```
+
+Once you run this cell you can access the search through several mechanisms
+
+First, you can use the dataframe directly
+
+```
+%%pyspark
 df_searchlog.show()
 ```
 
-Run a cell with this in it and you should see this as the output
+This is the output
 
 ```
 +------+------+--------------------+-------+--------------------+--------------------+-------------------+
@@ -132,6 +135,18 @@ only showing top 20 rows
 
 ```
 
+You can query it with Spark SQL
+```
+%%sql
+SELECT * 
+FROM searchlog
+```
+
+The benefit of using Spark SQL, is that many operations will be familiar to you 
+based on your SQL experience. 
+
+The approach we will use in the examples is to call Spark SQL from python. This will simplify 
+using this tutorial.
 
 ```
 %%pyspark
@@ -144,40 +159,27 @@ df = spark.sql(query)
 df.show()
 ```
 
-you'll see:
+
+Below, is an example of using Spark SQL from .NET for Spark
 
 ```
-+------+------+--------------------+-------+--------------------+--------------------+-------------------+
-|    id|market|          searchtext|latency|               links|        clickedlinks|               time|
-+------+------+--------------------+-------+--------------------+--------------------+-------------------+
-|399266| en-us|  how to make nachos|     73|www.nachos.com;ww...|                NULL|2019-10-15 11:53:04|
-|382045| en-gb|    best ski resorts|    614|skiresorts.com;sk...|ski-europe.com;ww...|2019-10-15 11:53:25|
-|382045| en-gb|          broken leg|     74|mayoclinic.com/he...|mayoclinic.com/he...|2019-10-16 11:53:42|
-|106479| en-ca| south park episodes|     24|southparkstudios....|southparkstudios.com|2019-10-16 11:53:10|
-|906441| en-us|              cosmos|   1213|cosmos.com;wikipe...|                NULL|2019-10-16 11:54:18|
-|351530| en-fr|           microsoft|    241|microsoft.com;wik...|                NULL|2019-10-16 11:54:29|
-|640806| en-us| wireless headphones|    502|www.amazon.com;re...|www.amazon.com;st...|2019-10-16 11:54:32|
-|304305| en-us|       dominos pizza|     60|dominos.com;wikip...|         dominos.com|2019-10-16 11:54:45|
-|460748| en-us|                yelp|   1270|yelp.com;apple.co...|            yelp.com|2019-10-16 11:54:58|
-|354841| en-us|          how to run|    610|running.about.com...|running.about.com...|2019-10-16 11:59:00|
-|354068| en-mx|         what is sql|    422|wikipedia.org/wik...|wikipedia.org/wik...|2019-10-16 12:00:07|
-|674364| en-us|mexican food redmond|    283|eltoreador.com;ye...|                NULL|2019-10-16 12:00:21|
-|347413| en-gr|           microsoft|    305|microsoft.com;wik...|                NULL|2019-10-16 12:11:34|
-|848434| en-ch|            facebook|     10|facebook.com;face...|        facebook.com|2019-10-16 12:12:14|
-|604846| en-us|           wikipedia|    612|wikipedia.org;en....|       wikipedia.org|2019-10-16 12:13:18|
-|840614| en-us|                xbox|   1220|xbox.com;en.wikip...|    xbox.com/xbox360|2019-10-16 12:13:41|
-|656666| en-us|             hotmail|    691|hotmail.com;login...|                NULL|2019-10-16 12:15:19|
-|951513| en-us|             pokemon|     63|pokemon.com;pokem...|         pokemon.com|2019-10-16 12:17:37|
-|350350| en-us|             wolfram|     30|wolframalpha.com;...|                NULL|2019-10-16 12:18:17|
-|641615| en-us|                kahn|    119|khanacademy.org;e...|     khanacademy.org|2019-10-16 12:19:21|
-+------+------+--------------------+-------+--------------------+--------------------+-------------------+
-only showing top 20 rows
+%%csharp
+string query = @"
+SELECT * 
+FROM searchlog
+";
+
+var df = spark.Sql(query);
+df.Show();
 ```
+
+
 
 ## Finding out the schema of a dataframe
 
 ```
-df.printSchema()
+%%pyspark
+df_searchlog.printSchema()
 ```
 
 ```
@@ -190,6 +192,32 @@ root
  |-- clickedlinks: string (nullable = true)
  |-- time: timestamp (nullable = true)
 
+```
+
+## Finding out the schema of a table or view
+
+```
+%%pyspark
+query =  """
+DESCRIBE TABLE searchlog
+"""
+
+df = spark.sql(query)
+df.show()
+```
+
+```
++------------+---------+-------+
+|    col_name|data_type|comment|
++------------+---------+-------+
+|          id|      int|   null|
+|      market|   string|   null|
+|  searchtext|   string|   null|
+|     latency|   string|   null|
+|       links|   string|   null|
+|clickedlinks|   string|   null|
+|        time|timestamp|   null|
++------------+---------+-------+
 ```
 
 
