@@ -1,14 +1,19 @@
-# Working with Spark Dataframes 
+# Working with Synapse Spark and Dataframes 
 
 ## Introduction
 
-If you come from the SQL world, you may be unused to the mechnics of using dataframes in Spark. 
-This document will get your productive fast. Just follow the instructions be and by the end you'll be able
-to do basic dataframe manipulations.
+This tutorial is for developers new to Azure Synapse who need to get productive 
+with basic Spark programming.
+
+* You don't need to haved a background in Spark at all
+* It will help if you have a basic knowledge of SQL queries
+* Knowledge of Python or C# will help
+
+Just read the sections one-by-one and by the end you'll be ready to use Spark in Synapse. 
 
 ## Preparing
 
-You'll need
+You'll need:
 - an Azure Synapse Analytics workspace. 
 - to be assigned the Workspace Admin role in the Synpse Workspace.
 - to have contributor access to the Workspace (done via the Azure portal)
@@ -18,18 +23,38 @@ You'll need
 
 If you don't already have, one create a spark pool. For this document, we'll assume it has a name of **spark1**.
 
+## Information you should have ready
+* The name of your Synapse workspace
+* The name AAD Directory you will use
+* The name Azure Subscription that your Synapse workspace is in
+* The name of the Primary ADLSGEN2 account your Synapse uses
+* The name of the default container in that ADLSGEN2 account used by your Synapse workspace
+
+# Launch Synapse Studio
+
+Go here: https://web.azuresynapse.net/
+
+Choose the appropriate:
+* Directory
+* Subscriptoin
+* Workspace
+
 ## Create a notebook and run a Hello World
 
-Create an new notebook. 
-Add a new cell.
-In the cell put this code
+* Go to the **Develop** hub and create an new notebook. 
+* Add a new code cell.
+* In the cell put this code
 
 ```
 %%pyspark
 print("Hello World!")
 ```
 
-This notebook does almost nothing, but running it ensuresthat the worksapce is configured correctly at some minumum level.
+In the notebook, ensure that Attach to is set to **spark1**
+
+Then click **Run all** or click the **Run** icon on that cell.
+
+This notebook does almost nothing, but running it ensures that the worksapce is configured correctly at some minumum level.
 
 ## A note about cell magics
 
@@ -40,7 +65,7 @@ The specific magic we used indicates that this cell will use the Python language
 
 ## The Searchlog dataset
 
-Run the folllowing code to create the searchlog dataset
+Run the folllowing code to create a dataframe the searchlog dataset. Don't both trying to understand what the code does. We'll explain everything it does at various points in the tutorial.
 
 ```
 import pyspark.sql.types as sqltypes
@@ -71,17 +96,15 @@ searchlog_data = [
     [666352 , "2019-10-16T12:21:16Z" , "en-us" , "weight loss" , 630 , "en.wikipedia.org/wiki/Weight_loss;webmd.com/diet;exercise.about.com" , "webmd.com/diet" ]
     ]
 
-
 searchog_schema = sqltypes.StructType([
-    sqltypes.StructField('id', sqltypes.IntegerType(), True),
-    sqltypes.StructField('time', sqltypes.StringType(), True),
-    sqltypes.StructField('market', sqltypes.StringType(), True),
-    sqltypes.StructField('searchtext', sqltypes.StringType(), True),
-    sqltypes.StructField('latency', sqltypes.StringType(), True),
+    sqltypes.StructField('id', sqltypes.IntegerType(), False),
+    sqltypes.StructField('time', sqltypes.StringType(), False),
+    sqltypes.StructField('market', sqltypes.StringType(), False),
+    sqltypes.StructField('searchtext', sqltypes.StringType(), False),
+    sqltypes.StructField('latency', sqltypes.IntegerType(), False),
     sqltypes.StructField('links', sqltypes.StringType(), True),
     sqltypes.StructField('clickedlinks', sqltypes.StringType(), True)
 ])
-
  
 df_searchlog = spark.createDataFrame(searchlog_data, searchog_schema)
 
@@ -93,11 +116,12 @@ def cast_column(df_, colname, t):
 
 df_searchlog = cast_column(df_searchlog, "time", sqltypes.TimestampType() )
 df_searchlog.createOrReplaceTempView("searchlog") 
+df_searchlog.show()
 ```
 
 Once you run this cell you can access the search through several mechanisms
 
-First, you can use the dataframe directly
+The cell created a dataframe called **df_searchlog**. You can use the dataframe directly.
 
 ```
 %%pyspark
@@ -132,10 +156,10 @@ This is the output
 |641615| en-us|                kahn|    119|khanacademy.org;e...|     khanacademy.org|2019-10-16 12:19:21|
 +------+------+--------------------+-------+--------------------+--------------------+-------------------+
 only showing top 20 rows
-
 ```
 
-You can query it with Spark SQL
+You can query using the temporary view with Spark SQL
+
 ```
 %%sql
 SELECT * 
@@ -145,7 +169,8 @@ FROM searchlog
 The benefit of using Spark SQL, is that many operations will be familiar to you 
 based on your SQL experience. 
 
-The approach we will use in the examples is to call Spark SQL from python. This will simplify 
+
+The approach we will use in the examples is to call Spark SQL from python and C#. This will simplify 
 using this tutorial.
 
 ```
@@ -158,7 +183,6 @@ FROM searchlog
 df = spark.sql(query)
 df.show()
 ```
-
 
 Below, is an example of using Spark SQL from .NET for Spark
 
@@ -173,8 +197,6 @@ var df = spark.Sql(query);
 df.Show();
 ```
 
-
-
 ## Finding out the schema of a dataframe
 
 ```
@@ -184,10 +206,10 @@ df_searchlog.printSchema()
 
 ```
 root
- |-- id: integer (nullable = true)
- |-- market: string (nullable = true)
- |-- searchtext: string (nullable = true)
- |-- latency: string (nullable = true)
+ |-- id: integer (nullable = false)
+ |-- market: string (nullable = false)
+ |-- searchtext: string (nullable = false)
+ |-- latency: integer (nullable = false)
  |-- links: string (nullable = true)
  |-- clickedlinks: string (nullable = true)
  |-- time: timestamp (nullable = true)
@@ -213,13 +235,32 @@ df.show()
 |          id|      int|   null|
 |      market|   string|   null|
 |  searchtext|   string|   null|
-|     latency|   string|   null|
+|     latency|      int|   null|
 |       links|   string|   null|
 |clickedlinks|   string|   null|
 |        time|timestamp|   null|
 +------------+---------+-------+
+
 ```
 
+## Understanding the SearchLog dataset
+
+The SearchLog dataset is hand-built to teach how to do basic, real-world operations
+on data that developers will most commonly need to do. 
+
+The "Story" behind the SearchLog dataset is that there's is a search enginer (like Bing).
+Users search for things. When they search for something they spend some amount of time seeing links, some of which they click on or not. The time they spend looking through the search results are a user session. The users may be searching from different markets - that is geographical regions. 
+
+Every row in the dataset represents a search session. The schema is shown below:
+
+Now we look at the schema:
+* id - integer - the session  
+* market - string - the geographical region
+* searchtext -  string - what the user searched for
+* latency - int - how long the search engine took to get the results in milliseconds
+* links - string - semicolon-separated list of all the links the user was presented 
+* clickedlinks - string - semicolon-separated list of all the links the user actually clicked on
+* time - timestamp - when the search was issued
 
 ## SELECT
 
