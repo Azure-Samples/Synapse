@@ -18,7 +18,7 @@ Data.json
 /Data.json
 ```
 
-Is equivalent to 
+Are equivalent to 
 
 ```
 abfss://CONTAINER@ACCOUNT.dfs.core.windows.net/Data.json
