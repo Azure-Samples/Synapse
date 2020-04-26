@@ -7,5 +7,5 @@
 * 5 [Grouping and Aggregation](grouping-and-aggregation.md)
 * 6 [Splitting and Joining rows](splitting-joining-rows.md)
 * 7 [User-defined Functions](udfs.md)
-* 8 [Reading and Writing](re.md)
+* 8 [Reading and Writing](reading-and-writing.md)
 * 9 [Other](other.md)
