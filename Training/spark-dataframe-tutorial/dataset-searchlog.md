@@ -72,7 +72,9 @@ def cast_column(df_, colname, t):
     return df_
 
 df_searchlog = cast_column(df_searchlog, "time", sqltypes.TimestampType() )
-df_searchlog.createOrReplaceTempView("searchlog") 
+
+df_searchlog.createOrReplaceTempView("tutorial.searchlog") 
+
 df_searchlog.show()
 ```
 

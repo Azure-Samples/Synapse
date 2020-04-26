@@ -3,7 +3,7 @@
 
 When we created the SearchLog dataset we created two things:
 * a dataframe called **df_searchlog**.
-* a temporary view that points to the same data 
+* a temporary view called **searchlog** that points to the same data 
 
 ## Examine a dataframe with pyspark
 
@@ -40,6 +40,7 @@ df_searchlog.show()
 +------+------+--------------------+-------+--------------------+--------------------+-------------------+
 only showing top 20 rows
 ```
+
 
 ## Examine a temporary view with Spark SQL
 
@@ -133,10 +134,42 @@ df.show()
 
 ```
 
+## Renaming a column
+
+Renaming is most easily down with the dataframe method **withColumnRenamed**.
+
+```
+%%pyspark
+query =  """
+SELECT * 
+FROM searchlog
+"""
+
+df = spark.sql(query)
+df = df.withColumnRenamed("id","session")
+df = df.withColumnRenamed("market","region")
+df.show()
+```
+
+You can also chain the use of **withColumnRenamed**
+
+```
+%%pyspark
+query =  """
+SELECT * 
+FROM searchlog
+"""
+
+df = spark.sql(query)
+df = df.withColumnRenamed("id","session"). \
+        withColumnRenamed("market","region")
+df.show()
+```
+
 
 ## Selecting columns
 
-### Pick which columns to show
+### Picking columns
 ```
 query =  """
 SELECT id, market 
@@ -219,7 +252,7 @@ only showing top 20 rows
 ```
 
 
-### Limiting the number of records returned
+### Limiting the number of records in a dataframe
 
 ```
 query =  """
