@@ -5,7 +5,7 @@ query =  """
 SELECT id,
        links, 
        split(links,";") As linksarray
-FROM searchlog
+FROM sparktutorial.searchlog
 """
 
 
@@ -42,13 +42,13 @@ only showing top 20 rows
 ```
 
 
-## Exploding arrows to rows
+## Exploding arrays to rows
 
 ```
 query =  """
 SELECT id,
        explode( split(links,";")) AS link
-FROM searchlog
+FROM sparktutorial.searchlog
 """
 
 

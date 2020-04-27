@@ -1,15 +1,39 @@
 
 # Dataframe basics
 
-When we created the SearchLog dataset we created two things:
-* a dataframe called **df_searchlog**.
-* a temporary view called **searchlog** that points to the same data 
+When we created the SearchLog dataset we created a table called **sparktutorial.searchlog** that contains to the same data.
 
-## Examine a dataframe with pyspark
+The examples in this tutorial will most often
+refer to this table.
+
+## Examine data with Spark SQL
+
+
+```
+%%sql
+SELECT * 
+FROM sparktutorial.searchlog
+```
+
+The benefit of using Spark SQL, is that many operations will be familiar to you 
+based on your SQL experience. 
+
+
+## Examine a dataframe with pyspark and sql
+
+
+The approach we will use in the examples is to call Spark SQL from python and C#. This will simplify 
+using this tutorial.
 
 ```
 %%pyspark
-df_searchlog.show()
+query =  """
+SELECT * 
+FROM sparktutorial.searchlog
+"""
+
+df = spark.sql(query)
+df.show()
 ```
 
 
@@ -42,35 +66,8 @@ only showing top 20 rows
 ```
 
 
-## Examine a temporary view with Spark SQL
-
-You can query using the temporary view with Spark SQL
-
-```
-%%sql
-SELECT * 
-FROM searchlog
-```
-
-The benefit of using Spark SQL, is that many operations will be familiar to you 
-based on your SQL experience. 
 
 
-# Using PySpark and SQL together
-
-The approach we will use in the examples is to call Spark SQL from python and C#. This will simplify 
-using this tutorial.
-
-```
-%%pyspark
-query =  """
-SELECT * 
-FROM searchlog
-"""
-
-df = spark.sql(query)
-df.show()
-```
 
 # Using .NET and SQL together
 
@@ -80,7 +77,7 @@ Below, is an example of using Spark SQL from .NET for Spark
 %%csharp
 string query = @"
 SELECT * 
-FROM searchlog
+FROM sparktutorial.searchlog
 ";
 
 var df = spark.Sql(query);
@@ -91,48 +88,28 @@ df.Show();
 
 ```
 %%pyspark
-df_searchlog.printSchema()
+query =  """
+SELECT * 
+FROM sparktutorial.searchlog
+"""
+
+df = spark.sql(query)
+df.printSchema()
 ```
 
 ```
 root
- |-- id: integer (nullable = false)
- |-- market: string (nullable = false)
- |-- searchtext: string (nullable = false)
- |-- latency: integer (nullable = false)
+ |-- id: integer (nullable = true)
+ |-- market: string (nullable = true)
+ |-- searchtext: string (nullable = true)
+ |-- latency: integer (nullable = true)
  |-- links: string (nullable = true)
  |-- clickedlinks: string (nullable = true)
  |-- time: timestamp (nullable = true)
 
-```
-
-
-## Finding out the schema of a table or view
 
 ```
-%%pyspark
-query =  """
-DESCRIBE TABLE searchlog
-"""
 
-df = spark.sql(query)
-df.show()
-```
-
-```
-+------------+---------+-------+
-|    col_name|data_type|comment|
-+------------+---------+-------+
-|          id|      int|   null|
-|      market|   string|   null|
-|  searchtext|   string|   null|
-|     latency|      int|   null|
-|       links|   string|   null|
-|clickedlinks|   string|   null|
-|        time|timestamp|   null|
-+------------+---------+-------+
-
-```
 
 ## Renaming a column
 
@@ -142,10 +119,11 @@ Renaming is most easily down with the dataframe method **withColumnRenamed**.
 %%pyspark
 query =  """
 SELECT * 
-FROM searchlog
+FROM sparktutorial.searchlog
 """
 
 df = spark.sql(query)
+df.printSchema()
 df = df.withColumnRenamed("id","session")
 df = df.withColumnRenamed("market","region")
 df.show()
@@ -157,7 +135,7 @@ You can also chain the use of **withColumnRenamed**
 %%pyspark
 query =  """
 SELECT * 
-FROM searchlog
+FROM sparktutorial.searchlog
 """
 
 df = spark.sql(query)
@@ -173,7 +151,7 @@ df.show()
 ```
 query =  """
 SELECT id, market 
-FROM searchlog
+FROM sparktutorial.searchlog
 """
 
 df = spark.sql(query)
@@ -215,7 +193,7 @@ only showing top 20 rows
 query =  """
 SELECT latency, 
        latency/1000 AS latencysec
-FROM searchlog
+FROM sparktutorial.searchlog
 """
 
 df = spark.sql(query)
@@ -258,7 +236,7 @@ only showing top 20 rows
 query =  """
 SELECT latency, 
        latency/1000 AS latencysec
-FROM searchlog
+FROM sparktutorial.searchlog
 LIMIT 5
 """
 

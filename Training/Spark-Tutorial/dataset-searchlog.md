@@ -73,7 +73,8 @@ def cast_column(df_, colname, t):
 
 df_searchlog = cast_column(df_searchlog, "time", sqltypes.TimestampType() )
 
-df_searchlog.createOrReplaceTempView("tutorial.searchlog") 
+spark.sql("CREATE DATABASE IF NOT EXISTS sparktutorial")
+df_searchlog.write.mode("overwrite").saveAsTable("sparktutorial.searchlog")
 
 df_searchlog.show()
 ```
