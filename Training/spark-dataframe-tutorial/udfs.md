@@ -52,6 +52,9 @@ only showing top 20 rows
 ```
 ## C# UDFs
 
+NOTE: There is a current limitation with .NET for Spark that requires
+the UDFs to be registered in a separate cell than when they are used.
+
 ```
 %%csharp
 
@@ -65,7 +68,12 @@ public static class Helpers
     }
 }
 
-var UDF_MyUpper = Functions.Udf<string, string>(Helpers.MyUpper);
+spark.Udf().Register<string, string>("UDF_MyUpper", Helpers.MyUpper);
+
+```
+
+```
+%%csharp
 
 string query = @"
 SELECT 
