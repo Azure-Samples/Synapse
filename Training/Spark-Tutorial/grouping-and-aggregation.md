@@ -5,7 +5,7 @@
 query =  """
 SELECT market, 
        COUNT(*) AS sessioncount 
-FROM searchlog
+FROM sparktutorial.searchlog
 GROUP BY market
 """
 

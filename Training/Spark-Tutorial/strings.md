@@ -7,7 +7,7 @@ SELECT searchtext,
        UPPER(searchtext) AS uc_searchtext, 
        LOWER(searchtext) AS lc_searchtext,
        INITCAP(searchtext) AS ic_searchtext
-FROM searchlog
+FROM sparktutorial.searchlog
 """
 
 
@@ -51,7 +51,7 @@ SELECT
     id, 
     links, 
     locate("mic", links) AS pos
-FROM searchlog
+FROM sparktutorial.searchlog
 """
 
 df = spark.sql(query)

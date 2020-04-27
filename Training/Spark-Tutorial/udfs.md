@@ -16,7 +16,7 @@ SELECT
     id, 
     links,
     UDF_MyUpper(links) AS linksupper 
-FROM searchlog
+FROM sparktutorial.searchlog
 """
 
 df = spark.sql(query)
@@ -80,7 +80,7 @@ SELECT
     id, 
     links,
     UDF_MyUpper(links) AS linksupper 
-FROM searchlog
+FROM sparktutorial.searchlog
 ";
 
 var df = spark.Sql(query);

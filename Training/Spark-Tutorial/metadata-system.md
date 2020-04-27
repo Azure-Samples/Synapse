@@ -83,10 +83,6 @@ df.Write().Mode("overwrite").SaveAsTable("tutorial.searchlog_copy");
 ```
 %%sql
 CREATE TABLE IF NOT EXISTS tutorial.searchlog_copy
-AS 
-(
-	SELECT *
-	FROM searchlog
-)
+AS ( SELECT * FROM searchlog )
 ```
 

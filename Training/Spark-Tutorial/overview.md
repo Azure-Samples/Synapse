@@ -1,4 +1,4 @@
-# Working with Spark Dataframes 
+# Synapse Spark Tutorial
 
 * 1 [Introduction](intro.md)
 * 2 [The Searchlog dataset](dataset-searchlog.md)
