@@ -16,8 +16,7 @@ Imagine we have two cells one %%csharp and one %%pyspark. They are different
 languages ans there's no clear way to pass a dataframe between them. This
 is where the temporary view helps us out.
 
-
-## passing data from PySpark to .NET
+In the following code you can see an example of how this works:
 
 ```
 %%pyspark
@@ -30,22 +29,19 @@ df0.createOrReplaceTempView("tv_df0")
 var df1 = spark.Sql("SELECT * FROM tv_df0");
 ```
 
+## Creating a temporary view
 
-## passing data from .NET to PySpark
+```
+%%pyspark
+df0 = spark.sql("SELECT * FROM sparktutorial.searchlog")
+df0.createOrReplaceTempView("tv_df0")
+```
+
 ```
 %%csharp
 var df0 = spark.Sql("SELECT * FROM sparktutorial.searchlog");
 df0.CreateOrReplaceTempView("tv_df0"); 
 ```
-
-```
-%%pyspark
-df1 = spark.sql("SELECT * from tv_df0")
-```
-
-
-
-### Consuming data from SparkSQL queries
 
 ```
 %%sql
@@ -57,37 +53,50 @@ AS
 ```
 
 
+## List temporary views
+
 ```
 %%pyspark
-df1 = spark.sql("SELECT * from tv_df0")
-```
+df0 = spark.sql("SELECT * FROM sparktutorial.searchlog")
+df0.createOrReplaceTempView("tv_df0")
+df1 = spark.sql("SELECT * FROM sparktutorial.searchlog WHERE latency > 600")
+df1.createOrReplaceTempView("tv_df1")
 
+tables = spark.catalog.listTables("default")
+for table in tables:
+    print(table)
+```
 
 ```
 %%csharp
-var df2 = spark.Sql("SELECT * FROM tv_df0");
+var df0 = spark.Sql("SELECT * FROM sparktutorial.searchlog");
+df0.CreateOrReplaceTempView("tv_df0");
+var df1 = spark.Sql("SELECT * FROM sparktutorial.searchlog WHERE latency > 600");
+df1.CreateOrReplaceTempView("tv_df1");
+
+var tables = spark.Catalog().ListTables("default");
+tables.Show();
 ```
 
-
+```
+%%sql
+drop view temp_view_name
+```
 
 ## Deleting a temporary view
 
-### with PySpark
-
 ```
-spark.catalog.dropTempView("tv_searchlog_enus")
+%%pyspark
+spark.catalog.dropTempView("temp_view_name")
 ```
-
-### with .NET for Spark
 
 ```
 %%csharp
-spark.Catalog().DropTempView("tv_searchlog_enus");
+spark.Catalog().DropTempView("temp_view_name");
 ```
 
-### with Spark SQL
-
 ```
-drop view tv_searchlog_enus
+%%sql
+drop view temp_view_name
 ```
 

@@ -7,7 +7,7 @@
 * 5 [Working with strings](strings.md)
 * 6 [Grouping and Aggregation](grouping-and-aggregation.md)
 * 7 [Splitting and Joining rows](splitting-joining-rows.md)
-* 8 [User-defined Functions](udfs.md)
+* 8 [User-defined Functions](user-defined-functions.md)
 * 9 [Reading and Writing](reading-and-writing.md)
 * 10 [Metadata system](metadata-system.md)
 * 11 [Other](other.md)

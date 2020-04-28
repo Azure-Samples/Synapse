@@ -20,9 +20,14 @@ Now we look at the schema:
 * clickedlinks - string - semicolon-separated list of all the links the user actually clicked on
 * time - timestamp - when the search was issued
 
+
 ## Create the dataset
 
-Run the folllowing code to create a dataframe the searchlog dataset. Don't both trying to understand what the code does. We'll explain everything it does at various points in the tutorial.
+Run the folllowing code to create a dataframe the 
+searchlog dataset. 
+
+Don't both trying to understand what the code does. We'll explain everything 
+it does at various points in the tutorial.
 
 ```
 import pyspark.sql.types as sqltypes
@@ -78,4 +83,3 @@ df_searchlog.write.mode("overwrite").saveAsTable("sparktutorial.searchlog")
 
 df_searchlog.show()
 ```
-
