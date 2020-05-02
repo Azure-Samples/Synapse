@@ -18,11 +18,13 @@ urlFragment: "update-this-to-unique-url-stub"
 
 Outline the file contents of the repository. It helps users navigate the codebase, build configuration and any related assets.
 
-*  [Data](https://github.com/Azure-Samples/Synapse/tree/master/Data) - Sample data
-*  [SQL](https://github.com/Azure-Samples/Synapse/tree/master/SQL) - SQL scripts 
+*  [CLI](https://github.com/Azure-Samples/Synapse/tree/master/CLI) - Azure CLI
+*  [Data](https://github.com/Azure-Samples/Synapse/tree/master/Data) - Small sample data sets
+*  [PowerShell](https://github.com/Azure-Samples/Synapse/tree/master/Powershell) - Azure PowerShell scripts
 *  [Notebooks](https://github.com/Azure-Samples/Synapse/tree/master/Notebooks) - Notebook files
-
+*  [Spark](https://github.com/Azure-Samples/Synapse/tree/master/Spark) - Azure PowerShell scripts
+*  [SQL](https://github.com/Azure-Samples/Synapse/tree/master/SQL) - T-SQL scripts 
 
 ## Contributing
 
-This project welcomes contributions and suggestions.  (See the [Contribute guide](CONTRIBUTE.md))
+This project welcomes contributions and suggestions. See the [Contributors guide](ttps://github.com/Azure-Samples/Synapse/tree/master/CONTRIBUTE.md)
