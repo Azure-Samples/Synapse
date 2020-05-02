@@ -27,4 +27,4 @@ Outline the file contents of the repository. It helps users navigate the codebas
 
 ## Contributing
 
-This project welcomes contributions and suggestions. See the [Contributors guide](ttps://github.com/Azure-Samples/Synapse/tree/master/CONTRIBUTE.md)
+This project welcomes contributions and suggestions. See the [Contributor's guide](https://github.com/Azure-Samples/Synapse/tree/master/CONTRIBUTE.md)
