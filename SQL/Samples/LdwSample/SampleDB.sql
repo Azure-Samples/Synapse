@@ -42,6 +42,10 @@ IF (EXISTS(SELECT * FROM sys.external_data_sources WHERE name = 'YellowTaxi')) B
     DROP EXTERNAL DATA SOURCE YellowTaxi
 END
 
+IF NOT EXISTS (SELECT * FROM sys.symmetric_keys) BEGIN
+    CREATE MASTER KEY ENCRYPTION BY PASSWORD = 'Put very strong password here!'
+END
+
 IF EXISTS
    (SELECT * FROM sys.credentials
    WHERE name = 'https://sqlondemandstorage.blob.core.windows.net')
