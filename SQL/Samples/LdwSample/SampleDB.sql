@@ -2,25 +2,25 @@
 --      Part 1 - Cleanup script
 --      This part removes objects from sample database
 ------------------------------------------------------------------------------------------
-DROP VIEW IF EXISTS parquet.NYCTaxi
+DROP VIEW IF EXISTS parquet.YellowTaxi
 GO
 DROP VIEW IF EXISTS json.Books
 GO
-DROP VIEW IF EXISTS csv.NYCTaxi
+DROP VIEW IF EXISTS csv.YellowTaxi
 GO
 IF (EXISTS(SELECT * FROM sys.external_tables WHERE name = 'Population')) BEGIN
     DROP EXTERNAL TABLE csv.Population
 END
-IF (EXISTS(SELECT * FROM sys.external_file_formats WHERE name = 'QuotedCsvWithHeaderFormat')) BEGIN
-    DROP EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat
+IF (EXISTS(SELECT * FROM sys.external_file_formats WHERE name = 'QuotedCsvWithHeader')) BEGIN
+    DROP EXTERNAL FILE FORMAT QuotedCsvWithHeader
 END
 GO
-IF (EXISTS(SELECT * FROM sys.external_file_formats WHERE name = 'QuotedCsvWithoutHeaderFormat')) BEGIN
-    DROP EXTERNAL FILE FORMAT QuotedCsvWithoutHeaderFormat
+IF (EXISTS(SELECT * FROM sys.external_file_formats WHERE name = 'QuotedCsvWithoutHeader')) BEGIN
+    DROP EXTERNAL FILE FORMAT QuotedCsvWithoutHeader
 END
 GO
-IF (EXISTS(SELECT * FROM sys.external_file_formats WHERE name = 'ParquetFormat')) BEGIN
-    DROP EXTERNAL FILE FORMAT ParquetFormat
+IF (EXISTS(SELECT * FROM sys.external_file_formats WHERE name = 'NativeParquet')) BEGIN
+    DROP EXTERNAL FILE FORMAT NativeParquet
 END
 GO
 DROP SCHEMA IF EXISTS parquet;
@@ -34,16 +34,21 @@ IF (EXISTS(SELECT * FROM sys.external_data_sources WHERE name = 'SqlOnDemandDemo
     DROP EXTERNAL DATA SOURCE SqlOnDemandDemo
 END
 
-IF (EXISTS(SELECT * FROM sys.external_data_sources WHERE name = 'AzureOpenDataStorage')) BEGIN
-    DROP EXTERNAL DATA SOURCE AzureOpenDataStorage
+IF (EXISTS(SELECT * FROM sys.external_data_sources WHERE name = 'AzureOpenData')) BEGIN
+    DROP EXTERNAL DATA SOURCE AzureOpenData
 END
 
 IF (EXISTS(SELECT * FROM sys.external_data_sources WHERE name = 'YellowTaxi')) BEGIN
     DROP EXTERNAL DATA SOURCE YellowTaxi
 END
 
+IF (EXISTS(SELECT * FROM sys.external_data_sources WHERE name = 'GreenTaxi')) BEGIN
+    DROP EXTERNAL DATA SOURCE GreenTaxi
+END
+
 IF NOT EXISTS (SELECT * FROM sys.symmetric_keys) BEGIN
-    CREATE MASTER KEY ENCRYPTION BY PASSWORD = 'Put very strong password here!'
+    declare @pasword nvarchar(400) = CAST(newid() as VARCHAR(400));
+    EXEC('CREATE MASTER KEY ENCRYPTION BY PASSWORD = ''' + @pasword + '''')
 END
 
 IF EXISTS
@@ -76,13 +81,6 @@ GO
 --      This part creates required objects in sample database
 ------------------------------------------------------------------------------------------
 
--- create server-scoped credential for the containers in demo storage account
--- this credential will be used in OPENROWSET function without data source that uses absolute file URL
-CREATE CREDENTIAL [https://sqlondemandstorage.blob.core.windows.net]
-WITH IDENTITY='SHARED ACCESS SIGNATURE',  
-SECRET = 'sv=2018-03-28&ss=bf&srt=sco&sp=rl&st=2019-10-14T12%3A10%3A25Z&se=2061-12-31T12%3A10%3A00Z&sig=KlSU2ullCscyTS0An0nozEpo4tO5JAgGBvw%2FJX2lguw%3D'
-GO
-
 -- create database-scoped credential for the containers in demo storage account
 -- this credential will be used in OPENROWSET function with data source that uses relative file URL
 CREATE DATABASE SCOPED CREDENTIAL [sqlondemand]
@@ -96,6 +94,13 @@ GO
 CREATE DATABASE SCOPED CREDENTIAL WorkspaceIdentity WITH IDENTITY = 'Managed Identity'
 GO
 
+-- SQL logins only:
+-- create server-scoped credential for the containers in demo storage account
+-- SQL logins will use this credential in OPENROWSET function without data source that uses absolute file URL
+CREATE CREDENTIAL [https://sqlondemandstorage.blob.core.windows.net]
+WITH IDENTITY='SHARED ACCESS SIGNATURE',  
+SECRET = 'sv=2018-03-28&ss=bf&srt=sco&sp=rl&st=2019-10-14T12%3A10%3A25Z&se=2061-12-31T12%3A10%3A00Z&sig=KlSU2ullCscyTS0An0nozEpo4tO5JAgGBvw%2FJX2lguw%3D'
+GO
 
 CREATE SCHEMA parquet;
 GO
@@ -111,14 +116,17 @@ CREATE EXTERNAL DATA SOURCE SqlOnDemandDemo WITH (
 );
 GO
 -- Create publicly available external data sources
-CREATE EXTERNAL DATA SOURCE AzureOpenDataStorage
+CREATE EXTERNAL DATA SOURCE AzureOpenData
 WITH ( LOCATION = 'https://azureopendatastorage.blob.core.windows.net/')
 GO
 CREATE EXTERNAL DATA SOURCE YellowTaxi
 WITH ( LOCATION = 'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/')
+GO
+CREATE EXTERNAL DATA SOURCE GreenTaxi
+WITH ( LOCATION = 'https://azureopendatastorage.blob.core.windows.net/nyctlc/green/')
 
 
-CREATE EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat
+CREATE EXTERNAL FILE FORMAT QuotedCsvWithHeader
 WITH (  
     FORMAT_TYPE = DELIMITEDTEXT,
     FORMAT_OPTIONS (
@@ -128,7 +136,7 @@ WITH (
     )
 );
 GO
-CREATE EXTERNAL FILE FORMAT QuotedCsvWithoutHeaderFormat
+CREATE EXTERNAL FILE FORMAT QuotedCsvWithoutHeader
 WITH (  
     FORMAT_TYPE = DELIMITEDTEXT,
     FORMAT_OPTIONS (
@@ -138,7 +146,7 @@ WITH (
     )
 );
 GO
-CREATE EXTERNAL FILE FORMAT ParquetFormat
+CREATE EXTERNAL FILE FORMAT NativeParquet
 WITH (  
     FORMAT_TYPE = PARQUET
 );
@@ -154,24 +162,26 @@ CREATE EXTERNAL TABLE csv.population
 WITH (
     LOCATION = 'csv/population/population.csv',
     DATA_SOURCE = SqlOnDemandDemo,
-    FILE_FORMAT = QuotedCsvWithHeaderFormat
+    FILE_FORMAT = QuotedCsvWithHeader
 );
 GO
 
-CREATE VIEW parquet.NYCTaxi
+CREATE VIEW parquet.YellowTaxi
 AS SELECT *, nyc.filepath(1) AS [year], nyc.filepath(2) AS [month]
 FROM
     OPENROWSET(
-        BULK 'https://sqlondemandstorage.blob.core.windows.net/parquet/taxi/year=*/month=*/*.parquet',
+        BULK 'parquet/taxi/year=*/month=*/*.parquet',
+        DATA_SOURCE = 'SqlOnDemandDemo',
         FORMAT='PARQUET'
     ) AS nyc
 GO
 
-CREATE VIEW csv.NYCTaxi
+CREATE VIEW csv.YellowTaxi
 AS
 SELECT  *, nyc.filepath(1) AS [year], nyc.filepath(2) AS [month]
 FROM OPENROWSET(
-    BULK 'https://sqlondemandstorage.blob.core.windows.net/csv/taxi/yellow_tripdata_*-*.csv',
+        BULK 'csv/taxi/yellow_tripdata_*-*.csv',
+        DATA_SOURCE = 'SqlOnDemandDemo',
         FORMAT = 'CSV', 
         FIRSTROW = 2
     )
@@ -200,7 +210,8 @@ CREATE VIEW json.Books
 AS SELECT *
 FROM
     OPENROWSET(
-        BULK 'https://sqlondemandstorage.blob.core.windows.net/json/books/*.json',
+        BULK 'json/books/*.json',
+        DATA_SOURCE = 'SqlOnDemandDemo',
         FORMAT='CSV',
         FIELDTERMINATOR ='0x0b',
         FIELDQUOTE = '0x0b',
