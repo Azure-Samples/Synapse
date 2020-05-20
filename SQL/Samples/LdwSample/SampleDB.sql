@@ -11,16 +11,16 @@ GO
 IF (EXISTS(SELECT * FROM sys.external_tables WHERE name = 'Population')) BEGIN
     DROP EXTERNAL TABLE csv.Population
 END
-IF (EXISTS(SELECT * FROM sys.external_file_formats WHERE name = 'QuotedCsvWithHeaderFormat')) BEGIN
-    DROP EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat
+IF (EXISTS(SELECT * FROM sys.external_file_formats WHERE name = 'QuotedCsvWithHeader')) BEGIN
+    DROP EXTERNAL FILE FORMAT QuotedCsvWithHeader
 END
 GO
-IF (EXISTS(SELECT * FROM sys.external_file_formats WHERE name = 'QuotedCsvWithoutHeaderFormat')) BEGIN
-    DROP EXTERNAL FILE FORMAT QuotedCsvWithoutHeaderFormat
+IF (EXISTS(SELECT * FROM sys.external_file_formats WHERE name = 'QuotedCsvWithoutHeader')) BEGIN
+    DROP EXTERNAL FILE FORMAT QuotedCsvWithoutHeader
 END
 GO
-IF (EXISTS(SELECT * FROM sys.external_file_formats WHERE name = 'ParquetFormat')) BEGIN
-    DROP EXTERNAL FILE FORMAT ParquetFormat
+IF (EXISTS(SELECT * FROM sys.external_file_formats WHERE name = 'NativeParquet')) BEGIN
+    DROP EXTERNAL FILE FORMAT NativeParquet
 END
 GO
 DROP SCHEMA IF EXISTS parquet;
@@ -76,13 +76,6 @@ GO
 --      This part creates required objects in sample database
 ------------------------------------------------------------------------------------------
 
--- create server-scoped credential for the containers in demo storage account
--- this credential will be used in OPENROWSET function without data source that uses absolute file URL
-CREATE CREDENTIAL [https://sqlondemandstorage.blob.core.windows.net]
-WITH IDENTITY='SHARED ACCESS SIGNATURE',  
-SECRET = 'sv=2018-03-28&ss=bf&srt=sco&sp=rl&st=2019-10-14T12%3A10%3A25Z&se=2061-12-31T12%3A10%3A00Z&sig=KlSU2ullCscyTS0An0nozEpo4tO5JAgGBvw%2FJX2lguw%3D'
-GO
-
 -- create database-scoped credential for the containers in demo storage account
 -- this credential will be used in OPENROWSET function with data source that uses relative file URL
 CREATE DATABASE SCOPED CREDENTIAL [sqlondemand]
@@ -96,6 +89,13 @@ GO
 CREATE DATABASE SCOPED CREDENTIAL WorkspaceIdentity WITH IDENTITY = 'Managed Identity'
 GO
 
+-- SQL logins only:
+-- create server-scoped credential for the containers in demo storage account
+-- SQL logins will use this credential in OPENROWSET function without data source that uses absolute file URL
+CREATE CREDENTIAL [https://sqlondemandstorage.blob.core.windows.net]
+WITH IDENTITY='SHARED ACCESS SIGNATURE',  
+SECRET = 'sv=2018-03-28&ss=bf&srt=sco&sp=rl&st=2019-10-14T12%3A10%3A25Z&se=2061-12-31T12%3A10%3A00Z&sig=KlSU2ullCscyTS0An0nozEpo4tO5JAgGBvw%2FJX2lguw%3D'
+GO
 
 CREATE SCHEMA parquet;
 GO
@@ -118,7 +118,7 @@ CREATE EXTERNAL DATA SOURCE YellowTaxi
 WITH ( LOCATION = 'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/')
 
 
-CREATE EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat
+CREATE EXTERNAL FILE FORMAT QuotedCsvWithHeader
 WITH (  
     FORMAT_TYPE = DELIMITEDTEXT,
     FORMAT_OPTIONS (
@@ -128,7 +128,7 @@ WITH (
     )
 );
 GO
-CREATE EXTERNAL FILE FORMAT QuotedCsvWithoutHeaderFormat
+CREATE EXTERNAL FILE FORMAT QuotedCsvWithoutHeader
 WITH (  
     FORMAT_TYPE = DELIMITEDTEXT,
     FORMAT_OPTIONS (
@@ -138,7 +138,7 @@ WITH (
     )
 );
 GO
-CREATE EXTERNAL FILE FORMAT ParquetFormat
+CREATE EXTERNAL FILE FORMAT NativeParquet
 WITH (  
     FORMAT_TYPE = PARQUET
 );
@@ -154,7 +154,7 @@ CREATE EXTERNAL TABLE csv.population
 WITH (
     LOCATION = 'csv/population/population.csv',
     DATA_SOURCE = SqlOnDemandDemo,
-    FILE_FORMAT = QuotedCsvWithHeaderFormat
+    FILE_FORMAT = QuotedCsvWithHeader
 );
 GO
 
