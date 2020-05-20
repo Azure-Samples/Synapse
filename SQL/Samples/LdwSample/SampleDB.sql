@@ -34,16 +34,21 @@ IF (EXISTS(SELECT * FROM sys.external_data_sources WHERE name = 'SqlOnDemandDemo
     DROP EXTERNAL DATA SOURCE SqlOnDemandDemo
 END
 
-IF (EXISTS(SELECT * FROM sys.external_data_sources WHERE name = 'AzureOpenDataStorage')) BEGIN
-    DROP EXTERNAL DATA SOURCE AzureOpenDataStorage
+IF (EXISTS(SELECT * FROM sys.external_data_sources WHERE name = 'AzureOpenData')) BEGIN
+    DROP EXTERNAL DATA SOURCE AzureOpenData
 END
 
 IF (EXISTS(SELECT * FROM sys.external_data_sources WHERE name = 'YellowTaxi')) BEGIN
     DROP EXTERNAL DATA SOURCE YellowTaxi
 END
 
+IF (EXISTS(SELECT * FROM sys.external_data_sources WHERE name = 'GreenTaxi')) BEGIN
+    DROP EXTERNAL DATA SOURCE GreenTaxi
+END
+
 IF NOT EXISTS (SELECT * FROM sys.symmetric_keys) BEGIN
-    CREATE MASTER KEY ENCRYPTION BY PASSWORD = 'Put very strong password here!'
+    declare @pasword nvarchar(400) = CAST(newid() as VARCHAR(400));
+    EXEC('CREATE MASTER KEY ENCRYPTION BY PASSWORD = ''' + @pasword + '''')
 END
 
 IF EXISTS
@@ -111,11 +116,14 @@ CREATE EXTERNAL DATA SOURCE SqlOnDemandDemo WITH (
 );
 GO
 -- Create publicly available external data sources
-CREATE EXTERNAL DATA SOURCE AzureOpenDataStorage
+CREATE EXTERNAL DATA SOURCE AzureOpenData
 WITH ( LOCATION = 'https://azureopendatastorage.blob.core.windows.net/')
 GO
 CREATE EXTERNAL DATA SOURCE YellowTaxi
 WITH ( LOCATION = 'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/')
+GO
+CREATE EXTERNAL DATA SOURCE GreenTaxi
+WITH ( LOCATION = 'https://azureopendatastorage.blob.core.windows.net/nyctlc/green/')
 
 
 CREATE EXTERNAL FILE FORMAT QuotedCsvWithHeader
@@ -162,7 +170,8 @@ CREATE VIEW parquet.NYCTaxi
 AS SELECT *, nyc.filepath(1) AS [year], nyc.filepath(2) AS [month]
 FROM
     OPENROWSET(
-        BULK 'https://sqlondemandstorage.blob.core.windows.net/parquet/taxi/year=*/month=*/*.parquet',
+        BULK 'parquet/taxi/year=*/month=*/*.parquet',
+        DATA_SOURCE = 'SqlOnDemandDemo',
         FORMAT='PARQUET'
     ) AS nyc
 GO
@@ -171,7 +180,8 @@ CREATE VIEW csv.NYCTaxi
 AS
 SELECT  *, nyc.filepath(1) AS [year], nyc.filepath(2) AS [month]
 FROM OPENROWSET(
-    BULK 'https://sqlondemandstorage.blob.core.windows.net/csv/taxi/yellow_tripdata_*-*.csv',
+        BULK 'csv/taxi/yellow_tripdata_*-*.csv',
+        DATA_SOURCE = 'SqlOnDemandDemo',
         FORMAT = 'CSV', 
         FIRSTROW = 2
     )
@@ -200,7 +210,8 @@ CREATE VIEW json.Books
 AS SELECT *
 FROM
     OPENROWSET(
-        BULK 'https://sqlondemandstorage.blob.core.windows.net/json/books/*.json',
+        BULK 'json/books/*.json',
+        DATA_SOURCE = 'SqlOnDemandDemo',
         FORMAT='CSV',
         FIELDTERMINATOR ='0x0b',
         FIELDQUOTE = '0x0b',
