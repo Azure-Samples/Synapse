@@ -2,11 +2,11 @@
 --      Part 1 - Cleanup script
 --      This part removes objects from sample database
 ------------------------------------------------------------------------------------------
-DROP VIEW IF EXISTS parquet.NYCTaxi
+DROP VIEW IF EXISTS parquet.YellowTaxi
 GO
 DROP VIEW IF EXISTS json.Books
 GO
-DROP VIEW IF EXISTS csv.NYCTaxi
+DROP VIEW IF EXISTS csv.YellowTaxi
 GO
 IF (EXISTS(SELECT * FROM sys.external_tables WHERE name = 'Population')) BEGIN
     DROP EXTERNAL TABLE csv.Population
@@ -166,7 +166,7 @@ WITH (
 );
 GO
 
-CREATE VIEW parquet.NYCTaxi
+CREATE VIEW parquet.YellowTaxi
 AS SELECT *, nyc.filepath(1) AS [year], nyc.filepath(2) AS [month]
 FROM
     OPENROWSET(
@@ -176,7 +176,7 @@ FROM
     ) AS nyc
 GO
 
-CREATE VIEW csv.NYCTaxi
+CREATE VIEW csv.YellowTaxi
 AS
 SELECT  *, nyc.filepath(1) AS [year], nyc.filepath(2) AS [month]
 FROM OPENROWSET(
