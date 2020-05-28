@@ -25,6 +25,17 @@ Outline the file contents of the repository. It helps users navigate the codebas
 *  [Spark](https://github.com/Azure-Samples/Synapse/tree/master/Spark) - Code for using Apache Spark
 *  [SQL](https://github.com/Azure-Samples/Synapse/tree/master/SQL) - T-SQL scripts 
 
+## Scenario-based Samples
+
+The following samples may span across several of the technology specific samples:
+
+### Tweet Analysis
+
+Shows .NET for Spark and shared meta data experience between Spark created tables and SQL.
+
+* [Description and notebooks/code files](Notebooks/Spark.NET%20C%23/Tweets) 
+* [Sample Data](Data/Tweets)
+
 ## Contributing
 
 This project welcomes contributions and suggestions. See the [Contributor's guide](https://github.com/Azure-Samples/Synapse/tree/master/CONTRIBUTE.md)
