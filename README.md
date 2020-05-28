@@ -29,12 +29,10 @@ Outline the file contents of the repository. It helps users navigate the codebas
 
 The following samples may span across several of the technology specific samples:
 
-### Tweet Analysis
+### Tweet Analysis ([Description and notebooks/code files](Notebooks/Spark.NET%20C%23/Tweets) - [Sample Data](Data/Tweets))
+
 
 Shows .NET for Spark and shared meta data experience between Spark created tables and SQL.
-
-* [Description and notebooks/code files](Notebooks/Spark.NET%20C%23/Tweets) 
-* [Sample Data](Data/Tweets)
 
 ## Contributing
 
