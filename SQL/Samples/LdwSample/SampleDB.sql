@@ -1,3 +1,6 @@
+if db_name() = 'master'
+    throw 50001, 'This script cannot be executed in master database. Create new database and run the script there.', 1;
+
 ------------------------------------------------------------------------------------------
 --      Part 1 - Cleanup script
 --      This part removes objects from sample database
