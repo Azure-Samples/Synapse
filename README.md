@@ -20,7 +20,7 @@ Outline the file contents of the repository. It helps users navigate the codebas
 
 *  [CLI](https://github.com/Azure-Samples/Synapse/tree/master/CLI) - Azure CLI
 *  [Data](https://github.com/Azure-Samples/Synapse/tree/master/Data) - Small sample data sets
-*  [PowerShell](https://github.com/Azure-Samples/Synapse/tree/master/Powershell) - Azure PowerShell scripts
+*  [PowerShell](https://github.com/Azure-Samples/Synapse/tree/master/PowerShell) - Azure PowerShell scripts
 *  [Notebooks](https://github.com/Azure-Samples/Synapse/tree/master/Notebooks) - Notebook files
 *  [Spark](https://github.com/Azure-Samples/Synapse/tree/master/Spark) - Code for using Apache Spark
 *  [SQL](https://github.com/Azure-Samples/Synapse/tree/master/SQL) - T-SQL scripts 
