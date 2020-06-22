@@ -1,0 +1,8 @@
+onnxruntime==1.0.0 
+werkzeug==0.16.1 
+nimbusml==1.7.1 
+ruamel.yaml==0.16.9
+azureml-train-automl-runtime==1.6.0
+scikit-learn==0.20.3
+numpy==1.16.2
+pandas==0.23.4
