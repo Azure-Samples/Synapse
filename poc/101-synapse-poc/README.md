@@ -23,12 +23,12 @@ This template deploys the following:
 
 # Index
 
-- [Purpose](https://raw.githubusercontent.com/JamJarchitect/synapse/master/poc/101-synapse-poc#purpose)
-- [Prerequisites](https://raw.githubusercontent.com/JamJarchitect/synapse/master/poc/101-synapse-poc#prerequisites)
-    - [Getting your Object ID](https://raw.githubusercontent.com/JamJarchitect/synapse/master/poc/101-synapse-poc#getting-your-object-id)
-        - [Option A - PowerShell](https://raw.githubusercontent.com/JamJarchitect/synapse/master/poc/101-synapse-poc#option-a---powershell)
-        - [Option B - Azure Portal](https://raw.githubusercontent.com/JamJarchitect/synapse/master/poc/101-synapse-poc#option-b---azure-portal)
-- [Deploy to Azure](https://raw.githubusercontent.com/JamJarchitect/synapse/master/poc/101-synapse-poc#deploy-to-azure)
+- [Purpose](https://github.com/JamJarchitect/Synapse/tree/master/poc/101-synapse-poc#purpose)
+- [Prerequisites](https://github.com/JamJarchitect/Synapse/tree/master/poc/101-synapse-poc#prerequisites)
+    - [Getting your Object ID](https://github.com/JamJarchitect/Synapse/tree/master/poc/101-synapse-poc#getting-your-object-id)
+        - [Option A - PowerShell](https://github.com/JamJarchitect/Synapse/tree/master/poc/101-synapse-poc#option-a---powershell)
+        - [Option B - Azure Portal](https://github.com/JamJarchitect/Synapse/tree/master/poc/101-synapse-poc#option-b---azure-portal)
+- [Deploy to Azure](https://github.com/JamJarchitect/Synapse/tree/master/poc/101-synapse-poc#deploy-to-azure)
 
 ## Purpose
 This template allows the Administrator to deploy a Proof-of-Concept environment of Azure Synapse Analytics with some pre-set parameters. This allows more time to focus on the Proof-of-Concept at hand and test the service.
@@ -44,7 +44,7 @@ Using the Getting Started wizard inside of the workspace is recommended to use s
 ## Getting your Object ID
 
 ### Option A - PowerShell
-- Download the PowerShell script from **[HERE](https://raw.githubusercontent.com/JamJarchitect/synapse/master/poc/101-synapse-poc/scripts)**
+- Download the PowerShell script from **[HERE](https://github.com/JamJarchitect/Synapse/tree/master/poc/101-synapse-poc/scripts)**
     - This script will:
         - Check if the Azure Active Directory PowerShell module is installed
             - If the Azure Active Directory PowerShell module is **NOT** installed, then the script will attempt to install it
