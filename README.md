@@ -18,8 +18,6 @@ urlFragment: "update-this-to-unique-url-stub"
 
 ## Contents
 
-Outline the file contents of the repository. It helps users navigate the codebase, build configuration and any related assets.
-
 *  [CLI](https://github.com/Azure-Samples/Synapse/tree/master/CLI) - Azure CLI
 *  [Data](https://github.com/Azure-Samples/Synapse/tree/master/Data) - Small sample data sets
 *  [PowerShell](https://github.com/Azure-Samples/Synapse/tree/master/PowerShell) - Azure PowerShell scripts
