@@ -4,11 +4,11 @@ languages:
 - csharp
 products:
 - dotnet
-description: "Samples for Azure Synapse Analytics (workspace preview)"
+description: "Samples for Azure Synapse AnalyticS"
 urlFragment: "update-this-to-unique-url-stub"
 ---
 
-# Samples for Azure Synapse Analytics (workspace preview)
+# Samples for Azure Synapse Analytics
 
 ## Resources
 * Documentation
