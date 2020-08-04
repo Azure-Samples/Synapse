@@ -6,10 +6,10 @@ The Azure Synapse SQL Extension contain a collection of User Defined Functions (
 The Azure Synapse SQL Extension will install the `microsoft` schema to your Synapse SQL pool. 
 
 ## Functions
-The Azure Synapse SQL Extension will install a collection of functions to your Synapse SQL pool. These functions extend the SQL capabilties by providing support for ANSI or Teradata functions. To see the complete list of functions, visit the [Functions Readme](functions/readme.md)
+The Azure Synapse SQL Extension will install a collection of functions to your Synapse SQL pool. These functions extend the SQL capabilties by providing support for ANSI or Teradata functions. To see the complete list of functions, visit the [Functions Readme](functions/Readme.md)
 
 ## Views
-The Azure Synapse SQL Extension will install a collection of vies to your Synapse SQL pool. These views extend the SQL monitoring capabilities by providing deeper insight into the configuration and execution of the Synapse SQL pool. To see the complete list of views, visit the [Views Readme](views/readme.md)
+The Azure Synapse SQL Extension will install a collection of vies to your Synapse SQL pool. These views extend the SQL monitoring capabilities by providing deeper insight into the configuration and execution of the Synapse SQL pool. To see the complete list of views, visit the [Views Readme](views/Readme.md)
 
 ## Installation
 1. Download the latest release of the *Azure Synapse SQL Extension* toolkit
