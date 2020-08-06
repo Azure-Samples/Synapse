@@ -25,7 +25,6 @@ This Repo contains detailed Synapse Spark sample notebooks that shows end-to-end
 In this scenario, you will ingest streaming and batch IoT data into Azure Cosmos DB using Azure Synapse Spark, perform Joins and aggregations using Azure Synapse Link and perform [anomaly detection](https://azure.microsoft.com/en-us/services/cognitive-services/anomaly-detector/) using Azure Cognitive Services on Spark (MMLSpark).
 
 ![IoT-components-dataflow](images/dataflow.PNG)
-
 ### Notebooks Execution
 
 Import the below four synapse spark notebooks under the "IoT/spark-notebooks/pyspark/" dir on to the Synapse workspace and attach the Spark pool created in the prerequisite to the notebooks.
