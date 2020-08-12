@@ -58,6 +58,8 @@ sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functio
 ECHO Deploying views
 
 REM Views
+sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\views\dbc.databases.sql
+sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\views\dbc.tables.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\views\microsoft.dw_active_queries.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\views\microsoft.dw_active_queue.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\views\microsoft.dw_configuration.sql
