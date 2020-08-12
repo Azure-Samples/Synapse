@@ -1,5 +1,9 @@
 # Views
 
+## dbc.tables
+The `dbc.tables` script installs a view that mimics the `DBC.TABLES` view found in Teradata. 
+Note: See the [`DBC.TABLES`](https://docs.teradata.com/reader/b7YPw3QMO~fsDCrY39kyiQ/NWKolQulMcPxjjpRzelZxA)
+
 ## microsoft.dw_active_queries
 The `microsoft.dw_active_queries` script installs a view that shows the active queries from the `sys.dm_pdw_exec_requests` view.
 

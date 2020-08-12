@@ -15,9 +15,6 @@ The `microsoft.initcap` script installs a function that emulates the `INITCAP(ex
 ## microsoft.instr
 The `microsoft.instr` script installs a function that emulates the `INSTR(expression, substring, position, occurrence)` function found in Oracle and Teradata.
 
-## microsoft.kurtosis
-The `microsoft.kurtosis` script installs a function that emulates the `KURTOSIS(expression)` ANSI function.
-
 ## microsoft.lpad
 The `microsoft.lpad` script installs a function that emulates the `LPAD(expression, length [, fill])` TERADATA function.
 
