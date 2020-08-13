@@ -54,6 +54,7 @@ sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functio
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.lpad.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.months_between.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.next_day.sql
+sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.rpad.sql
 
 ECHO Deploying views
 
