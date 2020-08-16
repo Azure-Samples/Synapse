@@ -12,11 +12,11 @@ Please make sure that you followed the pre-reqs of the main [README](../README.m
 
 3. Using the Azure Portal, go to Data Explorer of your the Azure Cosmos DB Account and create a database called CosmosDBIoTDemo. 
 
-4. In the same Data Explorer, create two Analytical Store enabled containers: IoTSignals and IoTDeviceInfo. In the portal interface, the container-id is the container name. Change the Throughput to Autoscale and set the max limit to 4,000. Please click [here](https://review.docs.microsoft.com/en-us/azure/cosmos-db/configure-synapse-link?branch=release-build-cosmosdb#create-analytical-ttl) for details on how to enable Analytical storage on Cosmos DB containers.
+4. In the same Data Explorer, create two Analytical Store enabled containers: IoTSignals and IoTDeviceInfo. In the portal interface, the container-id is the container name. Change the Throughput to Autoscale and set the max limit to 4,000. Please click [here](https://docs.microsoft.com/en-us/azure/cosmos-db/configure-synapse-link?branch=release-build-cosmosdb#create-analytical-ttl) for details on how to enable Analytical storage on Cosmos DB containers.
     * Use /id as the Partition key for both the containers
     * Please make sure that Analytical store is enabled for both the containers
 
-5. In your Azure Synapse workspace, go to the Manage / Linked Services tab and create a linked service called CosmosDBIoTDemo pointing to the Cosmos DB database that was created in step 3 above. Please click [here](https://review.docs.microsoft.com/en-us/azure/synapse-analytics/synapse-link/how-to-connect-synapse-link-cosmos-db?branch=release-build-synapse#connect-an-azure-cosmos-db-database-to-a-synapse-workspace) for more details on creating Synapse linked service pointing to Cosmos DB.
+5. In your Azure Synapse workspace, go to the Manage / Linked Services tab and create a linked service called CosmosDBIoTDemo pointing to the Cosmos DB database that was created in step 3 above. Please click [here](https://docs.microsoft.com/en-us/azure/synapse-analytics/synapse-link/how-to-connect-synapse-link-cosmos-db?branch=release-build-synapse#connect-an-azure-cosmos-db-database-to-a-synapse-workspace) for more details on creating Synapse linked service pointing to Cosmos DB.
 
 ### Notebooks Execution
 
