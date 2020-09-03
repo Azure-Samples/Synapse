@@ -57,7 +57,7 @@ In this simple scenario, you will learn how to use Azure Synapse Spark to ingest
 
 Import the below synapse spark notebooks under the "MongoDB/spark-notebooks/pyspark/" dir into your Synapse workspace and attach the Spark pool created in the prerequisite to the notebooks.
 
-1. [Data Ingestion and Queries with Synapse Spark for Cosmos DB API for MongoDB](MongoDB\spark-notebooks\pyspark\01-CosmosDBSynapseMongoDB.ipynb)
+1. [Data Ingestion and Queries with Synapse Spark for Cosmos DB API for MongoDB](MongoDB/spark-notebooks/pyspark/01-CosmosDBSynapseMongoDB.ipynb)
 
 ## Key concepts
 
