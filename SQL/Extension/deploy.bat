@@ -6,7 +6,7 @@ setlocal
 set _secure_password=**********
 
 ECHO.
-ECHO Azure Synapse SQL Extension toolkit v0.8.0.0 deployment script
+ECHO Azure Synapse SQL Extension toolkit v0.9.0.0 deployment script
 
 IF NOT "%~4"=="" IF "%~5"=="" GOTO Deploy
 ECHO The deploy script requires the following parameters:
@@ -48,13 +48,16 @@ ECHO Deploying functions
 REM Functions
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.acosh.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.asinh.sql
+sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.btrim.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.dayoccurrence_of_month.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.initcap.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.instr.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.lpad.sql
+sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.ltrim.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.months_between.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.next_day.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.rpad.sql
+sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.rtrim.sql
 
 ECHO Deploying views
 
