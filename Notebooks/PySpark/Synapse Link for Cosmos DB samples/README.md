@@ -49,7 +49,7 @@ Import the below two synapse spark notebooks under the "Retail/spark-notebooks/p
 1. [Batch Ingestion of Sales Forecasting data on Synapse Spark](Retail/spark-notebooks/pyspark/1CosmoDBSynapseSparkBatchIngestion.ipynb)
 1. [Perform Sales Forecasting using Azure Synapse Link and Azure Automated Machine Learning on Synapse Spark](Retail/spark-notebooks/pyspark/2SalesForecastingWithAML.ipynb)
 
-## Scenario 3 - Load, Query, and Schema Updates with Azure Cosmos DB API for MongoDB
+## Scenario 3 - Data Ingestion, Queries, and Schema Updates with Azure Cosmos DB API for MongoDB
 
 In this simple scenario, you will learn how to use Azure Synapse Spark to ingest data into Cosmos DB MongoDB API container, hot to query it using Spark, and how [schema updates are managed](https://docs.microsoft.com/en-us/azure/cosmos-db/analytical-store-introduction#analytical-schema).
 
