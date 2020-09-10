@@ -93,13 +93,17 @@
 
     "Frequency": {
       "type": "string",
-      "metadata": "Choose whether to run schedule every day of the week, or only on weekdays",
+      "metadata": {
+        "description": "Choose whether to run schedule every day of the week, or only on weekdays"
+      },
       "defaultValue": "Weekdays",
       "allowedValues": [ "Daily", "Weekdays" ]
     },
     "TIME_ZONE": {
       "type": "string",
-      "metadata": "Timezone for the schedule. Consult https://msdn.microsoft.com/en-us/library/ms912391(v=winembedded.11).aspx for more information",
+      "metadata": {
+        "description": "Timezone for the schedule. Consult https://msdn.microsoft.com/en-us/library/ms912391(v=winembedded.11).aspx for more information"
+      },
       "defaultValue": "Eastern Standard Time",
       "allowedValues": [
         "Dateline Standard Time",
@@ -169,7 +173,9 @@
     },
     "ResumeTime": {
       "type": "string",
-      "metadata": "Time of day when the data warehouse will be resumed",
+      "metadata": {
+        "description": "Time of Day when the data warehouse will be resumed"
+      },
       "allowedValues": [
         "12:00 AM (  0:00 )",
         "01:00 AM (  1:00 )",
@@ -200,7 +206,9 @@
     },
     "PauseTime": {
       "type": "string",
-      "metadata": "Time of day when the data warehouse will be paused",
+      "metadata": {
+        "description": "Time of day when the data warehouse will be paused"
+      },
       "allowedValues": [
         "12:00 AM (  0:00 )",
         "01:00 AM (  1:00 )",
@@ -247,40 +255,6 @@
     ]
   },
   "resources": [
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-06-01",
-      "name": "Guid0",
-      "properties": {
-        "mode": "incremental",
-        "templateLink": {
-          "uri": "[concat(parameters('_artifactsLocation'),'nestedtemplates/guidgenerator.json',parameters('_artifactsLocationSASToken'))]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "seed": {
-            "value": "0"
-          }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-06-01",
-      "name": "Guid1",
-      "properties": {
-        "mode": "incremental",
-        "templateLink": {
-          "uri": "[concat(parameters('_artifactsLocation'),'nestedtemplates/guidgenerator.json',parameters('_artifactsLocationSASToken'))]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "seed": {
-            "value": "1"
-          }
-        }
-      }
-    },
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
@@ -471,8 +445,7 @@
       "name": "MSIRBACOnResourceGroup0",
       "dependsOn": [
         "logicAppResumeDeployment",
-        "logicAppPauseDeployment",
-        "Guid0"
+        "logicAppPauseDeployment"
       ],
       "properties": {
         "mode": "Incremental",
@@ -482,9 +455,6 @@
         "parameters": {
           "logicAppName": {
             "value": "[variables('logicApps')[0].name]"
-          },
-          "roleAssignmentNameId": {
-            "value": "[reference('Guid0').outputs.guid.value]"
           }
         }
       }
@@ -495,8 +465,7 @@
       "name": "MSIRBACOnResourceGroup1",
       "dependsOn": [
         "logicAppResumeDeployment",
-        "logicAppPauseDeployment",
-        "Guid1"
+        "logicAppPauseDeployment"
       ],
       "properties": {
         "mode": "Incremental",
@@ -506,9 +475,6 @@
         "parameters": {
           "logicAppName": {
             "value": "[variables('logicApps')[1].name]"
-          },
-          "roleAssignmentNameId": {
-            "value": "[reference('Guid1').outputs.guid.value]"
           }
         }
       }

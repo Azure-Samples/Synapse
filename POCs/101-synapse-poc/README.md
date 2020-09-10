@@ -1,6 +1,8 @@
 # Azure Synapse Proof-of-Concept
 ![Synapse Analytics](https://raw.githubusercontent.com/Azure-Samples/Synapse/master/POCs/101-synapse-poc/images/synapse1.png)
 
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2FSynapse%2Fmaster%2FPOCs%2F101-synapse-poc%2Fazuredeploy.json)
+
 This template deploys necessary resources to run an Azure Synapse Proof-of-Concept
 
 This template deploys the following:
@@ -24,7 +26,6 @@ This template deploys the following:
 
 - [Purpose](https://github.com/Azure-Samples/Synapse/tree/master/POCs/101-synapse-poc#purpose)
 - [Prerequisites](https://github.com/Azure-Samples/Synapse/tree/master/POCs/101-synapse-poc#prerequisites)
-- [Deploy to Azure](https://github.com/Azure-Samples/Synapse/tree/master/POCs/101-synapse-poc#deploy-to-azure)
 - [Post Deployment](https://github.com/Azure-Samples/Synapse/tree/master/POCs/101-synapse-poc#post-deployment)
 
 ## Purpose
