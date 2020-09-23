@@ -16,4 +16,4 @@ Please make sure that you followed the pre-reqs of the main [README](../README.m
 
 Now you just need to follow the notebook instructions:
 
-[Data Ingestion and Queries with Synapse Spark for Cosmos DB API for MongoDB](MongoDB/spark-notebooks/pyspark/01-CosmosDBSynapseMongoDB.ipynb)
+[Data Ingestion and Queries with Synapse Spark for Cosmos DB API for MongoDB](../MongoDB/spark-notebooks/pyspark/01-CosmosDBSynapseMongoDB.ipynb)
