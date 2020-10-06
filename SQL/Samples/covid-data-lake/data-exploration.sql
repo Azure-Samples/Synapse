@@ -23,7 +23,7 @@ order by sum(cases) desc
 select countries_and_territories, geo_id
 from openrowset(bulk 'https://pandemicdatalake.blob.core.windows.net/public/curated/covid-19/ecdc_cases/latest/ecdc_cases.parquet',
                 format='parquet') as cases
-where countries_and_territories like '%bul%'
+where countries_and_territories like '%ser%'
 
 
 select DATE_REP, CASES, DEATHS
