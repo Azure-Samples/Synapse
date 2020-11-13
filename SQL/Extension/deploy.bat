@@ -50,6 +50,7 @@ sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functio
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.asinh.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.btrim.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.dayoccurrence_of_month.sql
+sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.getbit.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.initcap.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.instr.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.lpad.sql
