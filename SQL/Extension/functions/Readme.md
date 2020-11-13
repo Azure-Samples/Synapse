@@ -12,6 +12,9 @@ The `microsoft.btrim` script installs a function that emulates the `TRIM(BOTH 't
 ## microsoft.dayoccurrence_of_month
 The `microsoft.dayoccurrence_of_month` script installs a function that emulates the `DAYOCCURRENCE_OF_MONTH(expression)` Teradata function.
 
+## microsoft.getbit
+The `microsoft.getbit` script installs a function that emulates the `TD_SYSFNLIB.GETBIT(argument, bit)` Teradata function.
+
 ## microsoft.initcap
 The `microsoft.initcap` script installs a function that emulates the `INITCAP(expression)` Teradata function.
 

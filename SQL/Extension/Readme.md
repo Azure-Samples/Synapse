@@ -31,13 +31,17 @@ The Azure Synapse SQL Extension will install a collection of vies to your Synaps
 
 ## Version History
 
-### v0.9.0.0 (September 2nd, 2020)
-Version 0.9.0.0 adds the following:
+### November 12th, 2020
+What's new:
+
+- [Function]: The `microsoft.getbit` script installs a function that emulates the `TD_SYSFNLIB.GETBIT(argument, bit)` Teradata function.
+
+### September 2nd, 2020
+What's new:
 
 - [Function]: The `microsoft.btrim` script installs a function that emulates the `TRIM(BOTH 'trim_characters' FROM expression)` Teradata function.
 - [Function]: The `microsoft.ltrim` script installs a function that emulates the `TRIM(LEADING 'trim_characters' FROM expression)` Teradata function.
 - [Function]: The `microsoft.rtrim` script installs a function that emulates the `TRIM(TRAILING 'trim_characters' FROM expression)` Teradata function.
 
-### v0.8.0.0 (August 4th, 2020)
-
-Version 0.8.0.0 is the initial public release of the Azure Synapse SQL Extension toolkit.
+### August 4th, 2020
+The initial public release of the Azure Synapse SQL Extension toolkit.
