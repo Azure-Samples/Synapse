@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Basic Test</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<h1>Generating OPENROWSET statement for Cosmos DB documents</h1>
+		<div class="form-group row">
+			<label for="container" class="col-sm-2 col-form-label">Enter container name:</label>
+			<div class="col-sm-10">
+				<input name="container" id="container" type="text" placeholder="Enter container name here" value="Family"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="document">Enter a sample of a document from your container:</label>
+			<br/>
+				<textarea name="document" id="document" required="true" placeholder="Enter sample of JSON document" cols="120" rows="10">
+{
+	"id": "WakefieldFamily",
+	"parents": [
+		{ "familyName": "Wakefield", "givenName": "Robin" },
+		{ "familyName": "Miller", "givenName": "Ben" }
+	],
+	"children": [
+		{
+			"familyName": "Merriam", 
+			"givenName": "Jesse", 
+			"gender": "female", "grade": 1,
+			"pets": [
+				{ "givenName": "Goofy" },
+				{ "givenName": "Shadow" }
+			]
+		},
+		{ 
+			"familyName": "Miller", 
+			"givenName": "Lisa", 
+			"gender": "female", 
+			"grade": 8 }
+	],
+	"address": { "state": "NY", "county": "Manhattan", "city": "NY" },
+	"creationDate": 1431620462,
+	"isRegistered": false
+}</textarea>
+				
+			
+		</div>
+		<div class="form-group">
+			<button onclick="createSQL()" type="button" class="button btn-primary">Generate SQL script</button>
+		</div>
+		<h2>Copy the text below in some SQL editor once you generate the script</h2>
+		<pre class="border"><code class="language-html" data-lang="html" id="sql"></code></pre>
+
+	</div>
+	
+
+</div>
+  <script>
+function js2sql(type, value){
+  switch(type){
+      case "undefined": return "VARCHAR(100)";
+      case "string": return "VARCHAR(8000)";
+	  case "number": 
+			if(Number.isInteger(value))
+				return "BIGINT";
+			else
+				return "FLOAT";
+      case "bigint": return "BIGINT";
+      case "boolean": return "BIT";
+      case "object": return "VARCHAR(MAX)"; 
+  }
+}
+
+class Generator {
+
+	constructor(alias, col, parent, level) {
+		this.columns = [];
+		this.subArrays = [];
+		this.col = col;
+		this.parent = parent;
+		this.alias = alias;
+		this.level = level || 0;
+	}
+
+	qoute_identifier(name){
+		var pattern = /^[0-9a-zA-Z_]+$/;
+		if(name.match(pattern)) {
+			return name;
+		}
+		else
+		{  
+			return "["+name+"]"; 
+		}
+	}
+	generate(document, prefix) {
+		if(prefix == null) prefix = [];
+		var x;
+
+		let docType = typeof document;
+		if(docType != "object") {
+			// OUTER APPLY OPENJSON (...) WITH ( value type '$')
+			this.columns.push("value " + js2sql(docType) + " '$'");
+			return;
+		}
+		for (x in document) {
+			let type = typeof document[x];
+			if(type != "object") {
+				
+				const objectColumnName = prefix.join("_") + ((prefix.length===0)?"":"_") + x;
+				const objectPath = prefix.join(".") + ((prefix.length===0)?"":".") + x;
+
+				this.columns.push(this.qoute_identifier( prefix.join("_") + ((prefix.length===0)?"":"_") + x ) + " " +
+						js2sql(type, document[x]) +
+							(
+								(objectColumnName == objectPath)?
+									"":
+									(" '$" + ((prefix.length===0)?"":".") + prefix.join(".") + "." + x + "'")
+							)
+						
+						);
+			}
+			else if(type == "object" && !Array.isArray(document[x]) ) {
+				/* Expand nested sub-objects */
+				prefix.push(x);
+				this.generate(document[x], prefix);
+				prefix.pop();
+			}
+			else if(type == "object" && Array.isArray(document[x]) ) {
+
+				const columnType = (this.level==0) ? " VARCHAR(MAX)" : " NVARCHAR(MAX)";
+
+				const objectColumnName = prefix.join("_") + ((prefix.length===0)?"":"_") + x;
+				const objectPath = prefix.join(".") + ((prefix.length===0)?"":".") + x;
+
+				this.columns.push(this.qoute_identifier( objectColumnName ) +
+							columnType +
+							((objectColumnName == objectPath)?
+							"":
+							" '$" + ((prefix.length===0)?"":".") + objectPath + "'") + 
+							((this.level>0) ? " AS JSON " : ""))
+							;
+				
+				prefix.push(x);
+				var child = new Generator(	this.alias + "_" + objectColumnName, 
+											objectColumnName, 
+											this.alias, 
+											this.level + 1);
+				this.subArrays.push(child);
+				child.generate(document[x][0], []);
+				prefix.pop();
+			}
+		}
+	}
+
+	indent(tab) { return "\t".repeat(this.level+1+(tab||0)); }
+
+	query() {
+		var sql = "";
+		if(this.col == null) {
+		var sql = "SELECT * \nFROM OPENROWSET('CosmosDB',\n\t\t--> Insert account, database, region, and key values here when you execute the query\n\t\t'" + connectionstring + "',\n\t\t" + collection +")\n\tWITH (\n";
+		sql += this.indent(1) + this.columns.join(",\n"+this.indent(1));;
+		sql += "\n" + this.indent() + ") AS " + this.qoute_identifier(this.alias) + " ";
+		} else {
+		sql += "\n" +this.indent(-1) + "OUTER APPLY OPENJSON ( " + this.qoute_identifier( this.parent ) + "." + this.qoute_identifier(this.col) +" )\n" + this.indent() + " WITH (\n" + this.indent(1) + this.columns.join(",\n" + this.indent(1));
+		sql += this.indent() + "\n" + this.indent() + ") AS " + this.qoute_identifier( this.alias );
+		}
+		for(let child in this.subArrays) {
+		sql += this.subArrays[child].query();
+		}
+		return sql;
+	}
+
+	toString() {
+		var sql = this.query();
+		return sql;
+	}
+}
+
+var connectionstring;
+var collection;
+
+function createSQL() {
+	connectionstring = "account={account};database={db};region={region like westus2};key={key}";
+	collection =  document.querySelector("#container").value; //'People';
+	var doc =  eval("("+document.querySelector("#document").value+")");
+
+
+
+	if(collection == "") {
+		alert("Enter collection");
+		return;
+	}
+
+	if(doc == "") {
+		alert("Enter sample document");
+		return;
+	}
+
+	var g = new Generator(collection, null, null, 0);
+	g.generate(doc, []);
+	document.querySelector("#sql").innerHTML = "--NOTE: To optimize performance, try to replace types with smaller - for example VARCHAR(MAX) with VARCHAR(600), etc.";
+	document.querySelector("#sql").innerHTML += "--NOTE: This is best effort type mapping. Sometime you would need to replace FLOAT with VARCHAR(400), BIGINT wiht FLOAT or vice versa.";
+	document.querySelector("#sql").innerHTML += g.toString();
+}
+  </script>
+</body>
+</html>
