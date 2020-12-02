@@ -1,7 +1,7 @@
 
 # Load, Query, and Schema Updates with Azure Cosmos DB API for MongoDB
 
-In this noteboook, a simple dataset is created to show you how to use MongoDB client to ingest data, and how to use Synapse Link with Cosmos DB API for MongoDB to query this data. 
+In this notebook, a simple dataset is created to show you how to use MongoDB client to ingest data, and how to use Synapse Link with Cosmos DB API for MongoDB to query this data. 
 
 Also, we will ingest a second dataset with a schema update and show how it is managed by Synapse Link.
 
