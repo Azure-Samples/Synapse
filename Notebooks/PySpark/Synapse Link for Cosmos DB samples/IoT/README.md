@@ -25,20 +25,20 @@ Please make sure that you followed the pre-reqs of the main [README](../README.m
 
 Import the below four synapse spark notebooks under the `IoT/spark-notebooks/pyspark/` dir on to the Synapse workspace and attach the Spark pool created in the prerequisite to the notebooks.
 
-1. [01-CosmosDBSynapseStreamIngestion: Ingest streaming data into Azure Cosmos DB collection using Structured Streaming](IoT/spark-notebooks/pyspark/01-CosmosDBSynapseStreamIngestion.ipynb)
+1. [01-CosmosDBSynapseStreamIngestion: Ingest streaming data into Azure Cosmos DB collection using Structured Streaming](./spark-notebooks/pyspark/01-CosmosDBSynapseStreamIngestion.ipynb)
 
     This notebook ingests documents to "IoTSignals" collection using structured streaming. Please make sure to stop the execution of this notebook after few 2 to 5 minutes of streaming, which would bring in enough documents required for the Anomaly detection in "04-CosmosDBSynapseML" notebook.
     Once the notebook execution is stopped, go to the Data Explorer in Azure Cosmos DB Account portal and make sure that the data has been loaded into the "IoTSignals" collection.   
 
-1. [02-CosmosDBSynapseBatchIngestion: Ingest Batch data into Azure Cosmos DB collection using Azure Synapse Spark](IoT/spark-notebooks/pyspark/02-CosmosDBSynapseBatchIngestion.ipynb)
+1. [02-CosmosDBSynapseBatchIngestion: Ingest Batch data into Azure Cosmos DB collection using Azure Synapse Spark](./spark-notebooks/pyspark/02-CosmosDBSynapseBatchIngestion.ipynb)
 
     This notebook ingests documents from "IoTDeviceInfo.csv" to the "IoTDeviceInfo" collection.
     Once the notebook execution is completed, go to the Data Explorer in Azure Cosmos DB Account portal and make sure that the data has been loaded into the "IoTDeviceInfo" collection.   
 
-1. [03-CosmosDBSynapseJoins: Perform Joins and aggregations across Azure Cosmos DB collections using Azure Synapse Link](IoT/spark-notebooks/pyspark/03-CosmosDBSynapseJoins.ipynb)
+1. [03-CosmosDBSynapseJoins: Perform Joins and aggregations across Azure Cosmos DB collections using Azure Synapse Link](./spark-notebooks/pyspark/03-CosmosDBSynapseJoins.ipynb)
 
     This notebook creates Spark tables pointing to Azure Cosmos DB Analytical store collections, perform Joins, filters and aggregations across collectionsand visualize the data using plotly
 
-1. [04-CosmosDBSynapseML: Perform Anomaly Detection using Azure Synapse Link and Azure Cognitive Services on Synapse Spark (MMLSpark)](IoT/spark-notebooks/pyspark/04-CosmosDBSynapseML.ipynb)
+1. [04-CosmosDBSynapseML: Perform Anomaly Detection using Azure Synapse Link and Azure Cognitive Services on Synapse Spark (MMLSpark)](./spark-notebooks/pyspark/04-CosmosDBSynapseML.ipynb)
 
     This notebook performs anomaly detection using Azure Cognitive Services on Spark and enables to visualize the anomalies using `plotly`.
