@@ -27,7 +27,7 @@ In this scenario, you will ingest streaming and batch IoT data into Azure Cosmos
 
 ![IoT-components-dataflow](images/dataflow.PNG)
 
-### IoT Notebooks Execution
+### IoT Notebooks Execution - PySpark and SparkSQL
 
 Import the below four synapse spark notebooks under the `IoT/spark-notebooks/pyspark/` dir on to the Synapse workspace and attach the Spark pool created in the prerequisite to the notebooks.
 
@@ -42,7 +42,7 @@ In this scenario, you will ingest Retail data into Azure Cosmos DB using Azure S
 
 ![IoT-components-dataflow](images/pipeline.PNG)
 
-### Retail Notebooks Execution
+### Retail Notebooks Execution - PySpark and Azure Machine Learning SDK
 
 Import the below two synapse spark notebooks under the `Retail/spark-notebooks/pyspark/` dir into your Synapse workspace and attach the Spark pool created in the prerequisite to the notebooks.
 
@@ -53,11 +53,11 @@ Import the below two synapse spark notebooks under the `Retail/spark-notebooks/p
 
 In this simple scenario, you will learn how to use Azure Synapse Spark to ingest data into Cosmos DB MongoDB API container, hot to query it using Spark, and how [schema updates are managed](https://docs.microsoft.com/azure/cosmos-db/analytical-store-introduction#analytical-schema).
 
-### E-Commerce Notebooks Execution
+### E-Commerce Notebooks Execution - PySpark and SparkSQL
 
-Import the below synapse spark notebooks under the `E-Commerce-with-MongoDB/spark-notebooks/pyspark/` dir into your Synapse workspace and attach the Spark pool created in the prerequisite to the notebooks.
+Import the below synapse spark notebooks under the `E-Commerce/spark-notebooks/pyspark/` dir into your Synapse workspace and attach the Spark pool created in the prerequisite to the notebooks.
 
-1. [Data Ingestion and Queries with Synapse Spark for Cosmos DB API for MongoDB](E-Commerce-with-MongoDB/spark-notebooks/pyspark/01-CosmosDBSynapseMongoDB.ipynb)
+1. [Data Ingestion and Queries with Azure Synapse Link for Cosmos DB API for MongoDB](E-Commerce/spark-notebooks/pyspark/01-CosmosDBSynapseMongoDB.ipynb)
 
 ## Key concepts - Azure Synapse Link for Azure Cosmos DB analytical store
 
