@@ -18,54 +18,54 @@ This Repo contains detailed Synapse Spark sample notebooks that shows end-to-end
 
 ## Prerequisites
 
-* [Azure Cosmos DB account](https://docs.microsoft.com/en-us/azure/cosmos-db/create-cosmosdb-resources-portal)
-* [Azure Synapse workspace](https://docs.microsoft.com/en-us/azure/synapse-analytics/quickstart-create-workspace) configured with a [Spark pool](https://docs.microsoft.com/en-us/azure/synapse-analytics/quickstart-create-apache-spark-pool)
+* [Azure Cosmos DB account](https://docs.microsoft.com/azure/cosmos-db/create-cosmosdb-resources-portal)
+* [Azure Synapse workspace](https://docs.microsoft.com/azure/synapse-analytics/quickstart-create-workspace) configured with a [Spark pool](https://docs.microsoft.com/azure/synapse-analytics/quickstart-create-apache-spark-pool)
 
-## Scenario 1 - Internet of Things (IoT)
+## Scenario 1 - Internet of Things (IoT) - Azure Cosmos DB SQL API
 
-In this scenario, you will ingest streaming and batch IoT data into Azure Cosmos DB using Azure Synapse Spark, perform Joins and aggregations using Azure Synapse Link and perform [anomaly detection](https://azure.microsoft.com/en-us/services/cognitive-services/anomaly-detector/) using Azure Cognitive Services on Spark (MMLSpark).
+In this scenario, you will ingest streaming and batch IoT data into Azure Cosmos DB using Azure Synapse Spark, perform Joins and aggregations using Azure Synapse Link and perform [anomaly detection](https://azure.microsoft.com/services/cognitive-services/anomaly-detector/) using Azure Cognitive Services on Spark (MMLSpark).
 
 ![IoT-components-dataflow](images/dataflow.PNG)
 
-### IoT Notebooks Execution
+### IoT Notebooks Execution - PySpark and SparkSQL
 
-Import the below four synapse spark notebooks under the "IoT/spark-notebooks/pyspark/" dir on to the Synapse workspace and attach the Spark pool created in the prerequisite to the notebooks.
+Import the below four synapse spark notebooks under the `IoT/spark-notebooks/pyspark/` dir on to the Synapse workspace and attach the Spark pool created in the prerequisite to the notebooks.
 
 1. [01-CosmosDBSynapseStreamIngestion: Ingest streaming data into Azure Cosmos DB collection using Structured Streaming](IoT/spark-notebooks/pyspark/01-CosmosDBSynapseStreamIngestion.ipynb)
 1. [02-CosmosDBSynapseBatchIngestion: Ingest Batch data into Azure Cosmos DB collection using Azure Synapse Spark](IoT/spark-notebooks/pyspark/02-CosmosDBSynapseBatchIngestion.ipynb)
 1. [03-CosmosDBSynapseJoins: Perform Joins and aggregations across Azure Cosmos DB collections using Azure Synapse Link](IoT/spark-notebooks/pyspark/03-CosmosDBSynapseJoins.ipynb)
 1. [04-CosmosDBSynapseML: Perform Anomaly Detection using Azure Synapse Link and Azure Cognitive Services on Synapse Spark (MMLSpark)](IoT/spark-notebooks/pyspark/04-CosmosDBSynapseML.ipynb)
 
-## Scenario 2 - Retail Forecasting
+## Scenario 2 - Retail Forecasting - Azure Cosmos DB SQL API
 
-In this scenario, you will ingest Retail data into Azure Cosmos DB using Azure Synapse Spark, perform joins and aggregations using Azure Synapse Link and perform Forecasting using [Azure Automated Machine Learning](https://docs.microsoft.com/en-us/azure/machine-learning/concept-automated-ml).
+In this scenario, you will ingest Retail data into Azure Cosmos DB using Azure Synapse Spark, perform joins and aggregations using Azure Synapse Link and perform Forecasting using [Azure Automated Machine Learning](https://docs.microsoft.com/azure/machine-learning/concept-automated-ml).
 
 ![IoT-components-dataflow](images/pipeline.PNG)
 
-### Retail Notebooks Execution
+### Retail Notebooks Execution - PySpark and Azure Machine Learning SDK
 
-Import the below two synapse spark notebooks under the "Retail/spark-notebooks/pyspark/" dir into your Synapse workspace and attach the Spark pool created in the prerequisite to the notebooks.
+Import the below two synapse spark notebooks under the `Retail/spark-notebooks/pyspark/` dir into your Synapse workspace and attach the Spark pool created in the prerequisite to the notebooks.
 
 1. [Batch Ingestion of Sales Forecasting data on Synapse Spark](Retail/spark-notebooks/pyspark/1CosmoDBSynapseSparkBatchIngestion.ipynb)
 1. [Perform Sales Forecasting using Azure Synapse Link and Azure Automated Machine Learning on Synapse Spark](Retail/spark-notebooks/pyspark/2SalesForecastingWithAML.ipynb)
 
-## Scenario 3 - Data Ingestion, Queries, and Schema Updates with Azure Cosmos DB API for MongoDB
+## Scenario 3 - E-Commerce Food orders and SparkSQL Queries - Azure Cosmos DB API for MongoDB
 
-In this simple scenario, you will learn how to use Azure Synapse Spark to ingest data into Cosmos DB MongoDB API container, hot to query it using Spark, and how [schema updates are managed](https://docs.microsoft.com/en-us/azure/cosmos-db/analytical-store-introduction#analytical-schema).
+In this simple scenario, you will learn how to use Azure Synapse Spark to ingest data into Cosmos DB MongoDB API container, hot to query it using Spark, and how [schema updates are managed](https://docs.microsoft.com/azure/cosmos-db/analytical-store-introduction#analytical-schema).
 
-### MongoDB Notebook Execution
+### E-Commerce Notebooks Execution - PySpark and SparkSQL
 
-Import the below synapse spark notebooks under the "MongoDB/spark-notebooks/pyspark/" dir into your Synapse workspace and attach the Spark pool created in the prerequisite to the notebooks.
+Import the below synapse spark notebooks under the `E-Commerce/spark-notebooks/pyspark/` dir into your Synapse workspace and attach the Spark pool created in the prerequisite to the notebooks.
 
-1. [Data Ingestion and Queries with Synapse Spark for Cosmos DB API for MongoDB](MongoDB/spark-notebooks/pyspark/01-CosmosDBSynapseMongoDB.ipynb)
+1. [Data Ingestion and Queries with Azure Synapse Link for Cosmos DB API for MongoDB](E-Commerce/spark-notebooks/pyspark/01-CosmosDBSynapseMongoDB.ipynb)
 
-## Key concepts
+## Key concepts - Azure Synapse Link for Azure Cosmos DB analytical store
 
-* [Azure Synapse Link for Azure Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/synapse-link)
-* [Azure Cosmos DB Analytical Store](https://review.docs.microsoft.com/en-us/azure/cosmos-db/analytical-store-introduction?branch=release-build-cosmosdb)
-* [Configure Synapse Link for Azure Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/synapse-link-frequently-asked-questions)
-* [Connect to Synapse Link from Synapse Studio](https://docs.microsoft.com/en-us/azure/synapse-analytics/synapse-link/how-to-connect-synapse-link-cosmos-db?branch=release-build-synapse)
-* [Query Cosmos DB Analytical Store with Synapse Spark](https://docs.microsoft.com/en-us/azure/synapse-analytics/synapse-link/how-to-query-analytical-store-spark?branch=release-build-synapse)
+* [Azure Synapse Link for Azure Cosmos DB](https://docs.microsoft.com/azure/cosmos-db/synapse-link)
+* [Azure Cosmos DB Analytical Store](https://review.docs.microsoft.com/azure/cosmos-db/analytical-store-introduction?branch=release-build-cosmosdb)
+* [Configure Synapse Link for Azure Cosmos DB](https://docs.microsoft.com/azure/cosmos-db/synapse-link-frequently-asked-questions)
+* [Connect to Synapse Link from Synapse Studio](https://docs.microsoft.com/azure/synapse-analytics/synapse-link/how-to-connect-synapse-link-cosmos-db?branch=release-build-synapse)
+* [Query Cosmos DB Analytical Store with Synapse Spark](https://docs.microsoft.com/azure/synapse-analytics/synapse-link/how-to-query-analytical-store-spark?branch=release-build-synapse)
 
 ## Contributing
 

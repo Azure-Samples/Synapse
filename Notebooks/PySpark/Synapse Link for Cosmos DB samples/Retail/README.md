@@ -1,9 +1,7 @@
 
-# Load, Query, and Schema Updates with Azure Cosmos DB API for MongoDB
+# Retail Sales Forecasting with Azure Synapse Link for Azure Cosmos DB Analytical Store and AML SDK
 
-In this noteboook, a simple dataset is created to show you how to use MongoDB client to ingest data, and how to use Synapse Link with Cosmos DB API for MongoDB to query this data. 
-
-Also, we will ingest a second dataset with a schema update and show how it is managed by Synapse Link.
+In this notebook, a simple dataset is used to show you how to use Azure Synapse Link for Azure Cosmos DB Analytical Store and AML SDK.
 
 ## Environment setup
 
@@ -18,4 +16,5 @@ Please make sure that you followed the pre-reqs of the main [README](../README.m
 
 Now you just need to follow the notebook instructions:
 
-[Data Ingestion and Queries with Synapse Spark for Cosmos DB API for MongoDB](./spark-notebooks/pyspark/01-CosmosDBSynapseMongoDB.ipynb)
+1. [Batch Ingestion of Sales Forecasting data on Synapse Spark](./spark-notebooks/pyspark/1CosmoDBSynapseSparkBatchIngestion.ipynb)
+1. [Perform Sales Forecasting using Azure Synapse Link and Azure Automated Machine Learning on Synapse Spark](./spark-notebooks/pyspark/2SalesForecastingWithAML.ipynb)
