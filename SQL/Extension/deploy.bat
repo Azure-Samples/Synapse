@@ -59,6 +59,7 @@ sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functio
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.next_day.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.rpad.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.rtrim.sql
+sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.to_char.sql
 
 ECHO Deploying views
 

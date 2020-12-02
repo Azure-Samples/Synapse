@@ -38,3 +38,6 @@ The `microsoft.rpad` script installs a function that emulates the `RPAD(expressi
 
 ## microsoft.rtrim
 The `microsoft.rtrim` script installs a function that emulates the `TRIM(TRAILING 'trim_characters' FROM expression)` Teradata function.
+
+## microsoft.to_char
+The `microsoft.to_char` script installs a function that emulates the `TO_CHAR(expression, format)` Teradata function.
