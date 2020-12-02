@@ -21,9 +21,9 @@ Please make sure that you followed the pre-reqs of the main [README](../README.m
 
 5. In your Azure Synapse workspace, go to the Manage / Linked Services tab and create a linked service called CosmosDBIoTDemo pointing to the Cosmos DB database that was created in step 3 above. Please click [here](https://docs.microsoft.com/azure/synapse-analytics/synapse-link/how-to-connect-synapse-link-cosmos-db) for more details on creating Synapse linked service pointing to Cosmos DB.
 
-### Notebooks Execution
+## Notebooks Execution
 
-Import the below four synapse spark notebooks under the "IoT/spark-notebooks/pyspark/" dir on to the Synapse workspace and attach the Spark pool created in the prerequisite to the notebooks.
+Import the below four synapse spark notebooks under the `IoT/spark-notebooks/pyspark/` dir on to the Synapse workspace and attach the Spark pool created in the prerequisite to the notebooks.
 
 1. [01-CosmosDBSynapseStreamIngestion: Ingest streaming data into Azure Cosmos DB collection using Structured Streaming](IoT/spark-notebooks/pyspark/01-CosmosDBSynapseStreamIngestion.ipynb)
 
@@ -41,5 +41,4 @@ Import the below four synapse spark notebooks under the "IoT/spark-notebooks/pys
 
 1. [04-CosmosDBSynapseML: Perform Anomaly Detection using Azure Synapse Link and Azure Cognitive Services on Synapse Spark (MMLSpark)](IoT/spark-notebooks/pyspark/04-CosmosDBSynapseML.ipynb)
 
-    This notebook performs anomaly detection using Azure Cognitive Services on Spark and enables to visualize the anomalies using plotly.
-
+    This notebook performs anomaly detection using Azure Cognitive Services on Spark and enables to visualize the anomalies using `plotly`.
