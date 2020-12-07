@@ -57,6 +57,7 @@ sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functio
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.ltrim.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.months_between.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.next_day.sql
+sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.random.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.rpad.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.rtrim.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\functions\microsoft.to_char.sql
