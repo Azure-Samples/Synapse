@@ -1,3 +1,2 @@
-pymongo==2.8.1
+pymongo==3.5.1
 aenum==2.2.4
-bson==0.5.10
