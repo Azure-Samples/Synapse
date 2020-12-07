@@ -31,6 +31,10 @@ The Azure Synapse SQL Extension will install a collection of vies to your Synaps
 
 ## Version History
 
+### December 7, 2020
+What's new:
+- [Function]: The `microsoft.random` script installs a function that emulates the `RANDOM(expression, expression)` Teradata function.
+
 ### December 1, 2020
 What's new:
 - [Function]: The `microsoft.to_char` script installs a function that emulates the `TO_CHAR(expression, format)` Teradata function.

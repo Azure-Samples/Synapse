@@ -33,6 +33,9 @@ The `microsoft.months_between` script installs a function that emulates the `MON
 ## microsoft.next_day
 The `microsoft.next_day` script installs a function that emulates the `NEXT_DAY(date_expression, day_value)` Teradata function.
 
+## microsoft.random
+The `microsoft.random` script installs a function that emulates the `RANDOM(expression, expression)` Teradata function.
+
 ## microsoft.rpad
 The `microsoft.rpad` script installs a function that emulates the `RPAD(expression, length [, fill])` Teradata function.
 
