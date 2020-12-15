@@ -29,7 +29,19 @@ The Azure Synapse SQL Extension will install a collection of vies to your Synaps
 .\deploy.bat demo.database.windows.net DemoDW cloudsa very_secure_password
 `
 
+### Clean up Example
+
+`
+.\clean.bat demo.database.windows.net DemoDW cloudsa very_secure_password
+`
 ## Version History
+
+### December 15, 2020
+What's new:
+- [Function]: The `microsoft.firstdayofmonth` script installs a function that returns the first day of the specified month as DATETIME2.
+- [Function]: The `microsoft.firstdayofquarter` script installs a function that returns the first day of the specified quarter as DATETIME2.
+- [Function]: The `microsoft.firstdayofyear` script installs a function that returns the first day of the specified year as DATETIME2.
+- [Schema]: Added the `dbc` schema to support the `dbc.databases` and `dbc.tables` views.
 
 ### December 7, 2020
 What's new:
