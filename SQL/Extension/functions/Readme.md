@@ -12,6 +12,18 @@ The `microsoft.btrim` script installs a function that emulates the `TRIM(BOTH 't
 ## microsoft.dayoccurrence_of_month
 The `microsoft.dayoccurrence_of_month` script installs a function that emulates the `DAYOCCURRENCE_OF_MONTH(expression)` Teradata function.
 
+## microsoft.firstdayofmonth
+The `microsoft.firstdayofmonth` script installs a function that returns the first day of the specified month as DATETIME2.
+
+## microsoft.firstdayofquarter
+The `microsoft.firstdayofquarter` script installs a function that returns the first day of the specified quarter as DATETIME2.
+
+## microsoft.firstdayofyear
+The `microsoft.firstdayofyear` script installs a function that returns the first day of the specified year as DATETIME2.
+
+## microsoft.firstdayofquarter
+The `microsoft.firstdayofquarter` script installs a function that returns the first day of the specified quarter as DATETIME2.
+
 ## microsoft.getbit
 The `microsoft.getbit` script installs a function that emulates the `TD_SYSFNLIB.GETBIT(argument, bit)` Teradata function.
 
