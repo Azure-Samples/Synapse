@@ -51,7 +51,7 @@ BEGIN
 				WHEN @unit = 'NANOSECOND' THEN DATEADD(NANOSECOND, DATEDIFF(NANOSECOND, 0, @expression), 0) 
 
 				-- Week
-				WHEN @unit = 'W' OR @unit = 'WEEK' THEN DATEADD(DAY, -(DATEPART(WEEKDAY, @expression) - 1), @expression)
+				WHEN @unit = 'W' OR @unit = 'WEEK' THEN DATEADD(DAY, -(DATEPART(WEEKDAY, @expression) - 1), DATEADD(DAY, DATEDIFF(DAY, 0, @expression), 0) )
 
 				-- Quarter
 				WHEN @unit = 'QUARTER' THEN microsoft.FirstDayOfQuarter(@expression)
