@@ -42,13 +42,19 @@ BEGIN
 				WHEN @unit = 'S' OR @unit = 'SECOND' THEN DATEADD(SECOND, DATEDIFF(SECOND, 0, @expression), 0) 
 
 				-- Millisecond 
-				WHEN @unit = 'MILLISECOND' THEN DATEADD(MILLISECOND, DATEDIFF(MILLISECOND, 0, @expression), 0) 
+				WHEN @unit = 'MS' OR @unit = 'MILLISECOND' THEN DATEADD(MILLISECOND, DATEDIFF(MILLISECOND, 0, @expression), 0) 
 
 				-- Microsecond 
 				WHEN @unit = 'MICROSECOND' THEN DATEADD(MICROSECOND, DATEDIFF(MICROSECOND, 0, @expression), 0) 
 
 				-- Nanosecond 
 				WHEN @unit = 'NANOSECOND' THEN DATEADD(NANOSECOND, DATEDIFF(NANOSECOND, 0, @expression), 0) 
+
+				-- Week
+				WHEN @unit = 'W' OR @unit = 'WEEK' THEN DATEADD(DAY, -(DATEPART(WEEKDAY, @expression) - 1), @expression)
+
+				-- Quarter
+				WHEN @unit = 'QUARTER' THEN microsoft.FirstDayOfQuarter(@expression)
 			END
 		);
 
