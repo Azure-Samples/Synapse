@@ -38,6 +38,7 @@ The Azure Synapse SQL Extension will install a collection of vies to your Synaps
 
 ### December 15, 2020
 What's new:
+- [Function]: The `microsoft.date_trunc` script installs a function that emulates the `DATE_TRUNC(date_part, expression)` IBM Netezza function.
 - [Function]: The `microsoft.firstdayofmonth` script installs a function that returns the first day of the specified month as DATETIME2.
 - [Function]: The `microsoft.firstdayofquarter` script installs a function that returns the first day of the specified quarter as DATETIME2.
 - [Function]: The `microsoft.firstdayofyear` script installs a function that returns the first day of the specified year as DATETIME2.
