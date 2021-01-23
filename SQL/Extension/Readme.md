@@ -36,6 +36,10 @@ The Azure Synapse SQL Extension will install a collection of vies to your Synaps
 `
 ## Version History
 
+### January 22, 2020
+What's new:
+- [Function]: The `microsoft.corr` script installs a function that emulates the `CORR(expression, expression)` Teradata function.
+
 ### December 15, 2020
 What's new:
 - [Function]: The `microsoft.date_trunc` script installs a function that emulates the `DATE_TRUNC(date_part, expression)` IBM Netezza function.
