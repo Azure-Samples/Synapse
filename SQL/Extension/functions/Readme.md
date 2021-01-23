@@ -9,6 +9,9 @@ The `microsoft.asinh` script installs a function that emulates the `ASINH(expres
 ## microsoft.btrim
 The `microsoft.btrim` script installs a function that emulates the `TRIM(BOTH 'trim_characters' FROM expression)` Teradata function.
 
+## microsoft.corr
+The `microsoft.corr` script installs a function that emulates the `CORR(expression, expression)` Teradata function.
+
 ## microsoft.date_trunc
 The `microsoft.date_trunc` script installs a function that emulates the `DATE_TRUNC(date_part, expression)` IBM Netezza function.
 
