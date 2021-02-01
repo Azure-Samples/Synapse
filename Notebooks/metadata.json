@@ -1,0 +1,28 @@
+{
+    "data": [
+        {
+            "title": "Charting in Synapse Notebook",
+            "path": "PySpark\\06 Charting in Synapse Notebook.ipynb",
+            "description": "This notebook describes how to create an unmanaged (also known as external) table from Spark.",
+            "tags": ["Matplotlib", "Bokeh", "Seaborn", "Visualization", "Charting"],
+            "types": ["pyspark", "sample"],
+            "languages": ["PySpark"]
+        },
+        {
+            "title": "Creating a managed Spark Table",
+            "path": "PySpark\\09 Creating a managed Spark Table.ipynb",
+            "description": "This notebook describes how to create an unmanaged (also known as external) table from Spark.",
+            "tags": ["Managed Table", "Spark Table"],
+            "types": ["pyspark", "sample"],
+            "languages": ["PySpark"]
+        },
+        {
+            "title": "Read and write data from Azure Data Lake Storage Gen2",
+            "path": "PySpark\\01 Read and write data from Azure Data Lake Storage Gen2.ipynb",
+            "description": "This notebook provides examples of how to read data from ADLS Gen2 account into a Spark context and how to write the output of Spark jobs directly into an ADLS Gen2 location.",
+            "tags": ["Managed Table", "Spark Table"],
+            "types": ["pyspark", "sample"],
+            "languages": ["PySpark"]
+        }
+    ]
+}
