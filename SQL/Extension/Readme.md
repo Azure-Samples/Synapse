@@ -36,6 +36,10 @@ The Azure Synapse SQL Extension will install a collection of vies to your Synaps
 `
 ## Version History
 
+### February 4, 2020
+What's new:
+- [Function]: The `microsoft.ltrim` and 'microsoft.rtrim' scripts are updated to improve performance.
+
 ### January 22, 2020
 What's new:
 - [Function]: The `microsoft.corr` script installs a function that emulates the `CORR(expression, expression)` Teradata function.

@@ -12,15 +12,12 @@ BEGIN
 	IF (@characters IS NULL OR TRIM(@characters) = '')
 		RETURN @expression
 
-	DECLARE @character_length INT = DATALENGTH(@characters);
-	SET @characters = REPLACE(@characters, '%', '[%]');
-	SET @characters = REPLACE(@characters, '_', '[_]');
-	SET @characters = @characters + '%';
+	WHILE CHARINDEX(@characters, @expression) = 1
+	  BEGIN
 
-	RETURN
-		CASE PATINDEX(@characters, @expression)
-			WHEN 0 THEN @expression
-			ELSE SUBSTRING(@expression, PATINDEX(@characters, @expression) + @character_length, DATALENGTH(@expression))
-		END
+		SET @expression = RIGHT(@expression, LEN(@expression) - DATALENGTH(@characters));
+	  END 
+	
+	RETURN @expression;
 END
 GO

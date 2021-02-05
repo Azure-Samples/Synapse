@@ -12,16 +12,15 @@ BEGIN
 	IF (@characters IS NULL OR TRIM(@characters) = '')
 		RETURN @expression
 
-	DECLARE @character_length INT = DATALENGTH(@characters);
 	SET @characters = REVERSE(@characters);
-	SET @characters = REPLACE(@characters, '%', '[%]');
-	SET @characters = REPLACE(@characters, '_', '[_]');
-	SET @characters = @characters + '%';
+	SET @expression = REVERSE(@expression);
 
-	RETURN
-		CASE PATINDEX(@characters, REVERSE(@expression))
-			WHEN 0 THEN @expression
-			ELSE REVERSE(SUBSTRING(REVERSE(@expression), PATINDEX(@characters, REVERSE(@expression)) + @character_length, DATALENGTH(@expression)))
-		END
+	WHILE CHARINDEX(@characters, @expression) = 1
+	  BEGIN
+
+		SET @expression = RIGHT(@expression, LEN(@expression) - DATALENGTH(@characters));
+	  END 
+	
+	RETURN REVERSE(@expression);
 END
 GO
