@@ -28,7 +28,7 @@
                 "contentVersion": "1.0.0.0"
               },
               "parameters":{
-                "storageAccount":{"value": "[parameters('name')]"}
+                "storageAccount":{"value": "[replace(parameters('name'),'-','')]"}
               }
             }
         },
