@@ -46,7 +46,7 @@
                 "name":{"value": "[parameters('name')]"},
                 "sqlAdministratorLogin":{"value": "[parameters('sqlAdministratorLogin')]"},
                 "sqlAdministratorPassword":{"value": "[parameters('sqlAdministratorPassword')]"},
-                "defaultDataLakeStorageAccountName":{"value": "[parameters('name')]"},
+                "defaultDataLakeStorageAccountName":{"value": "[replace(parameters('name'),'-','')]"},
                 "tagValues":{"value": "[parameters('tagValues')]"}
               }
             },
