@@ -30,26 +30,23 @@ steps:
   displayName: 'Check out to test branch - add-test-data'
   inputs:
     azureSubscription: 'A365 Workspace Dev (8b3b8a60-1dd0-4824-8770-2ed6a55d8e27)'
-    scriptType: ps
-    scriptLocation: inlineScript
+    scriptType: 'ps'
+    scriptLocation: 'inlineScript'
     inlineScript: |
-     # Checkout to test branch in github
-     
-     git fetch origin lilijing/add-test-data
-     
-     git checkout lilijing/add-test-data
-     
-     Write-Host "Working directory: $(Build.SourcesDirectory)"
-
-#Your build pipeline references an undefined variable named ‘patCode’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
-#Your build pipeline references an undefined variable named ‘a365-notebook-sample’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+      # Checkout to test branch in github
+           
+           git fetch origin lilijing/add-test-data
+           
+           git checkout lilijing/add-test-data
+           
+           Write-Host "Working directory: $(Build.SourcesDirectory)"
 
 - task: AzureCLI@2
   displayName: 'Get A365 Workspace Repo & Switch to Test branch & Run the script'
   inputs:
     azureSubscription: 'A365 Workspace Dev (8b3b8a60-1dd0-4824-8770-2ed6a55d8e27)'
-    scriptType: ps
-    scriptLocation: inlineScript
+    scriptType: 'ps'
+    scriptLocation: 'inlineScript'
     inlineScript: |
      git clone https://$(patCode)@dev.azure.com/msdata/A365/_git/A365_Workspace
      
