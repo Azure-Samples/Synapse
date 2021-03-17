@@ -1,0 +1,72 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+
+- script: |
+    echo Add other tasks to build, test, and deploy your project.
+    echo See https://aka.ms/yaml
+  displayName: 'Run a multi-line script'
+
+- task: AzureKeyVault@1
+  displayName: 'Azure Key Vault: a365-keyvault'
+  inputs:
+    azureSubscription: 'A365 Workspace Dev (8b3b8a60-1dd0-4824-8770-2ed6a55d8e27)'
+    KeyVaultName: 'a365-keyvault'
+    SecretsFilter: 'a365-notebook-sample'
+    RunAsPreJob: true
+
+- task: AzureCLI@2
+  displayName: 'Check out to test branch - add-test-data'
+  inputs:
+    azureSubscription: 'A365 Workspace Dev (8b3b8a60-1dd0-4824-8770-2ed6a55d8e27)'
+    scriptType: ps
+    scriptLocation: inlineScript
+    inlineScript: |
+     # Checkout to test branch in github
+     
+     git fetch origin lilijing/add-test-data
+     
+     git checkout lilijing/add-test-data
+     
+     Write-Host "Working directory: $(Build.SourcesDirectory)"
+
+#Your build pipeline references an undefined variable named ‘patCode’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references an undefined variable named ‘a365-notebook-sample’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+
+- task: AzureCLI@2
+  displayName: 'Get A365 Workspace Repo & Switch to Test branch & Run the script'
+  inputs:
+    azureSubscription: 'A365 Workspace Dev (8b3b8a60-1dd0-4824-8770-2ed6a55d8e27)'
+    scriptType: ps
+    scriptLocation: inlineScript
+    inlineScript: |
+     git clone https://$(patCode)@dev.azure.com/msdata/A365/_git/A365_Workspace
+     
+     cd A365_Workspace
+     git fetch origin lilijing/nbsample-pipeline-script
+     git checkout lilijing/nbsample-pipeline-script
+     
+     cd .scripts/gallery_notebook_sample
+     
+     
+     install-module msal.ps -force -AcceptLicense
+     
+     $newToken = (Get-MsalToken -ClientId '860751b4-3c32-41d9-8978-5a6ec93d2be6' -ClientSecret (ConvertTo-SecureString $(a365-notebook-sample) -AsPlainText -Force) -TenantId '72f988bf-86f1-41af-91ab-2d7cd011db47' -Scope 'https://dev.azuresynapse.net/.default').AccessToken
+     
+     .\test-notebook-samples.ps1 $newToken
+     
+
+    workingDirectory: '$Build.SourcesDirectory'
+  env:
+    patCode: $(patCode)
