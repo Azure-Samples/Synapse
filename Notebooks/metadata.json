@@ -1,0 +1,68 @@
+{
+    "data": [
+        {
+            "title": "Charting in Synapse Notebook",
+            "path": "PySpark\\06 Charting in Synapse Notebook.ipynb",
+            "description": "This notebook describes how to create an unmanaged (also known as external) table from Spark.",
+            "tags": ["Matplotlib", "Bokeh", "Seaborn", "Visualization", "Charting"],
+            "types": ["pyspark", "sample"],
+            "languages": ["PySpark"]
+        },
+        {
+            "title": "Hitchhikers Guide to Hyperspace - Python",
+            "path": "PySpark\\Hitchhikers Guide to Hyperspace - Python.ipynb",
+            "description": "This notebook describes how to create an unmanaged (also known as external) table from Spark.",
+            "tags": ["Matplotlib", "Bokeh", "Seaborn", "Visualization", "Charting"],
+            "types": ["pyspark", "sample"],
+            "languages": ["PySpark"]
+        },
+        {
+            "title": "Using Azure Open Datasets in Synapse",
+            "path": "PySpark\\05 Using Azure Open Datasets in Synapse.ipynb",
+            "description": "This notebook describes how to create an unmanaged (also known as external) table from Spark.",
+            "tags": ["Matplotlib", "Bokeh", "Seaborn", "Visualization", "Charting"],
+            "types": ["pyspark", "sample"],
+            "languages": ["PySpark"]
+        },
+        {
+            "title": "Data Exploration and ML Modeling - NYC taxi predict using Spark MLlib",
+            "path": "PySpark\\07 Data Exploration and ML Modeling - NYC taxi predict using Spark MLlib.ipynb",
+            "description": "This notebook describes how to create an unmanaged (also known as external) table from Spark.",
+            "tags": ["Matplotlib", "Bokeh", "Seaborn", "Visualization", "Charting"],
+            "types": ["pyspark", "sample"],
+            "languages": ["PySpark"]
+        },
+        {
+            "title": "Hitchhikers Guide to Hyperspace - Scala",
+            "path": "Scala\\Hitchhikers Guide to Hyperspace - Scala.ipynb",
+            "description": "This notebook describes how to create an unmanaged (also known as external) table from Spark.",
+            "tags": ["Matplotlib", "Bokeh", "Seaborn", "Visualization", "Charting"],
+            "types": ["pyspark", "sample"],
+            "languages": ["PySpark"]
+        },
+        {
+            "title": "Experimenting with DotNet for Spark Using CreateDataFrame",
+            "path": "Spark.NET C#\\Experimenting with DotNet for Spark Using CreateDataFrame.ipynb",
+            "description": "This notebook describes how to create an unmanaged (also known as external) table from Spark.",
+            "tags": ["Matplotlib", "Bokeh", "Seaborn", "Visualization", "Charting"],
+            "types": ["pyspark", "sample"],
+            "languages": ["PySpark"]
+        },
+        {
+            "title": "Hitchhikers Guide to Hyperspace - CSharp",
+            "path": "Spark.NET C#\\Hitchhikers Guide to Hyperspace - CSharp.ipynb",
+            "description": "This notebook describes how to create an unmanaged (also known as external) table from Spark.",
+            "tags": ["Matplotlib", "Bokeh", "Seaborn", "Visualization", "Charting"],
+            "types": ["pyspark", "sample"],
+            "languages": ["PySpark"]
+        },
+        {
+            "title": "User-Defined Functions with Complex Types in DotNet for Spark",
+            "path": "Spark.NET C#\\User-Defined Functions with Complex Types in DotNet for Spark.ipynb",
+            "description": "This notebook describes how to create an unmanaged (also known as external) table from Spark.",
+            "tags": ["Matplotlib", "Bokeh", "Seaborn", "Visualization", "Charting"],
+            "types": ["pyspark", "sample"],
+            "languages": ["PySpark"]
+        }
+    ]
+}
