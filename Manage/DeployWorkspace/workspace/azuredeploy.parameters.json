@@ -37,9 +37,6 @@
         },
         "storageLocation": {
             "value": ""
-        },
-        "encryption": {
-            "value": {}
         }
     }
 }

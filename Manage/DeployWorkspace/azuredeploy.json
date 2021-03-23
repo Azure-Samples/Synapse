@@ -14,19 +14,7 @@
         "tagValues": {
             "defaultValue": {"Created with":"Synapse Azure Resource Manager deploment template"},
             "type": "Object"
-        },
-        "keyVaultKeyUri": {
-            "defaultValue": "",
-            "type": "String",
-            "metadata": {
-                "description": "The uri to a key in your Key Vault to add a second layer of encryption on top of what is provided by default (optional)."
-            }
         }
-    },
-    "variables": {
-      "withoutCmk": "{}",
-      "withCmk": "[concat('{\"cmk\":{\"key\":{\"name\":\"default\", \"keyVaultUrl\":\"', parameters('keyVaultKeyUri'), '\"}}}')]",
-      "encryption": "[json(if(empty(parameters('keyVaultKeyUri')), variables('withoutCmk'), variables('withCmk')))]"
     },
     "resources": [
         {
@@ -59,8 +47,7 @@
                 "sqlAdministratorLogin":{"value": "[parameters('sqlAdministratorLogin')]"},
                 "sqlAdministratorPassword":{"value": "[parameters('sqlAdministratorPassword')]"},
                 "defaultDataLakeStorageAccountName":{"value": "[replace(parameters('name'),'-','')]"},
-                "tagValues":{"value": "[parameters('tagValues')]"},
-                "encryption": "[variables('encryption')]"
+                "tagValues":{"value": "[parameters('tagValues')]"}
               }
             },
             "dependsOn": [
