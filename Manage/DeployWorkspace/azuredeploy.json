@@ -16,7 +16,7 @@
             "type": "Object"
         },
         "cmkUri": {
-            "type": "string",
+            "type": "String",
             "defaultValue": "",
             "metadata": {
                 "description": "The uri to a key in your Key Vault to add a second layer of encryption on top of the default infrastructure encryption"
