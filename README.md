@@ -25,9 +25,11 @@ urlFragment: "update-this-to-unique-url-stub"
 
 ## Scenario-based Samples
 
-### Tweet Analysis ([Description and notebooks/code files](Notebooks/Spark.NET%20C%23/Tweets) - [Sample Data](Data/Tweets))
-
+### Tweet Analysis
 Shows .NET for Spark and shared metadata experience between Spark created tables and SQL.
+
+* [Description and notebooks/code files](Notebooks/Spark.NET%20C%23/Tweets 
+* [Sample Data](Data/Tweets))
 
 ## Contributing
 This project welcomes contributions and suggestions. See the [Contributor's guide](https://github.com/Azure-Samples/Synapse/tree/master/CONTRIBUTE.md)
