@@ -161,7 +161,7 @@ class Generator {
 	query() {
 		var sql = "";
 		if(this.col == null) {
-		var sql = "SELECT * \nFROM OPENROWSET(PROVIDER = 'CosmosDB',\n\t\t--> Insert account, database, region, and key values here when you execute the query\n\t\t',CONNECTION=" + connectionstring + "',\n\t\tOBJECT='" + collection +"')\n\tWITH (\n";
+		var sql = "SELECT * \nFROM OPENROWSET(PROVIDER = 'CosmosDB',\n\t\t--> Insert account, database, region, and key values here when you execute the query\n\t\t,CONNECTION='" + connectionstring + "',\n\t\tOBJECT='" + collection +"')\n\tWITH (\n";
 		sql += this.indent(1) + this.columns.join(",\n"+this.indent(1));;
 		sql += "\n" + this.indent() + ") AS " + this.qoute_identifier(this.alias) + " ";
 		} else {
