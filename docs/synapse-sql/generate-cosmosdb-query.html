@@ -63,7 +63,7 @@
 function js2sql(type, value){
   switch(type){
       case "undefined": return "VARCHAR(100)";
-      case "string": return "VARCHAR(8000)";
+      case "string": return "VARCHAR(256) COLLATE Latin1_General_100_BIN2_UTF8";
 	  case "number": 
 			if(Number.isInteger(value))
 				return "BIGINT";
