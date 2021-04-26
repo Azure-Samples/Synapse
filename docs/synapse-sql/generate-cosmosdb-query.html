@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>Basic Test</title>
+  <title>OPENROWSET by example - Synapse link for CosmosDB</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
@@ -161,7 +161,7 @@ class Generator {
 	query() {
 		var sql = "";
 		if(this.col == null) {
-		var sql = "SELECT * \nFROM OPENROWSET('CosmosDB',\n\t\t--> Insert account, database, region, and key values here when you execute the query\n\t\t'" + connectionstring + "',\n\t\t" + collection +")\n\tWITH (\n";
+		var sql = "SELECT * \nFROM OPENROWSET(PROVIDER = 'CosmosDB',\n\t\t--> Insert account, database, region, and key values here when you execute the query\n\t\t',CONNECTION=" + connectionstring + "',\n\t\tOBJECT='" + collection +"')\n\tWITH (\n";
 		sql += this.indent(1) + this.columns.join(",\n"+this.indent(1));;
 		sql += "\n" + this.indent() + ") AS " + this.qoute_identifier(this.alias) + " ";
 		} else {
@@ -202,7 +202,7 @@ function createSQL() {
 
 	var g = new Generator(collection, null, null, 0);
 	g.generate(doc, []);
-	document.querySelector("#sql").innerHTML = "--NOTE: To optimize performance, try to replace types with smaller - for example VARCHAR(MAX) with VARCHAR(600), etc.";
+	document.querySelector("#sql").innerHTML = "--NOTE: To optimize performance, try to replace types with smaller - for example VARCHAR(MAX)/VARCHAR(256) with VARCHAR(100), etc.";
 	document.querySelector("#sql").innerHTML += "--NOTE: This is best effort type mapping. Sometime you would need to replace FLOAT with VARCHAR(400), BIGINT wiht FLOAT or vice versa.";
 	document.querySelector("#sql").innerHTML += g.toString();
 }
