@@ -20,7 +20,7 @@ The template defines two resources:
 
 This book contains the following samples:
 
-- Quick-start samples - reading [PARQUET](quickstarts/parquet.ipynb), [CSV](quickstarts/csv.ipynb) and [JSON](quickstarts/json.ipynb)
+- Quick-start samples - reading [PARQUET](quickstarts/parquet.ipynb), [CSV](quickstarts/csv.ipynb), [Delta Lake](quickstarts/delta-lake.ipynb), and [JSON](quickstarts/json.ipynb)
 - Tutorials - [Analyze COVID data set provided by ECDC](tutorials/covid-ecdc.ipynb) and [Analyze NY Taxi rides](tutorials/ny-taxi.ipynb)
 
-Open some of these notebooks, select SQL kernel and connect to your Synapse SQL endpoint. Follow the instructions in tutorials to run the samples.
+Open some of these notebooks, select SQL kernel and connect to your serverless Synapse SQL endpoint. Follow the instructions in tutorials to run the samples.
