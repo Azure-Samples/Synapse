@@ -34,3 +34,4 @@ $wsmsi = Get-AzureADServicePrincipal -SearchString $wsname
 New-AzRoleAssignment -ObjectId $wsmsi.ObjectId -RoleDefinitionName $role -Scope $final_scope
 ```
 
+# Next Steps

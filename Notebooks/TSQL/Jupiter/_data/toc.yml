@@ -1,0 +1,27 @@
+- title: Welcome
+  url: /readme
+- title: Search
+  search: true
+
+- title: Quick-starts
+  url: /quickstarts/readme
+  not_numbered: true
+  expand_sections: true
+  sections:
+    - title: Read Parquet files
+      url: /quickstarts/parquet
+    - title: Read Csv files
+      url: /quickstarts/csv
+    - title: Read Delta Lake folders
+      url: /quickstarts/delta-lake
+    - title: Read JSON files
+      url: /quickstarts/json
+- title: Tutorials
+  url: /tutorials/readme
+  not_numbered: true
+  expand_sections: true
+  sections:
+    - title: Analyze COVID/ECDC data
+      url: /tutorials/covid-ecdc
+    - title: Analyze NY Taxi rides
+      url: /tutorials/ny-taxi
