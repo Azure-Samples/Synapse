@@ -36,11 +36,16 @@ The Azure Synapse SQL Extension will install a collection of vies to your Synaps
 `
 ## Version History
 
-### February 4, 2020
+### June 9, 2021
+What's new:
+- [Function]: The 'microsoft.days_between' script installs a function that emulates the 'DAYS_BETWEEN(expression, expression)' IBM Netezza function.
+- [Bug]: The 'microsoft.date_trunc' function has been updated to accurately support date truncation and improve performance.
+
+### February 4, 2021
 What's new:
 - [Function]: The `microsoft.ltrim` and 'microsoft.rtrim' scripts are updated to improve performance.
 
-### January 22, 2020
+### January 22, 2021
 What's new:
 - [Function]: The `microsoft.corr` script installs a function that emulates the `CORR(expression, expression)` Teradata function.
 

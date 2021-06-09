@@ -5,6 +5,7 @@ IF EXISTS (SELECT * FROM sys.objects WHERE schema_id=SCHEMA_ID('microsoft') AND 
 IF EXISTS (SELECT * FROM sys.objects WHERE schema_id=SCHEMA_ID('microsoft') AND name = N'btrim') DROP FUNCTION [microsoft].[btrim];
 IF EXISTS (SELECT * FROM sys.objects WHERE schema_id=SCHEMA_ID('microsoft') AND name = N'corr') DROP FUNCTION [microsoft].[corr];
 IF EXISTS (SELECT * FROM sys.objects WHERE schema_id=SCHEMA_ID('microsoft') AND name = N'date_trunc') DROP FUNCTION [microsoft].[date_trunc];
+IF EXISTS (SELECT * FROM sys.objects WHERE schema_id=SCHEMA_ID('microsoft') AND name = N'days_between') DROP FUNCTION [microsoft].[days_between];
 IF EXISTS (SELECT * FROM sys.objects WHERE schema_id=SCHEMA_ID('microsoft') AND name = N'dayoccurrence_of_month') DROP FUNCTION [microsoft].[dayoccurrence_of_month];
 IF EXISTS (SELECT * FROM sys.objects WHERE schema_id=SCHEMA_ID('microsoft') AND name = N'firstdayofmonth') DROP FUNCTION [microsoft].[firstdayofmonth];
 IF EXISTS (SELECT * FROM sys.objects WHERE schema_id=SCHEMA_ID('microsoft') AND name = N'firstdayofquarter') DROP FUNCTION [microsoft].[firstdayofquarter];
