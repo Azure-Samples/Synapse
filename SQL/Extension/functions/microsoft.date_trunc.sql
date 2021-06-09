@@ -14,12 +14,15 @@ BEGIN
 
 	SET @unit = UPPER(@unit);
 
-	-- Special handle Millenium, Century, Quarter and Week
-	IF (@unit = 'MILLENIUM')
+	-- Special handle Millennium, Century, Decade, Quarter and Week
+	IF (@unit = 'MILLENNIUM')
 		RETURN CAST('01/01/' + LEFT(YEAR(@expression), 1) + '000 00:00:00.0000000' AS DATETIME2);
 
 	IF (@unit = 'CENTURY')
 		RETURN CAST('01/01/' + CAST((((1 + (YEAR(@expression) -1)) / 100) * 100) AS VARCHAR(4)) + ' 00:00:00.00000' AS DATETIME2)
+
+	IF (@unit = 'DECADE')
+		RETURN CAST('01/01/' + LEFT(YEAR(@expression), 3) + '0 00:00:00.00000' AS DATETIME2)
 
 	IF (@unit = 'WEEK')
 		RETURN DATEADD(DAY, -(DATEPART(WEEKDAY, @expression) - 1), DATEADD(DAY, DATEDIFF(DAY, 0, @expression), 0) )
