@@ -14,8 +14,8 @@ BEGIN
 
 	SET @unit = UPPER(@unit);
 
-	-- Special handle Millenium, Century, Quarter and Week
-	IF (@unit = 'MILLENIUM')
+	-- Special handle Millennium, Century, Quarter and Week
+	IF (@unit = 'MILLENNIUM')
 		RETURN CAST('01/01/' + LEFT(YEAR(@expression), 1) + '000 00:00:00.0000000' AS DATETIME2);
 
 	IF (@unit = 'CENTURY')
