@@ -88,10 +88,6 @@ Optional: copy your data to the new create catalog folder
  - TablePrefix
  
     Type: String. Prefix string added when create table in synapse. You can use it to track the original of the metadata and avoid name conflict. The default value is empty.
-
- - OverriedIfExists
- 
-    Type: Boolean. Override metadata object if it exists.
     
  - IgnoreIfExists
  
@@ -106,8 +102,8 @@ Optional: copy your data to the new create catalog folder
     > "dbfs:/user/hive/warehouse"->"abfss://adbdata@myws.dfs.core.windows.net/synapse/workspaces/my-demo/warehouse",
     > "dbfs:/user/hive/warehouse/"->"abfss://adbdata@myws.dfs.core.windows.net/synapse/workspaces/my-demo/warehouse/db_prefix_") 
     > 
-    > Source ADB DB location is: dbfs:/user/hive/warehouse/mydb.db/
-    > Tagert Synapse DB location will be: abfss://adbdata@myws.dfs.core.windows.net/synapse/workspaces/my-demo/warehouse/db_prefix_mydb.db/
+    > Source ADB DB location is: "dbfs:/user/hive/warehouse/mydb.db/"
+    > Tagert Synapse DB location will be: "abfss://adbdata@myws.dfs.core.windows.net/synapse/workspaces/my-demo/warehouse/db_prefix_mydb.db/"
 
     Note: if no mapping abfss path for some DBFS location in ADB catalog objects, the migration will fail
     
@@ -122,7 +118,6 @@ Optional: copy your data to the new create catalog folder
   var DatabasePrefix = ""
   var TablePrefix = ""
   var IgnoreIfExists = false
-  var OverrideIfExists = false
 
   var LocationPrefixMappings:Map[String, String] = Map("dbfs:/user/hive/warehouse"->"abfss://<container_name>@<storage_account_name>.dfs.core.windows.net/catalog/hive/warehouse")
  ```
@@ -132,11 +127,13 @@ Optional: copy your data to the new create catalog folder
 ## Monitor Migration progress
 ### Monitor export progress 
 
-Export script is executed in Databrick notebook. Our script is print the total get databases, tables and partition in last cmd output. You can monitor the export progress here.
+Export script is executed in Databrick notebook. The export progress is output at "execution output" of last cmd. Total exported databases, tables and partitions count are also output in "execution output" of last cmd. 
  
-### Monitor import progress 
+### Monitor import progress
 
-Import script is executed in Synapse notebook. Import database, table and partition are executed in different cells. When import cell running, you can check what the cell doing as below
+Import script is executed in Synapse notebook. Import database, table and partition are executed in different cells. Progress of database/table/partition can be monitor as below: 
 1.	click the "view in monitoring" at the right bottom of cell to go to the spark application monitor page 
 2.	In spark application monitor page, choose Logs -> driver-> stderr to check what the cell doing. 
-3.	After cell executed, you can also see how many catalog objects created at the cell output. You can also see how many catalog objects on spark application monitor page, Logs -> driver-> stdout part.
+
+## Migration result validation
+After import cell execution completed, created database/table/partition count and validation result are output at "execution output" of each import cell.

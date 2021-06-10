@@ -5,6 +5,7 @@ var StorageAccountAccessKey = "<storage_account_access_key>"
 
 var DatabaseNames = "" 
 
+
 // COMMAND ----------
 
 
@@ -35,9 +36,15 @@ object ExportMetadata {
 
   import spark.implicits._
 
+  val DatabaseType = "database"
+  val TableType = "table"
+  val PartitionType = "partition"
+
   case class CatalogPartitions(database: String, table: String, tablePartitons: Seq[CatalogTablePartition])
 
   case class CatalogTables(database: String, tables: Seq[CatalogTable])
+
+  case class CatalogStat(entityType: String, count: Int, database: Option[String], table: Option[String])
 
   def ConvertToJsonStringList(objs: List[Object]):List[String] = {
 
@@ -73,7 +80,7 @@ object ExportMetadata {
     df.write.mode(SaveMode.Overwrite).text(filePath);
   }
 
-  def ExportCatalogObjectsToFile(databases: List[CatalogDatabase], tables: List[CatalogTables], partitions: List[CatalogPartitions], outputDirectory: String) : Unit = {
+  def ExportCatalogObjectsToFile(databases: List[CatalogDatabase], tables: List[CatalogTables], partitions: List[CatalogPartitions], stats: List[CatalogStat], outputDirectory: String) : Unit = {
     val jsonStringForDbs = ConvertToJsonStringList(databases)
     WriteToFile(jsonStringForDbs, outputDirectory.trim() + "/databases")
     println("Databases are exported to: " + outputDirectory.trim() + "/databases "+ Calendar.getInstance().getTime())
@@ -85,6 +92,9 @@ object ExportMetadata {
     val jsonStringForParts = ConvertToJsonStringList(partitions)
     WriteToFile(jsonStringForParts, outputDirectory.trim() + "/partitions")
     println("Partitions are exported to: " + outputDirectory.trim() + "/partitions "+ Calendar.getInstance().getTime())
+
+    val jsonStringForStats = ConvertToJsonStringList(stats);
+    WriteToFile(jsonStringForStats, outputDirectory.trim() + "/catalogObjectStats")
   }
 
   def ExportCatalogObjectFromMetadataStore(outputDirecoty: String, databaseNames: String):Unit = {
@@ -154,15 +164,40 @@ object ExportMetadata {
     println(tableCount + " tables get from metastore. "+ Calendar.getInstance().getTime())
     println(partitionCount + " partitions get from metastore. "+ Calendar.getInstance().getTime())
 
-    ExportCatalogObjectsToFile(dbBuffer.toList, tableBuffer.toList, partitionBuffer.toList, outputDirecoty)
+    // Sum database count
+    var statBuffer = new ListBuffer[CatalogStat];
+    statBuffer.append(CatalogStat(DatabaseType, dbBuffer.size, None, None))
+
+    // Sum table count
+    var totalTableCount = 0;
+    tableBuffer.groupBy(tbls => tbls.database).foreach(group => {
+      var tblcount = 0;
+      group._2.foreach(tbls => {
+        tblcount += tbls.tables.size
+      })
+      statBuffer.append(CatalogStat(TableType, tblcount, Some(group._1), None))
+      totalTableCount += tblcount;
+    })
+    statBuffer.append(CatalogStat(TableType, totalTableCount, None, None))
+
+    // Sum Parititon Count
+    var totablPartitionCount = 0;
+    partitionBuffer.groupBy(parts => (parts.database, parts.table)).foreach(group => {
+      var partCount = 0;
+      group._2.foreach(parts => {
+        partCount += parts.tablePartitons.size
+      })
+      statBuffer.append(CatalogStat(PartitionType, partCount, Some(group._1._1), Some(group._1._2)))
+      totablPartitionCount += partCount;
+    })
+    statBuffer.append(new CatalogStat(PartitionType, totablPartitionCount, None, None))
+
+    ExportCatalogObjectsToFile(dbBuffer.toList, tableBuffer.toList, partitionBuffer.toList, statBuffer.toList, outputDirecoty)
   }
 
 }
 
-
 println("IntermediateFolderPath: " + IntermediateFolderPath + ". " + Calendar.getInstance().getTime())
 println("DatabaseNames : " + DatabaseNames + ". " + Calendar.getInstance().getTime())
 ExportMetadata.ExportCatalogObjectFromMetadataStore(IntermediateFolderPath, DatabaseNames)
-
-
 
