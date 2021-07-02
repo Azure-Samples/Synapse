@@ -29,9 +29,7 @@ As you troubleshoot the issues, make sure you have done the following checklist.
     - Az.Resources: 3.3.0
     - Az.Accounts: 2.2.6
     - Az.Synapse: 0.8.0
-1. 	Make sure you’ve downloaded the latest version of the code
-    - [Migration tool](https://dev.azure.com/adfcustomersuccess/_git/ADF%20Migration%20to%20Synapse?path=%2FimportADFtoSynapseTool.ps1)
-    - [Migration Utils code being used in the tool](https://dev.azure.com/adfcustomersuccess/_git/ADF%20Migration%20to%20Synapse?path=%2FUtils.ps1)
+
 1.	Check and see if you can login in with a fresh PowerShell 7 Terminal Instance with the following command        
     -    Connect-AzAccount
     - Or Connect-AzAccount -Subscription <Your Sub ID>
