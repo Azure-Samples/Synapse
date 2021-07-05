@@ -31,5 +31,9 @@ Shows .NET for Spark and shared metadata experience between Spark created tables
 * [Description and notebooks/code files](Notebooks/Spark.NET%20C%23/Tweets)
 * [Sample Data](Data/Tweets))
 
+### ADF to Synapse Migration Tool
+
+The [ADF to Synapse Migration Tool](Pipelines/ImportADFtoSynapse) (currently PowerShell scripts) enables you to migrate Azure Data Factory pipelines, datasets, linked service, integration runtime and triggers to a Synapse Analytics Workspace.
+
 ## Contributing
 This project welcomes contributions and suggestions. See the [Contributor's guide](https://github.com/Azure-Samples/Synapse/tree/master/CONTRIBUTE.md)
