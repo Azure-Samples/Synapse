@@ -82,6 +82,7 @@ sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\views\d
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\views\dbc.tables.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\views\microsoft.dw_active_queries.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\views\microsoft.dw_active_queue.sql
+sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\views\microsoft.dw_calendar.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\views\microsoft.dw_configuration.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\views\microsoft.dw_extension_version.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\views\microsoft.dw_statistics_information.sql
@@ -96,7 +97,7 @@ sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\procedu
 ECHO Executing procedures
 
 REM Executing code
-sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -Q "SET NOCOUNT ON; exec microsoft.proc_fill_calendar @startdate = '01/01/1900', @enddate = '12/31/2099';"
+REM sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -Q "SET NOCOUNT ON; exec microsoft.proc_fill_calendar @startdate = '01/01/1900', @enddate = '12/31/2099';"
 
 ECHO.
 ECHO Finished

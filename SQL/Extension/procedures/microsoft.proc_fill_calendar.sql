@@ -1,5 +1,3 @@
-SET NOCOUNT ON;
-
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID('microsoft.proc_fill_calendar'))
 BEGIN
     DROP PROCEDURE microsoft.proc_fill_calendar; 
@@ -165,11 +163,4 @@ BEGIN
     END
 
 END;
-GO
-
--- DWU 1000c: ~1:36.46
-EXEC microsoft.proc_fill_calendar @startdate = '01/01/1900', @enddate = '12/31/2100';
-GO
-
-SELECT * FROM microsoft.calendar;
 GO
