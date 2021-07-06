@@ -99,6 +99,12 @@ ECHO Executing procedures
 REM Executing code
 REM sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -Q "SET NOCOUNT ON; exec microsoft.proc_fill_calendar @startdate = '01/01/1900', @enddate = '12/31/2099';"
 
+ECHO Loading database
+bcp microsoft.calendar in .\data\microsoft.calendar.txt -c -S %_server% -d %_database% -U %_username% -P %_password% -q
+
+ECHO Optimizing tables
+sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\scripts\microsoft.calendar.sql
+
 ECHO.
 ECHO Finished
 ECHO.
