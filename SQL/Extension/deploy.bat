@@ -43,6 +43,11 @@ REM Schemas
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\schemas\dbc.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\schemas\microsoft.sql
 
+ECHO Deploying tables
+
+REM Tables
+sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\tables\microsoft.calendar.sql
+
 ECHO Deploying functions
 
 REM Functions
@@ -81,6 +86,17 @@ sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\views\m
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\views\microsoft.dw_extension_version.sql
 sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\views\microsoft.dw_statistics_information.sql
 rem sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\views\microsoft.dw_table_information.sql
+
+
+ECHO Deploying procedures
+
+REM Procedures
+sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -i .\procedures\microsoft.proc_fill_calendar.sql
+
+ECHO Executing procedures
+
+REM Executing code
+sqlcmd -S %_server% -d %_database% -U %_username% -P %_password% -I -Q "SET NOCOUNT ON; exec microsoft.proc_fill_calendar @startdate = '01/01/1900', @enddate = '12/31/2099';"
 
 ECHO.
 ECHO Finished

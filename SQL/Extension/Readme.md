@@ -36,6 +36,11 @@ The Azure Synapse SQL Extension will install a collection of vies to your Synaps
 `
 ## Version History
 
+### July 2, 2021
+What's new:
+- [Table]: The `microsoft.calendar` table that contains dates from 1900 to 2100 for joining date based operations.
+- [Procedure]: The `microsoft.proc_fill_calendar` procedure that is used to populate the `microsoft.calendar` table.
+
 ### June 9, 2021
 What's new:
 - [Function]: The 'microsoft.days_between' script installs a function that emulates the 'DAYS_BETWEEN(expression, expression)' IBM Netezza function.
