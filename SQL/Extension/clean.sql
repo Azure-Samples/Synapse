@@ -1,3 +1,7 @@
+-- Procedures
+PRINT 'Removing procedures';
+IF EXISTS (SELECT * FROM sys.objects WHERE schema_id=SCHEMA_ID('microsoft') AND name = N'proc_fill_calendar') DROP PROCEDURE [microsoft].[proc_fill_calendar];
+
 -- Functions
 PRINT 'Removing functions';
 IF EXISTS (SELECT * FROM sys.objects WHERE schema_id=SCHEMA_ID('microsoft') AND name = N'acosh') DROP FUNCTION [microsoft].[acosh];
@@ -26,11 +30,15 @@ IF EXISTS (SELECT * FROM sys.objects WHERE schema_id=SCHEMA_ID('microsoft') AND 
 PRINT 'Removing views';
 IF EXISTS (SELECT * FROM sys.objects WHERE schema_id=SCHEMA_ID('microsoft') AND name = N'dw_active_queries') DROP VIEW [microsoft].[dw_active_queries];
 IF EXISTS (SELECT * FROM sys.objects WHERE schema_id=SCHEMA_ID('microsoft') AND name = N'dw_active_queue') DROP VIEW [microsoft].[dw_active_queue];
+IF EXISTS (SELECT * FROM sys.objects WHERE schema_id=SCHEMA_ID('microsoft') AND name = N'dw_calendar') DROP VIEW [microsoft].[dw_calendar];
 IF EXISTS (SELECT * FROM sys.objects WHERE schema_id=SCHEMA_ID('microsoft') AND name = N'dw_configuration') DROP VIEW [microsoft].[dw_configuration];
 IF EXISTS (SELECT * FROM sys.objects WHERE schema_id=SCHEMA_ID('microsoft') AND name = N'dw_extension_version') DROP VIEW [microsoft].[dw_extension_version];
 IF EXISTS (SELECT * FROM sys.objects WHERE schema_id=SCHEMA_ID('microsoft') AND name = N'dw_statistics_information') DROP VIEW [microsoft].[dw_statistics_information];
 IF EXISTS (SELECT * FROM sys.objects WHERE schema_id=SCHEMA_ID('dbc') AND name = N'databases') DROP VIEW [dbc].[databases];
 IF EXISTS (SELECT * FROM sys.objects WHERE schema_id=SCHEMA_ID('dbc') AND name = N'tables') DROP VIEW [dbc].[tables];
+
+-- Tables
+IF EXISTS (SELECT * FROM sys.objects WHERE schema_id=SCHEMA_ID('microsoft') AND name = N'calendar') DROP TABLE [microsoft].[calendar];
 
 -- Schemas
 PRINT 'Removing schemas';
