@@ -61,14 +61,12 @@ You can get the Resource IDs for Azure Data Factory and Azure Synapse Analytics.
  .\importADFtoSynapseTool.ps1 -ConfigFile appsettings.json
 ```
 
-<span style="color:red">[!NOTE]</span>
-*  Existing resources in destination workspace with the same name will be overwritten. 
-*  Same networking setting between Azure Data Factory and Synapse is required.
+>[!NOTE]
+> *  Existing resources in destination workspace with the same name will be overwritten. 
+> *  Same networking setting between Azure Data Factory and Synapse is required.
 e.g. Managed Virtual Network of Azure Data Factory is enabled on both Azure Data Factory and Synapse.
-*  The migration tool does not support migration of ADF SSIS pipeline
-* Refer to the [Troubleshooting Guide](./Troubleshooting.md) if you run into any issues when using the migration PowerShell script
- 
-* * *
+> *  The migration tool does not support migration of ADF SSIS pipeline
+> * Refer to the [Troubleshooting Guide](./Troubleshooting.md) if you run into any issues when using the migration PowerShell script
 
 ## How do I exclude specific objects from my Data Factory source factory?
 This migration tool will migrate all objects from the published version of your factory that is live in Azure. You will have to remove any objects that you do not wish to migrate to your Synapse workspace. If you do not wish to modify your source ADF, then you should make a copy of the existing factory, remove the objects you do not wish to migrate, and use that new factory as your source.
