@@ -109,7 +109,8 @@
             "type": 2,
             "description": "Spark Application Livy Id and Name",
             "isRequired": true,
-            "query": "SparkMetrics_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and isnotempty(livyId_s)\r\n| summarize by livyId_s, applicationName_s\r\n| order by livyId_s desc\r\n| extend applicationName = substring(applicationName_s, 0, strlen(applicationName_s) - 1)\r\n| project value = livyId_s, label = strcat(livyId_s, \" | \", applicationName), selected = false",
+            "query": "SparkMetrics_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and isnotempty(livyId_s)\r\n| extend applicationName = column_ifexists(\"applicationName_s\", applicationId_s)\r\n| summarize by livyId_s, applicationName\r\n| order by livyId_s desc\r\n| project value = livyId_s, label = strcat(livyId_s, \" | \", applicationName), selected = false",
+            "value": null,
             "typeSettings": {
               "additionalResourceOptions": [],
               "showDefault": false
