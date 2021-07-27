@@ -354,6 +354,16 @@ function ProcessResource {
             Write-Host ""
             Write-Host "Processing $resourceType" -ForegroundColor White
             $resourcesToBeCopied.AddRange($srcResponse.Value);
+
+            while ($srcResponse.PSobject.Properties.Name.Contains("nextLink")) {
+                Write-Host "Processing next page $srcResponse.nextLink"
+                $nextLink = $srcResponse.nextLink
+                $srcResponse = Invoke-RestMethod -UseBasicParsing -Uri $nextLink -Method Get -ContentType "application/json" -Headers @{ Authorization = "Bearer $token"} 
+                if ($srcResponse.Value.Length -gt 0) {
+                    $resourcesToBeCopied.AddRange($srcResponse.Value);
+                }
+            }
+
             WriteSuccessResponse("  Migrating $($resourcesToBeCopied.Count) $resourceType")
         }
         elseif($resourcesToBeCopied.Count -le 0) {
