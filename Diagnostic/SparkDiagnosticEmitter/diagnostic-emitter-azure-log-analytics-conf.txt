@@ -1,0 +1,6 @@
+spark.synapse.diagnostic.emitters MyDestination1
+spark.synapse.diagnostic.emitter.MyDestination1.type AzureLogAnalytics
+spark.synapse.diagnostic.emitter.MyDestination1.categories Log,EventLog,Metrics
+spark.synapse.diagnostic.emitter.MyDestination1.workspaceId <workspace-id>
+spark.synapse.diagnostic.emitter.MyDestination1.secret.keyVault <key-vault-name>
+spark.synapse.diagnostic.emitter.MyDestination1.secret.keyVault.secretName <key-vault-secret-name>
