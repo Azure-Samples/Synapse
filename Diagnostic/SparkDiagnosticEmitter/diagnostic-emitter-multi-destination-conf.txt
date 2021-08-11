@@ -10,6 +10,6 @@ spark.synapse.diagnostic.emitter.MyDestination1.secret.keyVault.secretName <key-
 spark.synapse.diagnostic.emitters MyDestination2
 spark.synapse.diagnostic.emitter.MyDestination2.type AzureLogAnalytics
 spark.synapse.diagnostic.emitter.MyDestination2.categories Log,EventLog,Metrics
-spark.synapse.diagnostic.emitter.MyDestination2.workspaceId <workspace-id>
+spark.synapse.diagnostic.emitter.MyDestination2.workspaceId <azure-log-analytics-workspace-id>
 spark.synapse.diagnostic.emitter.MyDestination2.secret.keyVault <key-vault-name>
-spark.synapse.diagnostic.emitter.MyDestination2.secret.keyVault.secretName <key-vault-secret-name>
+spark.synapse.diagnostic.emitter.MyDestination2.secret.keyVault.secretName <key-vault-secret-name-for-log-analytics-key>
