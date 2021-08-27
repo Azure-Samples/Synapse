@@ -29,7 +29,50 @@ The Azure Synapse SQL Extension will install a collection of vies to your Synaps
 .\deploy.bat demo.database.windows.net DemoDW cloudsa very_secure_password
 `
 
+### Clean up Example
+
+`
+.\clean.bat demo.database.windows.net DemoDW cloudsa very_secure_password
+`
 ## Version History
+
+### July 6, 2021
+What's new:
+
+- [View] The `microsoft.dw_calendar` script installs a view that extends the `microsoft.calendar` table with the `day_of_week`, `week_start`, and `week_end` columns that are [@@DATEFIRST](https://docs.microsoft.com/sql/t-sql/functions/datefirst-transact-sql) aware.
+- [Deploy] The `deploy.bat` now loads the `microsoft.calendar` table from the supplied [.\data\microsoft.data.txt](.\data\microsoft.data.txt) file with a date range of 01/01/1900 through 12/31/2100 for faster performance.
+- [Deploy] The `deploy.bat` now optimizes the `microsoft.calendar` table by adding the `idx_microsoft_calendar_calendar_date` clustered index and the covering `stx_microsoft_calendar_all` statistics.
+
+### July 2, 2021
+What's new:
+
+- [Table]: The `microsoft.calendar` table that contains dates from 1900 to 2100 for joining date based operations.
+- [Procedure]: The `microsoft.proc_fill_calendar` procedure that is used to populate the `microsoft.calendar` table.
+
+### June 9, 2021
+What's new:
+- [Function]: The `microsoft.days_between` script installs a function that emulates the `DAYS_BETWEEN(expression, expression)` IBM Netezza function.
+- [Bug]: The `microsoft.date_trunc` function has been updated to accurately support date truncation and improve performance.
+
+### February 4, 2021
+What's new:
+- [Function]: The `microsoft.ltrim` and 'microsoft.rtrim' scripts are updated to improve performance.
+
+### January 22, 2021
+What's new:
+- [Function]: The `microsoft.corr` script installs a function that emulates the `CORR(expression, expression)` Teradata function.
+
+### December 15, 2020
+What's new:
+- [Function]: The `microsoft.date_trunc` script installs a function that emulates the `DATE_TRUNC(date_part, expression)` IBM Netezza function.
+- [Function]: The `microsoft.firstdayofmonth` script installs a function that returns the first day of the specified month as DATETIME2.
+- [Function]: The `microsoft.firstdayofquarter` script installs a function that returns the first day of the specified quarter as DATETIME2.
+- [Function]: The `microsoft.firstdayofyear` script installs a function that returns the first day of the specified year as DATETIME2.
+- [Schema]: Added the `dbc` schema to support the `dbc.databases` and `dbc.tables` views.
+
+### December 7, 2020
+What's new:
+- [Function]: The `microsoft.random` script installs a function that emulates the `RANDOM(expression, expression)` Teradata function.
 
 ### December 1, 2020
 What's new:

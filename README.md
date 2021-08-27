@@ -11,10 +11,8 @@ urlFragment: "update-this-to-unique-url-stub"
 # Samples for Azure Synapse Analytics
 
 ## Resources
-* Documentation
-    * GA Docs [aka.ms/SynapseDocs](https://aka.ms/SynapseDocs)
-    * Workspaces Preview Docs [aka.ms/SynapseWorkspaceDocs](aka.ms/SynapseWorkspaceDocs)
-* Samples - [aka.ms/SynapseSamples](https://aka.ms/Synapsesamples) - this location
+* Documentation [https://aka.ms/SynapseDocs](https://aka.ms/SynapseDocs)
+* Samples - [https://aka.ms/SynapseSamples](https://aka.ms/Synapsesamples) - this location
 
 ## Contents
 
@@ -27,11 +25,15 @@ urlFragment: "update-this-to-unique-url-stub"
 
 ## Scenario-based Samples
 
-The following samples may span across several of the technology specific samples:
+### Tweet Analysis
+Shows .NET for Spark and shared metadata experience between Spark created tables and SQL.
 
-### Tweet Analysis ([Description and notebooks/code files](Notebooks/Spark.NET%20C%23/Tweets) - [Sample Data](Data/Tweets))
+* [Description and notebooks/code files](Notebooks/Spark.NET%20C%23/Tweets)
+* [Sample Data](Data/Tweets))
 
-Shows .NET for Spark and shared meta data experience between Spark created tables and SQL.
+### ADF to Synapse Migration Tool
+
+The [ADF to Synapse Migration Tool](Pipelines/ImportADFtoSynapse) (currently PowerShell scripts) enables you to migrate Azure Data Factory pipelines, datasets, linked service, integration runtime and triggers to a Synapse Analytics Workspace.
 
 ## Contributing
 This project welcomes contributions and suggestions. See the [Contributor's guide](https://github.com/Azure-Samples/Synapse/tree/master/CONTRIBUTE.md)

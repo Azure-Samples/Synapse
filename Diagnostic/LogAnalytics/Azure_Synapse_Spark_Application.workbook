@@ -1,0 +1,1717 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlParameterItem/1.0",
+        "parameters": [
+          {
+            "id": "c0a924e6-38dc-401b-98be-d1470ac508b8",
+            "version": "KqlParameterItem/1.0",
+            "name": "TimeRange",
+            "label": "Time Range",
+            "type": 4,
+            "isRequired": true,
+            "value": {
+              "durationMs": 86400000
+            },
+            "typeSettings": {
+              "selectableValues": [
+                {
+                  "durationMs": 300000
+                },
+                {
+                  "durationMs": 900000
+                },
+                {
+                  "durationMs": 1800000
+                },
+                {
+                  "durationMs": 3600000
+                },
+                {
+                  "durationMs": 14400000
+                },
+                {
+                  "durationMs": 43200000
+                },
+                {
+                  "durationMs": 86400000
+                },
+                {
+                  "durationMs": 172800000
+                },
+                {
+                  "durationMs": 259200000
+                },
+                {
+                  "durationMs": 604800000
+                },
+                {
+                  "durationMs": 1209600000
+                },
+                {
+                  "durationMs": 2592000000
+                }
+              ],
+              "allowCustom": true
+            },
+            "timeContext": {
+              "durationMs": 86400000
+            },
+            "timeContextFromParameter": "TimeRange"
+          },
+          {
+            "id": "aefb4ef7-5e64-443e-bc36-0d97f44d954e",
+            "version": "KqlParameterItem/1.0",
+            "name": "Workspace",
+            "label": "Synapse Workspace ",
+            "type": 2,
+            "isRequired": true,
+            "query": "SparkMetrics_CL\r\n| summarize by workspaceName_s\r\n| where isnotempty(workspaceName_s)\r\n| order by workspaceName_s\r\n| project value = workspaceName_s, label = workspaceName_s, selected = false",
+            "typeSettings": {
+              "additionalResourceOptions": [],
+              "showDefault": false
+            },
+            "timeContext": {
+              "durationMs": 0
+            },
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "value": null
+          },
+          {
+            "id": "65632680-7b6a-4b0a-896c-7f7bc7d5c934",
+            "version": "KqlParameterItem/1.0",
+            "name": "SparkPool",
+            "label": "Spark Pool",
+            "type": 2,
+            "isRequired": true,
+            "query": "SparkMetrics_CL\r\n| where workspaceName_s == \"{Workspace:value}\"\r\n| summarize by clusterName_s\r\n| order by clusterName_s\r\n",
+            "typeSettings": {
+              "additionalResourceOptions": [],
+              "showDefault": false
+            },
+            "timeContext": {
+              "durationMs": 86400000
+            },
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces"
+          },
+          {
+            "id": "9d5e1d9f-ced7-4c00-8b9d-bc7864b23067",
+            "version": "KqlParameterItem/1.0",
+            "name": "LivyId",
+            "label": "App Livy Id | Name",
+            "type": 2,
+            "description": "Spark Application Livy Id and Name",
+            "isRequired": true,
+            "query": "SparkMetrics_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and isnotempty(livyId_s)\r\n| extend applicationName = column_ifexists(\"applicationName_s\", applicationId_s)\r\n| summarize by livyId_s, applicationName\r\n| order by livyId_s desc\r\n| project value = livyId_s, label = strcat(livyId_s, \" | \", applicationName), selected = false",
+            "value": null,
+            "typeSettings": {
+              "additionalResourceOptions": [],
+              "showDefault": false
+            },
+            "timeContext": {
+              "durationMs": 0
+            },
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces"
+          },
+          {
+            "id": "031565fc-6626-4bd0-90d7-8f858d2307fe",
+            "version": "KqlParameterItem/1.0",
+            "name": "Interval",
+            "type": 1,
+            "query": "SparkMetrics_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| summarize end=max(TimeGenerated), start=min(TimeGenerated)\r\n| extend interval = max_of(bin((end - start) / 100, 30s), 30s)\r\n| project interval",
+            "isHiddenWhenLocked": true,
+            "timeContext": {
+              "durationMs": 0
+            },
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces"
+          }
+        ],
+        "style": "above",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces"
+      },
+      "name": "Header Dropdowns"
+    },
+    {
+      "type": 11,
+      "content": {
+        "version": "LinkItem/1.0",
+        "style": "tabs",
+        "links": [
+          {
+            "id": "935fd239-3d75-4a4e-9ef3-7575926f3b83",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Guide",
+            "subTarget": "Guide",
+            "preText": "Metrics",
+            "postText": "1",
+            "style": "primary"
+          },
+          {
+            "id": "0f9974b2-1d0a-4009-a0a2-e6daa028552b",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Application Summary",
+            "subTarget": "Summary",
+            "preText": "Metrics",
+            "postText": "1",
+            "style": "primary"
+          },
+          {
+            "id": "928b79c1-7ff7-4f38-b52d-f74e1999dded",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Executors",
+            "subTarget": "Executors",
+            "preText": "Metrics",
+            "postText": "1",
+            "style": "primary"
+          },
+          {
+            "id": "9246e88b-9682-498c-b440-f53a15b6e481",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Streaming",
+            "subTarget": "Streaming",
+            "preText": "Metrics",
+            "postText": "1",
+            "style": "primary"
+          },
+          {
+            "id": "cfcc40e9-dc73-4c62-ac80-6fc5c8ee6301",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Custom Metrics",
+            "subTarget": "CustomMetrics",
+            "preText": "Metrics",
+            "postText": "1",
+            "style": "primary"
+          },
+          {
+            "id": "d418efc1-704b-4446-aae2-cee9dda8f8bb",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Logs",
+            "subTarget": "Logs",
+            "style": "link"
+          }
+        ]
+      },
+      "name": "Header Links"
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlParameterItem/1.0",
+        "parameters": [
+          {
+            "id": "a5646be0-9334-4a9f-a2d6-c08125a168ab",
+            "version": "KqlParameterItem/1.0",
+            "name": "Level",
+            "type": 2,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "value": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "limitSelectTo": 1,
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "selectAllValue": "All",
+              "showDefault": false
+            },
+            "jsonData": "[\r\n    { \"value\": \"INFO\", \"label\": \"INFO\" },\r\n    { \"value\": \"WARN\", \"label\": \"WARN\" },\r\n    { \"value\": \"ERROR\", \"label\": \"ERROR\" },\r\n    { \"value\": \"DEBUG\", \"label\": \"DEBUG\" }\r\n]",
+            "timeContext": {
+              "durationMs": 172800000
+            },
+            "timeContextFromParameter": "TimeRange",
+            "defaultValue": "value::all"
+          },
+          {
+            "id": "d130855b-b533-4f78-b050-7d68089964c3",
+            "version": "KqlParameterItem/1.0",
+            "name": "Logger",
+            "type": 2,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "SparkLoggingEvent_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| summarize by logger_name_s\r\n| order by logger_name_s\r\n\r\n",
+            "typeSettings": {
+              "limitSelectTo": 1,
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "selectAllValue": "All",
+              "showDefault": false
+            },
+            "timeContext": {
+              "durationMs": 0
+            },
+            "timeContextFromParameter": "TimeRange",
+            "defaultValue": "value::all",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces"
+          }
+        ],
+        "style": "above",
+        "doNotRunWhenHidden": true,
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces"
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Logs"
+      },
+      "name": "Logs Filter Dropdown"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "SparkLoggingEvent_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| project TimeGenerated, executorId_s, Level, logger_name_s, Message, exception_stacktrace_s\r\n| where iff(\"{Logger:label}\" == \"All\", true, logger_name_s in ({Logger}))\r\n| where iff(\"{Level:label}\" == \"All\", true, Level in ({Level}))\r\n| order by TimeGenerated asc\r\n| limit 1000",
+        "size": 2,
+        "showAnalytics": true,
+        "title": "View and Filter Logs",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "timeContextFromParameter": "TimeRange",
+        "showExportToExcel": true,
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "Message",
+              "formatter": 1,
+              "formatOptions": {
+                "customColumnWidthSetting": "100ch"
+              }
+            },
+            {
+              "columnMatch": "exception_stacktrace_s",
+              "formatter": 0,
+              "formatOptions": {
+                "customColumnWidthSetting": "26.7143ch"
+              }
+            }
+          ],
+          "rowLimit": 1000,
+          "filter": true,
+          "sortBy": [
+            {
+              "itemKey": "TimeGenerated",
+              "sortOrder": 2
+            }
+          ],
+          "labelSettings": [
+            {
+              "columnId": "TimeGenerated",
+              "label": "Time"
+            },
+            {
+              "columnId": "executorId_s",
+              "label": "Executor"
+            },
+            {
+              "columnId": "logger_name_s",
+              "label": "Logger"
+            },
+            {
+              "columnId": "exception_stacktrace_s",
+              "label": "Exception"
+            }
+          ]
+        },
+        "sortBy": [
+          {
+            "itemKey": "TimeGenerated",
+            "sortOrder": 2
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Logs"
+      },
+      "name": "Logs"
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlParameterItem/1.0",
+        "parameters": [
+          {
+            "id": "f1e61b4e-0f2a-479b-8dc2-c1205bc4aab9",
+            "version": "KqlParameterItem/1.0",
+            "name": "MetricName",
+            "type": 2,
+            "isRequired": true,
+            "query": "SparkMetrics_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| extend metrics_name=strcat_array(array_slice(split(name_s, \".\"), 2, -1), \".\")\r\n| where metrics_name startswith_cs \"CustomMetrics\"\r\n| extend custom_metrics_name=tostring(split(metrics_name, \".\")[-1])\r\n| summarize by custom_metrics_name\r\n\r\n",
+            "typeSettings": {
+              "additionalResourceOptions": [],
+              "showDefault": false
+            },
+            "timeContext": {
+              "durationMs": 0
+            },
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces"
+          }
+        ],
+        "style": "above",
+        "doNotRunWhenHidden": true,
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces"
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "CustomMetrics"
+      },
+      "name": "CustomMetricsSelector"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "let data = SparkMetrics_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| extend metrics_name=strcat_array(array_slice(split(name_s, \".\"), 2, -1), \".\"), executor=strcat(\"executor=\", executorId_s)\r\n| where metrics_name endswith_cs \"{MetricName}\";\r\ndata\r\n| extend value = case(metric_type_s == \"Gauge\", value_d, metric_type_s == \"Counter\", count_d, value_d)\r\n| summarize max(value) by bin(TimeGenerated, 30s), executor\r\n| order by TimeGenerated asc",
+        "size": 0,
+        "aggregation": 5,
+        "showAnnotations": true,
+        "showAnalytics": true,
+        "title": "Custom Metric",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "showRefreshButton": true,
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "areachart",
+        "tileSettings": {
+          "showBorder": false,
+          "titleContent": {
+            "columnMatch": "TenantId",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "m15_rate_d",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "graphSettings": {
+          "type": 0,
+          "topContent": {
+            "columnMatch": "app_id",
+            "formatter": 1
+          },
+          "centerContent": {
+            "columnMatch": "value_d",
+            "formatter": 1,
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "chartSettings": {
+          "showLegend": true,
+          "ySettings": {
+            "numberFormatSettings": {
+              "unit": 0,
+              "options": {
+                "style": "decimal",
+                "useGrouping": false
+              }
+            }
+          }
+        },
+        "mapSettings": {
+          "locInfo": "LatLong",
+          "sizeSettings": "value_d",
+          "sizeAggregation": "Sum",
+          "legendMetric": "value_d",
+          "legendAggregation": "Sum",
+          "itemColorSettings": {
+            "type": "heatmap",
+            "colorAggregation": "Sum",
+            "nodeColorField": "value_d",
+            "heatmapPalette": "greenRed"
+          }
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "CustomMetrics"
+      },
+      "name": "Custom Metric"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "let Data = SparkListenerEvent_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\";\r\n\r\nunion\r\n(SparkMetrics_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| where executorId_s != \"driver\"\r\n| summarize by executorId_s\r\n| count as Value\r\n| extend Name=\"Executors\", Order=0\r\n),\r\n(Data\r\n| where Event_s == \"SparkListenerJobStart\"\r\n| count as Value \r\n| extend Name=\"JobStarted\", Order=1\r\n),\r\n(Data\r\n| where Event_s == \"SparkListenerJobEnd\" and Job_Result_Result_s == \"JobSucceeded\"\r\n| count as Value \r\n| extend Name=\"JobSucceeded\", Order=2\r\n),\r\n(Data\r\n| where Event_s == \"SparkListenerJobEnd\" and Job_Result_Result_s == \"JobFailed\"\r\n| count as Value \r\n| extend Name=\"JobFailed\", Order=3\r\n),\r\n(Data\r\n| where Event_s == \"SparkListenerStageSubmitted\"\r\n| count as Value \r\n| extend Name=\"StageSubmitted\", Order=4\r\n),\r\n(Data\r\n| where Event_s == \"SparkListenerTaskStart\"\r\n| count as Value \r\n| extend Name=\"TaskStarted\", Order=5\r\n),\r\n(Data\r\n| where Event_s == \"SparkListenerTaskEnd\"\r\n| count as Value \r\n| extend Name=\"TaskEnded\", Order=6\r\n)\r\n",
+        "size": 4,
+        "showAnnotations": true,
+        "showAnalytics": true,
+        "title": "Application Overview",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "timeContextFromParameter": "TimeRange",
+        "showRefreshButton": true,
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "tiles",
+        "tileSettings": {
+          "titleContent": {
+            "columnMatch": "Name",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "Value",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "style": "decimal",
+                "useGrouping": false,
+                "maximumFractionDigits": 2,
+                "maximumSignificantDigits": 4
+              },
+              "emptyValCustomText": "-"
+            }
+          },
+          "showBorder": false,
+          "sortCriteriaField": "Order",
+          "sortOrderField": 1,
+          "size": "auto"
+        },
+        "graphSettings": {
+          "type": 0,
+          "topContent": {
+            "columnMatch": "app_id",
+            "formatter": 1
+          },
+          "centerContent": {
+            "columnMatch": "value_d",
+            "formatter": 1,
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "mapSettings": {
+          "locInfo": "LatLong",
+          "sizeSettings": "value_d",
+          "sizeAggregation": "Sum",
+          "legendMetric": "value_d",
+          "legendAggregation": "Sum",
+          "itemColorSettings": {
+            "type": "heatmap",
+            "colorAggregation": "Sum",
+            "nodeColorField": "value_d",
+            "heatmapPalette": "greenRed"
+          }
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Summary"
+      },
+      "customWidth": "70",
+      "name": "Application Overview"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "let Data = SparkListenerEvent_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\";\r\n\r\nunion\r\n(Data\r\n| where Event_s == \"org.apache.spark.sql.streaming.StreamingQueryListener$QueryProgressEvent\"\r\n| project TimeGenerated, progress_sources=parse_json(column_ifexists(\"progress_sources_s\", \"{}\"))\r\n| mv-expand progress_sources\r\n| project TimeGenerated, InputRows=tolong(progress_sources.numInputRows)\r\n| summarize Value=sum(InputRows)\r\n| extend Name=\"Total Input Rows\", Order=0\r\n),\r\n(Data\r\n| where Event_s == \"org.apache.spark.sql.streaming.StreamingQueryListener$QueryProgressEvent\"\r\n| count as Value\r\n| extend Name=\"Total Query Progress Events\", Order=1\r\n),\r\n(Data\r\n| where Event_s == \"org.apache.spark.sql.streaming.StreamingQueryListener$QueryStartedEvent\"\r\n| count as Value\r\n| extend Name=\"Total Query Starts\", Order=2\r\n),\r\n(Data\r\n| where Event_s == \"org.apache.spark.sql.streaming.StreamingQueryListener$QueryTerminatedEvent\"\r\n| count as Value\r\n| extend Name=\"Total Query Terminateds\", Order=3\r\n)\r\n",
+        "size": 4,
+        "showAnnotations": true,
+        "showAnalytics": true,
+        "title": "Application Streaming Overview",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "timeContextFromParameter": "TimeRange",
+        "showRefreshButton": true,
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "tiles",
+        "tileSettings": {
+          "titleContent": {
+            "columnMatch": "Name",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "Value",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "style": "decimal",
+                "useGrouping": false,
+                "maximumFractionDigits": 2,
+                "maximumSignificantDigits": 4
+              },
+              "emptyValCustomText": "-"
+            }
+          },
+          "showBorder": false,
+          "sortCriteriaField": "Order",
+          "sortOrderField": 1,
+          "size": "auto"
+        },
+        "graphSettings": {
+          "type": 0,
+          "topContent": {
+            "columnMatch": "app_id",
+            "formatter": 1
+          },
+          "centerContent": {
+            "columnMatch": "value_d",
+            "formatter": 1,
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "mapSettings": {
+          "locInfo": "LatLong",
+          "sizeSettings": "value_d",
+          "sizeAggregation": "Sum",
+          "legendMetric": "value_d",
+          "legendAggregation": "Sum",
+          "itemColorSettings": {
+            "type": "heatmap",
+            "colorAggregation": "Sum",
+            "nodeColorField": "value_d",
+            "heatmapPalette": "greenRed"
+          }
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Streaming"
+      },
+      "name": "Application Streaming Overview"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "SparkListenerEvent_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| where Event_s == \"SparkListenerTaskEnd\"\r\n| summarize ResultCount=count() by Task_End_Reason_Reason_s\r\n",
+        "size": 4,
+        "showAnnotations": true,
+        "showAnalytics": true,
+        "title": "Task Results",
+        "noDataMessage": "No task results data.",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "timeContextFromParameter": "TimeRange",
+        "showRefreshButton": true,
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "tiles",
+        "tileSettings": {
+          "titleContent": {
+            "columnMatch": "Task_End_Reason_Reason_s",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "ResultCount",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "style": "decimal",
+                "useGrouping": false,
+                "maximumFractionDigits": 2,
+                "maximumSignificantDigits": 4
+              }
+            }
+          },
+          "showBorder": false,
+          "sortCriteriaField": "Order",
+          "sortOrderField": 1,
+          "size": "auto"
+        },
+        "graphSettings": {
+          "type": 0,
+          "topContent": {
+            "columnMatch": "app_id",
+            "formatter": 1
+          },
+          "centerContent": {
+            "columnMatch": "value_d",
+            "formatter": 1,
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "mapSettings": {
+          "locInfo": "LatLong",
+          "sizeSettings": "value_d",
+          "sizeAggregation": "Sum",
+          "legendMetric": "value_d",
+          "legendAggregation": "Sum",
+          "itemColorSettings": {
+            "type": "heatmap",
+            "colorAggregation": "Sum",
+            "nodeColorField": "value_d",
+            "heatmapPalette": "greenRed"
+          }
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Summary"
+      },
+      "customWidth": "30",
+      "name": "Task Count"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "SparkMetrics_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| where name_s endswith \"executor.threadpool.completeTasks\"\r\n| extend executor=strcat(\"executor=\", executorId_s)\r\n| summarize max(value_d) by bin(TimeGenerated, 30s), executor",
+        "size": 4,
+        "aggregation": 5,
+        "showAnnotations": true,
+        "title": "Completed Tasks by Executors",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "piechart",
+        "tileSettings": {
+          "showBorder": false,
+          "titleContent": {
+            "columnMatch": "TenantId",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "m15_rate_d",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "graphSettings": {
+          "type": 0,
+          "topContent": {
+            "columnMatch": "app_id",
+            "formatter": 1
+          },
+          "centerContent": {
+            "columnMatch": "value_d",
+            "formatter": 1,
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "mapSettings": {
+          "locInfo": "LatLong",
+          "sizeSettings": "value_d",
+          "sizeAggregation": "Sum",
+          "legendMetric": "value_d",
+          "legendAggregation": "Sum",
+          "itemColorSettings": {
+            "type": "heatmap",
+            "colorAggregation": "Sum",
+            "nodeColorField": "value_d",
+            "heatmapPalette": "greenRed"
+          }
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Summary"
+      },
+      "customWidth": "50",
+      "name": "Completed Tasks by Executors"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "SparkMetrics_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| where name_s endswith \"executor.bytesRead\"\r\n| extend executor=strcat(\"executor=\", executorId_s)\r\n| summarize max(count_d) by executor",
+        "size": 4,
+        "aggregation": 5,
+        "showAnnotations": true,
+        "title": "Total Input Bytes",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "piechart",
+        "tileSettings": {
+          "showBorder": false,
+          "titleContent": {
+            "columnMatch": "TenantId",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "m15_rate_d",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "graphSettings": {
+          "type": 0,
+          "topContent": {
+            "columnMatch": "app_id",
+            "formatter": 1
+          },
+          "centerContent": {
+            "columnMatch": "value_d",
+            "formatter": 1,
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "chartSettings": {
+          "ySettings": {
+            "numberFormatSettings": {
+              "unit": 2,
+              "options": {
+                "style": "decimal",
+                "useGrouping": true
+              }
+            }
+          }
+        },
+        "mapSettings": {
+          "locInfo": "LatLong",
+          "sizeSettings": "value_d",
+          "sizeAggregation": "Sum",
+          "legendMetric": "value_d",
+          "legendAggregation": "Sum",
+          "itemColorSettings": {
+            "type": "heatmap",
+            "colorAggregation": "Sum",
+            "nodeColorField": "value_d",
+            "heatmapPalette": "greenRed"
+          }
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Summary"
+      },
+      "customWidth": "50",
+      "name": "Total Input Bytes"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "SparkMetrics_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| where name_s endswith \"executor.runTime\"\r\n| extend executor=strcat(\"executor=\", executorId_s)\r\n| summarize value=max(count_d) by executor\r\n| order by value desc",
+        "size": 0,
+        "aggregation": 5,
+        "showAnnotations": true,
+        "title": "Total Run Time by Executor",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "barchart",
+        "tileSettings": {
+          "showBorder": false,
+          "titleContent": {
+            "columnMatch": "TenantId",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "m15_rate_d",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "graphSettings": {
+          "type": 0,
+          "topContent": {
+            "columnMatch": "app_id",
+            "formatter": 1
+          },
+          "centerContent": {
+            "columnMatch": "value_d",
+            "formatter": 1,
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "chartSettings": {
+          "ySettings": {
+            "numberFormatSettings": {
+              "unit": 23,
+              "options": {
+                "style": "decimal",
+                "useGrouping": true
+              }
+            }
+          }
+        },
+        "mapSettings": {
+          "locInfo": "LatLong",
+          "sizeSettings": "value_d",
+          "sizeAggregation": "Sum",
+          "legendMetric": "value_d",
+          "legendAggregation": "Sum",
+          "itemColorSettings": {
+            "type": "heatmap",
+            "colorAggregation": "Sum",
+            "nodeColorField": "value_d",
+            "heatmapPalette": "greenRed"
+          }
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Summary"
+      },
+      "customWidth": "50",
+      "name": "Total Run Time by Executor"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "SparkListenerEvent_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| where Event_s == \"SparkListenerStageCompleted\"\r\n| extend stageTime = (Stage_Info_Completion_Time_d - Stage_Info_Submission_Time_d), label = strcat(\"Stage \", toint(Stage_Info_Stage_ID_d))\r\n| project label, stageTime\r\n| order by label\r\n",
+        "size": 0,
+        "aggregation": 5,
+        "showAnnotations": true,
+        "title": "Stage Durations",
+        "noDataMessage": "No spark stage data.",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "barchart",
+        "tileSettings": {
+          "showBorder": false,
+          "titleContent": {
+            "columnMatch": "TenantId",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "m15_rate_d",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "graphSettings": {
+          "type": 0,
+          "topContent": {
+            "columnMatch": "app_id",
+            "formatter": 1
+          },
+          "centerContent": {
+            "columnMatch": "value_d",
+            "formatter": 1,
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "chartSettings": {
+          "ySettings": {
+            "numberFormatSettings": {
+              "unit": 23,
+              "options": {
+                "style": "decimal",
+                "useGrouping": true
+              }
+            }
+          }
+        },
+        "mapSettings": {
+          "locInfo": "LatLong",
+          "sizeSettings": "value_d",
+          "sizeAggregation": "Sum",
+          "legendMetric": "value_d",
+          "legendAggregation": "Sum",
+          "itemColorSettings": {
+            "type": "heatmap",
+            "colorAggregation": "Sum",
+            "nodeColorField": "value_d",
+            "heatmapPalette": "greenRed"
+          }
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Summary"
+      },
+      "customWidth": "50",
+      "name": "Stage Durations"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "\r\nlet eventCores = toint(toscalar(SparkListenerEvent_CL\r\n    | where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n    | project cores=column_ifexists(\"Properties_spark_driver_cores_s\", -1) | where isnotempty(cores) | limit 1));\r\nlet metricsCores = toint(toscalar(SparkMetrics_CL\r\n    | where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n    | where name_s endswith \"SynapseDiagnostic.cores\" | project value_d | limit 1));\r\nlet cores = iff(metricsCores > 0, metricsCores, eventCores);\r\nSparkMetrics_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| where name_s endswith \".jvmCpuTime\"\r\n| extend label=iff(executorId_s != \"driver\", strcat(\"executor \", executorId_s), executorId_s)\r\n| project TimeGenerated, label, value_d\r\n| order by label, TimeGenerated asc\r\n| serialize\r\n| extend CpuUsage = iff(label == prev(label), (value_d - prev(value_d, 1)) / 1e9 / ((TimeGenerated - prev(TimeGenerated, 1)) / 1s) * 100 / cores, 0.0)\r\n| summarize avg(CpuUsage) by bin(TimeGenerated, timespan({Interval})), label\r\n| order by TimeGenerated asc nulls last\r\n",
+        "size": 0,
+        "aggregation": 5,
+        "showAnnotations": true,
+        "title": "Executors CPU Usage",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "linechart",
+        "tileSettings": {
+          "showBorder": false,
+          "titleContent": {
+            "columnMatch": "TenantId",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "m15_rate_d",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "graphSettings": {
+          "type": 0,
+          "topContent": {
+            "columnMatch": "app_id",
+            "formatter": 1
+          },
+          "centerContent": {
+            "columnMatch": "value_d",
+            "formatter": 1,
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "chartSettings": {
+          "ySettings": {
+            "numberFormatSettings": {
+              "unit": 1,
+              "options": {
+                "style": "decimal",
+                "useGrouping": true
+              }
+            },
+            "min": 0,
+            "max": 100
+          }
+        },
+        "mapSettings": {
+          "locInfo": "LatLong",
+          "sizeSettings": "value_d",
+          "sizeAggregation": "Sum",
+          "legendMetric": "value_d",
+          "legendAggregation": "Sum",
+          "itemColorSettings": {
+            "type": "heatmap",
+            "colorAggregation": "Sum",
+            "nodeColorField": "value_d",
+            "heatmapPalette": "greenRed"
+          }
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Executors"
+      },
+      "customWidth": "50",
+      "name": "Executors CPU Usage"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "let Data = SparkMetrics_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| where name_s endswith \"jvm.total.used\"\r\n| summarize UsedMemory=max(value_d) by bin(TimeGenerated, timespan({Interval})), executorId_s\r\n| order by TimeGenerated asc\r\n| join kind=inner (\r\n    SparkMetrics_CL\r\n    | where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n    | where name_s endswith \"jvm.total.max\"\r\n    | summarize MaxMemory=max(value_d) by bin(TimeGenerated, timespan({Interval})), executorId_s\r\n) on executorId_s, TimeGenerated;\r\n\r\nData\r\n| extend label=iff(executorId_s != \"driver\", strcat(\"executor \", executorId_s), executorId_s)\r\n| extend ResultValue=UsedMemory / MaxMemory * 100\r\n| summarize max(ResultValue) by bin(TimeGenerated, timespan({Interval})), label\r\n| order by TimeGenerated asc nulls last\r\n",
+        "size": 0,
+        "aggregation": 5,
+        "showAnnotations": true,
+        "title": "Executors Memory Usage",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "linechart",
+        "tileSettings": {
+          "showBorder": false,
+          "titleContent": {
+            "columnMatch": "TenantId",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "m15_rate_d",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "graphSettings": {
+          "type": 0,
+          "topContent": {
+            "columnMatch": "app_id",
+            "formatter": 1
+          },
+          "centerContent": {
+            "columnMatch": "value_d",
+            "formatter": 1,
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "chartSettings": {
+          "ySettings": {
+            "numberFormatSettings": {
+              "unit": 1,
+              "options": {
+                "style": "decimal",
+                "useGrouping": true
+              }
+            },
+            "min": 0,
+            "max": 100
+          }
+        },
+        "mapSettings": {
+          "locInfo": "LatLong",
+          "sizeSettings": "value_d",
+          "sizeAggregation": "Sum",
+          "legendMetric": "value_d",
+          "legendAggregation": "Sum",
+          "itemColorSettings": {
+            "type": "heatmap",
+            "colorAggregation": "Sum",
+            "nodeColorField": "value_d",
+            "heatmapPalette": "greenRed"
+          }
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Executors"
+      },
+      "customWidth": "50",
+      "name": "Executors Memory Usage"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "SparkMetrics_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| where name_s endswith \"executor.bytesRead\"\r\n| extend label=iff(executorId_s != \"driver\", strcat(\"executor \", executorId_s), executorId_s)\r\n| project TimeGenerated, label, count_d\r\n| order by label, TimeGenerated asc\r\n| serialize\r\n| extend irate = iff(label == prev(label), (max_of(0, count_d - prev(count_d, 1))) / ((TimeGenerated - prev(TimeGenerated, 1)) / 1s), 0.0)\r\n| summarize avg(irate) by bin(TimeGenerated, timespan({Interval})), label\r\n| order by TimeGenerated asc nulls last",
+        "size": 0,
+        "aggregation": 2,
+        "title": "Input Bytes / Second",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "areachart",
+        "chartSettings": {
+          "ySettings": {
+            "numberFormatSettings": {
+              "unit": 11,
+              "options": {
+                "style": "decimal",
+                "useGrouping": true
+              }
+            }
+          }
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Executors"
+      },
+      "customWidth": "50",
+      "name": "Input Bytes / Second"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "SparkMetrics_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| where name_s endswith \"executor.bytesWritten\"\r\n| extend label=iff(executorId_s != \"driver\", strcat(\"executor \", executorId_s), executorId_s)\r\n| project TimeGenerated, label, count_d\r\n| order by label, TimeGenerated asc\r\n| serialize\r\n| extend irate = iff(label == prev(label), max_of(count_d - prev(count_d, 1), 0) / ((TimeGenerated - prev(TimeGenerated, 1)) / 1s), 0.0)\r\n| summarize avg(irate) by bin(TimeGenerated, timespan({Interval})), label\r\n| order by TimeGenerated asc nulls last",
+        "size": 0,
+        "aggregation": 2,
+        "title": "Output Bytes / Second",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "areachart",
+        "chartSettings": {
+          "ySettings": {
+            "numberFormatSettings": {
+              "unit": 11,
+              "options": {
+                "style": "decimal",
+                "useGrouping": true
+              }
+            }
+          }
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Executors"
+      },
+      "customWidth": "50",
+      "name": "Output Bytes / Second"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "SparkMetrics_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| where name_s endswith \"executor.resultSerializationTime\"\r\n| extend label=iff(executorId_s != \"driver\", strcat(\"executor \", executorId_s), executorId_s)\r\n| project TimeGenerated, label, count_d\r\n| order by label, TimeGenerated asc\r\n| serialize\r\n| extend result = iff(label == prev(label), (count_d - prev(count_d, 1)) / 1000.0 / ((TimeGenerated - prev(TimeGenerated, 1))/1s) * 100.0, 0.0)\r\n| summarize max(result) by bin(TimeGenerated, timespan({Interval})), label\r\n| order by TimeGenerated asc nulls last",
+        "size": 0,
+        "aggregation": 2,
+        "title": "Serialization Time Percentage",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "areachart",
+        "chartSettings": {
+          "ySettings": {
+            "numberFormatSettings": {
+              "unit": 1,
+              "options": {
+                "style": "decimal",
+                "useGrouping": true
+              }
+            }
+          }
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Executors"
+      },
+      "customWidth": "50",
+      "name": "Serialization Time Percentage"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "SparkMetrics_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| where name_s endswith \"executor.deserializeTime\"\r\n| extend label=iff(executorId_s != \"driver\", strcat(\"executor \", executorId_s), executorId_s)\r\n| project TimeGenerated, label, count_d\r\n| order by label, TimeGenerated asc\r\n| serialize\r\n| extend result = iff(label == prev(label), (count_d - prev(count_d, 1)) / 1000.0 / ((TimeGenerated - prev(TimeGenerated, 1))/1s) * 100.0, 0.0)\r\n| summarize max(result) by bin(TimeGenerated, timespan({Interval})), label\r\n| order by TimeGenerated asc nulls last",
+        "size": 0,
+        "aggregation": 2,
+        "title": "Deserialization Time Percentage",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "areachart",
+        "chartSettings": {
+          "ySettings": {
+            "numberFormatSettings": {
+              "unit": 1,
+              "options": {
+                "style": "decimal",
+                "useGrouping": true
+              }
+            }
+          }
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Executors"
+      },
+      "customWidth": "50",
+      "name": "Deserialization Time Percentage"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "let Data = SparkMetrics_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| extend Executor=iff(executorId_s != \"driver\", strcat(\"executor \", executorId_s), executorId_s);\r\n\r\nunion\r\n(Data\r\n| where name_s endswith \"executor.shuffleBytesWritten\"\r\n| summarize ShuffleBytesWritten=max(count_d) by Executor\r\n),\r\n(Data\r\n| where name_s endswith \"executor.shuffleFetchWaitTime\"\r\n| summarize ShuffleFetchWaitTime=max(count_d) by Executor\r\n),\r\n(Data\r\n| where name_s endswith \"executor.shuffleWriteTime\"\r\n| summarize ShuffleWriteTime=max(count_d / 1e9) by Executor\r\n),\r\n(Data\r\n| where name_s endswith \"executor.shuffleRecordsRead\"\r\n| summarize ShuffleRecordsRead=max(count_d) by Executor\r\n),\r\n(Data\r\n| where name_s endswith \"executor.shuffleRecordsWritten\"\r\n| summarize ShuffleRecordsWritten=max(count_d) by Executor\r\n),\r\n(Data\r\n| where name_s endswith \"executor.ShuffleRemoteBytesRead\"\r\n| summarize ShuffleRemoteBytesRead=max(count_d) by Executor\r\n),\r\n(Data\r\n| where name_s endswith \"executor.ShuffleRemoteBytesReadToDisk\"\r\n| summarize ShuffleRemoteBytesReadToDisk=max(count_d) by Executor\r\n)\r\n| summarize \r\n   ShuffleFetchWaitTime=max(ShuffleFetchWaitTime), \r\n   ShuffleWriteTime=max(ShuffleWriteTime),\r\n\r\n   ShuffleRecordsRead=max(ShuffleRecordsRead), \r\n   ShuffleRecordsWritten=max(ShuffleRecordsWritten),\r\n   \r\n   ShuffleBytesWritten=max(ShuffleBytesWritten), \r\n   ShuffleRemoteBytesRead=max(ShuffleRemoteBytesRead), \r\n   ShuffleRemoteBytesReadToDisk=max(ShuffleRemoteBytesReadToDisk) by Executor\r\n| order by Executor asc",
+        "size": 1,
+        "aggregation": 5,
+        "title": "Shuffle Summary",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "Executor",
+              "formatter": 0,
+              "formatOptions": {
+                "customColumnWidthSetting": "10%"
+              }
+            },
+            {
+              "columnMatch": "ShuffleFetchWaitTime",
+              "formatter": 4,
+              "formatOptions": {
+                "min": 0,
+                "palette": "orange",
+                "customColumnWidthSetting": "12%"
+              },
+              "numberFormat": {
+                "unit": 23,
+                "options": {
+                  "style": "decimal",
+                  "useGrouping": false
+                }
+              }
+            },
+            {
+              "columnMatch": "ShuffleWriteTime",
+              "formatter": 4,
+              "formatOptions": {
+                "min": 0,
+                "palette": "orange",
+                "customColumnWidthSetting": "12%"
+              },
+              "numberFormat": {
+                "unit": 24,
+                "options": {
+                  "style": "decimal",
+                  "useGrouping": false
+                }
+              }
+            },
+            {
+              "columnMatch": "ShuffleRecordsRead",
+              "formatter": 4,
+              "formatOptions": {
+                "min": 0,
+                "palette": "green",
+                "customColumnWidthSetting": "12%"
+              },
+              "numberFormat": {
+                "unit": 17,
+                "options": {
+                  "style": "decimal",
+                  "useGrouping": false
+                }
+              }
+            },
+            {
+              "columnMatch": "ShuffleRecordsWritten",
+              "formatter": 4,
+              "formatOptions": {
+                "min": 0,
+                "palette": "green",
+                "customColumnWidthSetting": "12%"
+              },
+              "numberFormat": {
+                "unit": 17,
+                "options": {
+                  "style": "decimal"
+                }
+              }
+            },
+            {
+              "columnMatch": "ShuffleBytesWritten",
+              "formatter": 4,
+              "formatOptions": {
+                "min": 0,
+                "palette": "blue",
+                "customColumnWidthSetting": "12%"
+              },
+              "numberFormat": {
+                "unit": 2,
+                "options": {
+                  "style": "decimal",
+                  "useGrouping": false,
+                  "maximumFractionDigits": 1
+                }
+              }
+            },
+            {
+              "columnMatch": "ShuffleRemoteBytesRead",
+              "formatter": 4,
+              "formatOptions": {
+                "min": 0,
+                "palette": "blue",
+                "customColumnWidthSetting": "12%"
+              },
+              "numberFormat": {
+                "unit": 2,
+                "options": {
+                  "style": "decimal",
+                  "maximumFractionDigits": 1
+                }
+              }
+            },
+            {
+              "columnMatch": "ShuffleRemoteBytesReadToDisk",
+              "formatter": 4,
+              "formatOptions": {
+                "min": 0,
+                "palette": "blue",
+                "customColumnWidthSetting": "12%"
+              },
+              "numberFormat": {
+                "unit": 2,
+                "options": {
+                  "style": "decimal",
+                  "useGrouping": false,
+                  "maximumFractionDigits": 1
+                }
+              }
+            }
+          ]
+        },
+        "chartSettings": {
+          "yAxis": [
+            "size"
+          ],
+          "ySettings": {
+            "numberFormatSettings": {
+              "unit": 2,
+              "options": {
+                "style": "decimal",
+                "useGrouping": true,
+                "minimumFractionDigits": 1,
+                "maximumFractionDigits": 1
+              }
+            }
+          }
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Executors"
+      },
+      "name": "Shuffle Summary"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "SparkMetrics_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| where name_s endswith \"executor.shuffleBytesWritten\"\r\n| extend label=iff(executorId_s != \"driver\", strcat(\"executor \", executorId_s), executorId_s)\r\n| summarize size=max(count_d) by bin(TimeGenerated, timespan({Interval})), label\r\n| order by TimeGenerated asc",
+        "size": 0,
+        "aggregation": 5,
+        "title": "Accumulated Shuffle Written",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "areachart",
+        "chartSettings": {
+          "yAxis": [
+            "size"
+          ],
+          "ySettings": {
+            "numberFormatSettings": {
+              "unit": 2,
+              "options": {
+                "style": "decimal",
+                "useGrouping": true,
+                "minimumFractionDigits": 1,
+                "maximumFractionDigits": 1
+              }
+            }
+          }
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Executors"
+      },
+      "customWidth": "50",
+      "name": "Accumulated Shuffle Written"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "SparkMetrics_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| where name_s endswith \"executor.shuffleRemoteBytesRead\"\r\n| extend label=iff(executorId_s != \"driver\", strcat(\"executor \", executorId_s), executorId_s)\r\n| summarize size=max(count_d) by bin(TimeGenerated, timespan({Interval})), label\r\n| order by TimeGenerated asc",
+        "size": 0,
+        "aggregation": 5,
+        "title": "Shuffle Remotes Bytes Read",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "areachart",
+        "chartSettings": {
+          "yAxis": [
+            "size"
+          ],
+          "ySettings": {
+            "numberFormatSettings": {
+              "unit": 2,
+              "options": {
+                "style": "decimal",
+                "useGrouping": true,
+                "minimumFractionDigits": 1,
+                "maximumFractionDigits": 1
+              }
+            }
+          }
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Executors"
+      },
+      "customWidth": "50",
+      "name": "Shuffle Remotes Bytes Read"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "SparkListenerEvent_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| where Event_s == \"org.apache.spark.sql.streaming.StreamingQueryListener$QueryProgressEvent\"\r\n| project TimeGenerated, progress_sources=parse_json(column_ifexists(\"progress_sources_s\", \"{}\"))\r\n| mv-expand progress_sources\r\n| project TimeGenerated, Description=tostring(progress_sources.description), ProcessedRowsPerSecond=todouble(progress_sources.processedRowsPerSecond)\r\n| summarize Value=sum(ProcessedRowsPerSecond) by TimeGenerated, Description\r\n| order by TimeGenerated asc\r\n\r\n// InputRowsPerSecond=todouble(progress_sources.inputRowsPerSecond), ",
+        "size": 1,
+        "aggregation": 5,
+        "showAnalytics": true,
+        "title": "Streaming Total Processing Rate",
+        "noDataMessage": "No streaming event data.",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "timeContextFromParameter": "TimeRange",
+        "showRefreshButton": true,
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "linechart"
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Streaming"
+      },
+      "customWidth": "50",
+      "name": "Streaming Total Processing Rate"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "SparkListenerEvent_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| where Event_s == \"org.apache.spark.sql.streaming.StreamingQueryListener$QueryProgressEvent\"\r\n| project TimeGenerated, progress_sources=parse_json(column_ifexists(\"progress_sources_s\", \"{}\"))\r\n| mv-expand progress_sources\r\n| project TimeGenerated, Description=tostring(progress_sources.description), InputRows=tolong(progress_sources.numInputRows)\r\n| summarize sum(InputRows)/count() by bin(TimeGenerated, timespan({Interval})), Description\r\n| order by TimeGenerated asc",
+        "size": 1,
+        "aggregation": 5,
+        "showAnalytics": true,
+        "title": "Streaming Inputs / Trigger",
+        "noDataMessage": "No streaming event data.",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "timeContextFromParameter": "TimeRange",
+        "showRefreshButton": true,
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "linechart"
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Streaming"
+      },
+      "customWidth": "50",
+      "name": "Streaming Inputs / Trigger"
+    },
+    {
+      "type": 1,
+      "content": {
+        "json": "### Configure Azure Log Analytics in Synapse Apache Spark Pool\r\n\r\nTo use this workbook to visualize the Azure Synapse Analytics Spark pool metrics and logs, \r\nyou need to configure the Log Analytics connector. \r\n\r\nPlease see [Use Azure Log Analytics to collect and visualize metrics and logs](https://aka.ms/SynapseSparkLogAnalyticsDoc).\r\n\r\n### Feedback\r\n\r\nIf have any feedbacks or ideas about the Azure Synapse Spark pool Log Analytics experience, please provide your feedback here: [Azure Synapse Analytics Feedback](https://feedback.azure.com/forums/307516-azure-synapse-analytics?category_id=387853)\r\n"
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Guide"
+      },
+      "name": "GuideText"
+    },
+    {
+      "type": 1,
+      "content": {
+        "json": "Here we only support metric types `Gauge` and `Counter` for \"Custom Metrics\" currently. \r\nYou can customize your own charts by Kusto queries. Please see [Azure Monitor Workbooks](https://docs.microsoft.com/azure/azure-monitor/visualize/workbooks-overview).\r\n\r\nFor more information about Spark metrics system, please check the following documents:\r\n- [Spark Monitoring and Instrumentation](https://spark.apache.org/docs/latest/monitoring.html#executor-task-metrics)\r\n- [Dropwizard metrics](https://metrics.dropwizard.io/3.1.0/getting-started/)"
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "CustomMetrics"
+      },
+      "name": "Custom Metrics Text"
+    }
+  ],
+  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+}

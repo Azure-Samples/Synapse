@@ -3,6 +3,7 @@
 This book contains quick-start sample that demonstrate how to query the following types of files:
 - [PARQUET](parquet.ipynb)
 - [CSV](csv.ipynb)
+- [Delta Lake](delta-lake.ipynb)
 - [JSON](json.ipynb)
 
 

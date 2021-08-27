@@ -48,6 +48,13 @@
             "metadata": {
                 "description": "Do not change this value if Data Lake Storage is placed in the same region as Synapse Workspace(recommended)."
             }
+        },
+        "encryption": {
+            "defaultValue": {},
+            "type": "Object",
+            "metadata": {
+                "description": "The encryption object containing your customer-managed key used for double encryption (optional)."
+            }
         }
     },
     "variables": {
@@ -73,7 +80,8 @@
                     "computeSubnetId": ""
                 },
                 "sqlAdministratorLogin": "[parameters('sqlAdministratorLogin')]",
-                "sqlAdministratorLoginPassword": "[parameters('sqlAdministratorPassword')]"
+                "sqlAdministratorLoginPassword": "[parameters('sqlAdministratorPassword')]",
+                "encryption": "[parameters('encryption')]"
             },
             "resources": [
                 {
