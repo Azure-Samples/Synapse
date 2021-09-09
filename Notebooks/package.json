@@ -1,0 +1,7 @@
+
+{
+    "name": "notebook-samples",
+    "version": "0.0.1",
+    "description": "Notebook samples",
+    "files": ["*/*.ipynb", "*/parameters/*.json"]
+}
