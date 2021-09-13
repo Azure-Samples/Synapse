@@ -1,0 +1,1 @@
+To test whether a pipline would only be triggered by changes in specific folder
