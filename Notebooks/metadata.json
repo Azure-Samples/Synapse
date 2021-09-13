@@ -17,6 +17,15 @@
             "types": ["PySpark"],
             "categories": ["Querying"],
             "languages": ["PySpark"]
+        },
+        {
+            "title": "Using Azure Open Datasets in Synapse",
+            "path": "PySpark\\05 Using Azure Open Datasets in Synapse.ipynb",
+            "description": "This notebook provides examples of how to enrich NYC Green Taxi Data with Holiday and Weather.",
+            "tags": ["Matplotlib", "Bokeh", "Seaborn", "Visualization", "Charting"],
+            "types": ["PySpark"],
+            "categories": ["Data preparation"],
+            "languages": ["PySpark"]
         }
     ]
 }
