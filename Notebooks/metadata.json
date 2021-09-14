@@ -2,7 +2,7 @@
     "data": [
         {
             "title": "Charting in Synapse Notebook",
-            "path": "PySpark\\06 Charting in Synapse Notebook-test.ipynb",
+            "path": "PySpark\\06 Charting in Synapse Notebook.ipynb",
             "description": "This notebook provides examples to visualize data in Synapse notebook using matplotlib, bokeh, or seaborn.",
             "tags": ["Matplotlib", "Bokeh", "Seaborn", "Visualization", "Charting"],
             "types": ["PySpark"],
