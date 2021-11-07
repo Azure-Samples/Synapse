@@ -277,7 +277,7 @@ select	impact = 1.0,
 		column_name = NULL,
 		message = CONCAT('The table ', e.name, ' is created on a partitioned data set, but cannot leverage partition elimination. Replace it with a partitioned view.')
 from sys.external_tables e
-where location like '%*%'
+where REPLACE(location, '*.', '') like '%*%'
 
 union all
 
