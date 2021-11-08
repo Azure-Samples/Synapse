@@ -241,7 +241,7 @@ and lower(c.name) not like '%explanation%'
 union all
 
 -- Oversized key columns:
-select	impact = 0.4 + ROUND((1-EXP(-IIF(c.max_length=-1, 1000., c.max_length)/1000.)),1),
+select	impact = 0.4 + ROUND((1-EXP(-IIF(c.max_length=-1, 8000., c.max_length)/8000.)),1),
 		type = 'BIG KEY',
 		schema_name = schema_name(o.schema_id),
 		object = o.name,
