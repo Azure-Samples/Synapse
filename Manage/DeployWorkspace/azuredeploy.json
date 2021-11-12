@@ -47,7 +47,8 @@
                 "contentVersion": "1.0.0.0"
               },
               "parameters":{
-                "storageAccount":{"value": "[replace(parameters('name'),'-','')]"}
+                "storageAccount":{"value": "[replace(parameters('name'),'-','')]"},
+                "workspaceContainer":{"value": "[parameters('name')]"}
               }
             }
         },
@@ -66,6 +67,7 @@
                 "sqlAdministratorLogin":{"value": "[parameters('sqlAdministratorLogin')]"},
                 "sqlAdministratorPassword":{"value": "[parameters('sqlAdministratorPassword')]"},
                 "defaultDataLakeStorageAccountName":{"value": "[replace(parameters('name'),'-','')]"},
+                "defaultDataLakeStorageFilesystemName":{"value": "[parameters('name')]"},
                 "tagValues":{"value": "[parameters('tagValues')]"},
                 "encryption":{"value": "[variables('encryption')]"}
               }
