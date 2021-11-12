@@ -3,7 +3,16 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "name": {
-            "type": "String"
+            "type": "String",
+            "metadata": {
+                "description": "The name of the workspace."
+            }
+        },
+        "storage": {
+            "type": "String",
+            "metadata": {
+                "description": "The name of the storage. If not provided, the workspace name will be used."
+            }
         },
         "sqlAdministratorLogin": {
             "type": "String"
@@ -24,6 +33,7 @@
         }
     },
     "variables": {
+        "dataLakeStorageName": "[if(empty(parameters('storage')), replace(parameters('name'),'-',''), parameters('storage'))]",
         "cmkUriStripVersion": "[if(empty(parameters('cmkUri')), '', substring(parameters('cmkUri'), 0, lastIndexOf(parameters('cmkUri'), '/')))]",
         "withCmk": {
             "cmk": {
@@ -47,7 +57,7 @@
                 "contentVersion": "1.0.0.0"
               },
               "parameters":{
-                "storageAccount":{"value": "[replace(parameters('name'),'-','')]"},
+                "storageAccount":{"value": "[variables('dataLakeStorageName')]"},
                 "workspaceContainer":{"value": "[parameters('name')]"}
               }
             }
@@ -66,7 +76,7 @@
                 "name":{"value": "[parameters('name')]"},
                 "sqlAdministratorLogin":{"value": "[parameters('sqlAdministratorLogin')]"},
                 "sqlAdministratorPassword":{"value": "[parameters('sqlAdministratorPassword')]"},
-                "defaultDataLakeStorageAccountName":{"value": "[replace(parameters('name'),'-','')]"},
+                "defaultDataLakeStorageAccountName":{"value": "[variables('dataLakeStorageName')]"},
                 "defaultDataLakeStorageFilesystemName":{"value": "[parameters('name')]"},
                 "tagValues":{"value": "[parameters('tagValues')]"},
                 "encryption":{"value": "[variables('encryption')]"}
