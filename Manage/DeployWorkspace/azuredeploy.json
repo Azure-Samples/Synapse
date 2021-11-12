@@ -33,7 +33,7 @@
         }
     },
     "variables": {
-        "dataLakeStorageName": "[if(empty(parameters('storage')), replace(parameters('name'),'-',''), parameters('storage'))]",
+        "dataLakeStorageName": "[if(empty(parameters('storage')), replace(tolower(parameters('name')),'-',''), tolower(parameters('storage')))]",
         "cmkUriStripVersion": "[if(empty(parameters('cmkUri')), '', substring(parameters('cmkUri'), 0, lastIndexOf(parameters('cmkUri'), '/')))]",
         "withCmk": {
             "cmk": {
@@ -73,7 +73,7 @@
                 "contentVersion": "1.0.0.0"
               },
               "parameters":{
-                "name":{"value": "[parameters('name')]"},
+                "name":{"value": "[tolower(parameters('name'))]"},
                 "sqlAdministratorLogin":{"value": "[parameters('sqlAdministratorLogin')]"},
                 "sqlAdministratorPassword":{"value": "[parameters('sqlAdministratorPassword')]"},
                 "defaultDataLakeStorageAccountName":{"value": "[variables('dataLakeStorageName')]"},
