@@ -109,7 +109,8 @@
             "type": 2,
             "description": "Spark Application Livy Id and Name",
             "isRequired": true,
-            "query": "SparkMetrics_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and isnotempty(livyId_s)\r\n| summarize by livyId_s, applicationName_s\r\n| order by livyId_s desc\r\n| extend applicationName = substring(applicationName_s, 0, strlen(applicationName_s) - 1)\r\n| project value = livyId_s, label = strcat(livyId_s, \" | \", applicationName), selected = false",
+            "query": "SparkMetrics_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and isnotempty(livyId_s)\r\n| extend applicationName = column_ifexists(\"applicationName_s\", applicationId_s)\r\n| summarize by livyId_s, applicationName\r\n| order by livyId_s desc\r\n| project value = livyId_s, label = strcat(livyId_s, \" | \", applicationName), selected = false",
+            "value": null,
             "typeSettings": {
               "additionalResourceOptions": [],
               "showDefault": false
@@ -182,7 +183,7 @@
             "id": "9246e88b-9682-498c-b440-f53a15b6e481",
             "cellValue": "selectedTab",
             "linkTarget": "parameter",
-            "linkLabel": "Spark Streaming",
+            "linkLabel": "Streaming",
             "subTarget": "Streaming",
             "preText": "Metrics",
             "postText": "1",
@@ -255,7 +256,7 @@
               "additionalResourceOptions": [
                 "value::all"
               ],
-              "selectAllValue": "ALL",
+              "selectAllValue": "All",
               "showDefault": false
             },
             "timeContext": {
@@ -277,7 +278,7 @@
         "comparison": "isEqualTo",
         "value": "Logs"
       },
-      "name": "CustomMetricsSelector - Copy"
+      "name": "Logs Filter Dropdown"
     },
     {
       "type": 3,
@@ -566,7 +567,7 @@
       "type": 3,
       "content": {
         "version": "KqlItem/1.0",
-        "query": "let Data = SparkListenerEvent_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\";\r\n\r\nunion\r\n(Data\r\n| where Event_s == \"org.apache.spark.sql.streaming.StreamingQueryListener$QueryProgressEvent\"\r\n| project TimeGenerated, progress_sources=parse_json(progress_sources_s)\r\n| mv-expand progress_sources\r\n| project TimeGenerated, InputRows=tolong(progress_sources.numInputRows)\r\n| summarize Value=sum(InputRows)\r\n| extend Name=\"Total Input Rows\", Order=0\r\n),\r\n(Data\r\n| where Event_s == \"org.apache.spark.sql.streaming.StreamingQueryListener$QueryProgressEvent\"\r\n| count as Value\r\n| extend Name=\"Total Query Progress Events\", Order=1\r\n),\r\n(Data\r\n| where Event_s == \"org.apache.spark.sql.streaming.StreamingQueryListener$QueryStartedEvent\"\r\n| count as Value\r\n| extend Name=\"Total Query Starts\", Order=2\r\n),\r\n(Data\r\n| where Event_s == \"org.apache.spark.sql.streaming.StreamingQueryListener$QueryTerminatedEvent\"\r\n| count as Value\r\n| extend Name=\"Total Query Terminateds\", Order=3\r\n)\r\n",
+        "query": "let Data = SparkListenerEvent_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\";\r\n\r\nunion\r\n(Data\r\n| where Event_s == \"org.apache.spark.sql.streaming.StreamingQueryListener$QueryProgressEvent\"\r\n| project TimeGenerated, progress_sources=parse_json(column_ifexists(\"progress_sources_s\", \"{}\"))\r\n| mv-expand progress_sources\r\n| project TimeGenerated, InputRows=tolong(progress_sources.numInputRows)\r\n| summarize Value=sum(InputRows)\r\n| extend Name=\"Total Input Rows\", Order=0\r\n),\r\n(Data\r\n| where Event_s == \"org.apache.spark.sql.streaming.StreamingQueryListener$QueryProgressEvent\"\r\n| count as Value\r\n| extend Name=\"Total Query Progress Events\", Order=1\r\n),\r\n(Data\r\n| where Event_s == \"org.apache.spark.sql.streaming.StreamingQueryListener$QueryStartedEvent\"\r\n| count as Value\r\n| extend Name=\"Total Query Starts\", Order=2\r\n),\r\n(Data\r\n| where Event_s == \"org.apache.spark.sql.streaming.StreamingQueryListener$QueryTerminatedEvent\"\r\n| count as Value\r\n| extend Name=\"Total Query Terminateds\", Order=3\r\n)\r\n",
         "size": 4,
         "showAnnotations": true,
         "showAnalytics": true,
@@ -1637,7 +1638,7 @@
       "type": 3,
       "content": {
         "version": "KqlItem/1.0",
-        "query": "SparkListenerEvent_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| where Event_s == \"org.apache.spark.sql.streaming.StreamingQueryListener$QueryProgressEvent\"\r\n| project TimeGenerated, progress_sources=parse_json(progress_sources_s)\r\n| mv-expand progress_sources\r\n| project TimeGenerated, Description=tostring(progress_sources.description), ProcessedRowsPerSecond=todouble(progress_sources.processedRowsPerSecond)\r\n| summarize Value=sum(ProcessedRowsPerSecond) by TimeGenerated, Description\r\n| order by TimeGenerated asc\r\n\r\n// InputRowsPerSecond=todouble(progress_sources.inputRowsPerSecond), ",
+        "query": "SparkListenerEvent_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| where Event_s == \"org.apache.spark.sql.streaming.StreamingQueryListener$QueryProgressEvent\"\r\n| project TimeGenerated, progress_sources=parse_json(column_ifexists(\"progress_sources_s\", \"{}\"))\r\n| mv-expand progress_sources\r\n| project TimeGenerated, Description=tostring(progress_sources.description), ProcessedRowsPerSecond=todouble(progress_sources.processedRowsPerSecond)\r\n| summarize Value=sum(ProcessedRowsPerSecond) by TimeGenerated, Description\r\n| order by TimeGenerated asc\r\n\r\n// InputRowsPerSecond=todouble(progress_sources.inputRowsPerSecond), ",
         "size": 1,
         "aggregation": 5,
         "showAnalytics": true,
@@ -1664,7 +1665,7 @@
       "type": 3,
       "content": {
         "version": "KqlItem/1.0",
-        "query": "SparkListenerEvent_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| where Event_s == \"org.apache.spark.sql.streaming.StreamingQueryListener$QueryProgressEvent\"\r\n| project TimeGenerated, progress_sources=parse_json(progress_sources_s)\r\n| mv-expand progress_sources\r\n| project TimeGenerated, Description=tostring(progress_sources.description), InputRows=tolong(progress_sources.numInputRows)\r\n| summarize sum(InputRows)/count() by bin(TimeGenerated, timespan({Interval})), Description\r\n| order by TimeGenerated asc",
+        "query": "SparkListenerEvent_CL\r\n| where workspaceName_s == \"{Workspace}\" and clusterName_s == \"{SparkPool}\" and livyId_s == \"{LivyId}\"\r\n| where Event_s == \"org.apache.spark.sql.streaming.StreamingQueryListener$QueryProgressEvent\"\r\n| project TimeGenerated, progress_sources=parse_json(column_ifexists(\"progress_sources_s\", \"{}\"))\r\n| mv-expand progress_sources\r\n| project TimeGenerated, Description=tostring(progress_sources.description), InputRows=tolong(progress_sources.numInputRows)\r\n| summarize sum(InputRows)/count() by bin(TimeGenerated, timespan({Interval})), Description\r\n| order by TimeGenerated asc",
         "size": 1,
         "aggregation": 5,
         "showAnalytics": true,

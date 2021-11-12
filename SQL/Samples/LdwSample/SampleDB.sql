@@ -29,6 +29,10 @@ IF (EXISTS(SELECT * FROM sys.external_file_formats WHERE name = 'NativeParquet')
     DROP EXTERNAL FILE FORMAT NativeParquet
 END
 GO
+IF (EXISTS(SELECT * FROM sys.external_file_formats WHERE name = 'DeltaLakeFormat')) BEGIN
+    DROP EXTERNAL FILE FORMAT DeltaLakeFormat
+END
+GO
 DROP SCHEMA IF EXISTS parquet;
 GO
 DROP SCHEMA IF EXISTS csv;
@@ -38,6 +42,10 @@ GO
 
 IF (EXISTS(SELECT * FROM sys.external_data_sources WHERE name = 'SqlOnDemandDemo')) BEGIN
     DROP EXTERNAL DATA SOURCE SqlOnDemandDemo
+END
+
+IF (EXISTS(SELECT * FROM sys.external_data_sources WHERE name = 'DeltaLakeStorage')) BEGIN
+    DROP EXTERNAL DATA SOURCE DeltaLakeStorage
 END
 
 IF (EXISTS(SELECT * FROM sys.external_data_sources WHERE name = 'AzureOpenData')) BEGIN
@@ -112,6 +120,14 @@ CREATE EXTERNAL DATA SOURCE SqlOnDemandDemo WITH (
     CREDENTIAL = sqlondemand
 );
 GO
+
+-- Data source referencing Delta Lake folders
+CREATE EXTERNAL DATA SOURCE DeltaLakeStorage WITH (
+    LOCATION = 'https://sqlondemandstorage.blob.core.windows.net/delta-lake',
+    CREDENTIAL = sqlondemand
+);
+GO
+
 -- Create publicly available external data sources
 CREATE EXTERNAL DATA SOURCE AzureOpenData
 WITH ( LOCATION = 'https://azureopendatastorage.blob.core.windows.net/')
@@ -146,6 +162,11 @@ GO
 CREATE EXTERNAL FILE FORMAT NativeParquet
 WITH (  
     FORMAT_TYPE = PARQUET
+);
+GO
+CREATE EXTERNAL FILE FORMAT DeltaLakeFormat
+WITH (  
+    FORMAT_TYPE = DELTA
 );
 GO
 

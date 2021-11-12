@@ -18,6 +18,9 @@ The `microsoft.date_trunc` script installs a function that emulates the `DATE_TR
 ## microsoft.dayoccurrence_of_month
 The `microsoft.dayoccurrence_of_month` script installs a function that emulates the `DAYOCCURRENCE_OF_MONTH(expression)` Teradata function.
 
+## microsoft.days_between
+The `microsoft.days_between` script installs a function that emulates the `DAYS_BETWEEN(expression, expression)` IBM Netezza function.
+
 ## microsoft.firstdayofmonth
 The `microsoft.firstdayofmonth` script installs a function that returns the first day of the specified month as DATETIME2.
 

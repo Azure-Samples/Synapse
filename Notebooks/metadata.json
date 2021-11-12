@@ -1,0 +1,31 @@
+{
+    "data": [
+        {
+            "title": "Charting in Synapse Notebook",
+            "path": "PySpark\\06 Charting in Synapse Notebook.ipynb",
+            "description": "This notebook provides examples to visualize data in Synapse notebook using matplotlib, bokeh, or seaborn.",
+            "tags": ["Matplotlib", "Bokeh", "Seaborn", "Visualization", "Charting"],
+            "types": ["PySpark"],
+            "categories": ["Visualization"],
+            "languages": ["PySpark"]
+        },
+        {
+            "title": "Getting Started with Hyperspace Indexing",
+            "path": "PySpark\\Hitchhikers Guide to Hyperspace - Python.ipynb",
+            "description": "This notebook shows you a tour of using Hyperspace indexing and how you could accelerate your Apache Spark workloads. It starts with an explanation of what indexing is and dives into how you can create, use and maintain indexes. In addition, you will also learn how to look at query plans and understand whether indexing is being utilized by Apache Spark.",
+            "tags": ["Spark", "Hyperspace Indexing", "Python", "PySpark", "Incremental", "Hybrid-Scan", "Accelerate", "Join", "Filter", "Acceleration", "Fast", "Parquet", "JSON", "CSV", "Workload"],
+            "types": ["PySpark"],
+            "categories": ["Querying"],
+            "languages": ["PySpark"]
+        },
+        {
+            "title": "Using Azure Open Datasets in Synapse",
+            "path": "PySpark\\05 Using Azure Open Datasets in Synapse.ipynb",
+            "description": "This notebook provides examples of how to enrich NYC Green Taxi Data with Holiday and Weather.",
+            "tags": ["Matplotlib", "Bokeh", "Seaborn", "Visualization", "Charting"],
+            "types": ["PySpark"],
+            "categories": ["Data preparation"],
+            "languages": ["PySpark"]
+        }
+    ]
+}

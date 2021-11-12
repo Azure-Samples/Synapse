@@ -14,6 +14,9 @@ The `microsoft.dw_active_queue` script installs a view that shows the queued sta
 
 Note: See the [`sys.dm_pdw_resource_waits`](https://docs.microsoft.com/sql/relational-databases/system-dynamic-management-views/sys-dm-pdw-resource-waits-transact-sql) DMV for column details.
 
+## microsoft.dw_calendar
+The `microsoft.dw_calendar` script installs a view that extends the `microsoft.calendar` table with the `day_of_week`, `week_start`, and `week_end` columns that are [@@DATEFIRST](https://docs.microsoft.com/sql/t-sql/functions/datefirst-transact-sql) aware.
+
 ## microsoft.dw_configuration
 The `microsoft.dw_configuration` script installs a view that shows the configuration for the Azure Synapse SQL database.
 
