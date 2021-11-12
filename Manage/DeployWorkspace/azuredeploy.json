@@ -67,6 +67,7 @@
                 "sqlAdministratorLogin":{"value": "[parameters('sqlAdministratorLogin')]"},
                 "sqlAdministratorPassword":{"value": "[parameters('sqlAdministratorPassword')]"},
                 "defaultDataLakeStorageAccountName":{"value": "[replace(parameters('name'),'-','')]"},
+                "defaultDataLakeStorageFilesystemName":{"value": "[parameters('name')]"},
                 "tagValues":{"value": "[parameters('tagValues')]"},
                 "encryption":{"value": "[variables('encryption')]"}
               }
