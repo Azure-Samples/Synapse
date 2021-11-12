@@ -58,7 +58,7 @@
               },
               "parameters":{
                 "storageAccount":{"value": "[variables('dataLakeStorageName')]"},
-                "workspaceContainer":{"value": "[parameters('name')]"}
+                "workspaceContainer":{"value": "[tolower(parameters('name'))]"}
               }
             }
         },
@@ -77,7 +77,7 @@
                 "sqlAdministratorLogin":{"value": "[parameters('sqlAdministratorLogin')]"},
                 "sqlAdministratorPassword":{"value": "[parameters('sqlAdministratorPassword')]"},
                 "defaultDataLakeStorageAccountName":{"value": "[variables('dataLakeStorageName')]"},
-                "defaultDataLakeStorageFilesystemName":{"value": "[parameters('name')]"},
+                "defaultDataLakeStorageFilesystemName":{"value": "[tolower(parameters('name'))]"},
                 "tagValues":{"value": "[parameters('tagValues')]"},
                 "encryption":{"value": "[variables('encryption')]"}
               }
