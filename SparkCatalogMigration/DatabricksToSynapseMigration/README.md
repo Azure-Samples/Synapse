@@ -56,7 +56,11 @@ This script is used to import databases, tables, and partitions from the interme
  - DatabaseNames
 
     Type: String. Semicolon-separated list of names of database in Databricks to export. Default is *, all databases will be exported.
-
+    
+ - SkipExportTablesWithUnrecognizedType
+    
+    Type: Boolean. Skip exporting tables from ADB if table contains un-recognized data type. Default is true.  
+    
  Parmeters sample
  ``` yaml
  var IntermediateFolderPath = "abfss://adbdata@myws.dfs.core.windows.net/intermediate_output/"

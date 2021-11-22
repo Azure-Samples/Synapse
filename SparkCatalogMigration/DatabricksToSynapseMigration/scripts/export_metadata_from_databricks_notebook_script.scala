@@ -3,7 +3,8 @@ var IntermediateFolderPath = "abfss://<container_name>@<storage_account_name>.df
 var StorageAccountName = "<storage_account_name>"
 var StorageAccountAccessKey = "<storage_account_access_key>"
 
-var DatabaseNames = "" 
+var DatabaseNames = "*" 
+var SkipExportTablesWithUnrecognizedType:Boolean = true
 
 
 // COMMAND ----------
@@ -23,6 +24,7 @@ import scala.collection.mutable.{ListBuffer, Map, Set}
 import org.apache.spark.sql._
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.catalyst._
+import org.apache.spark.sql.catalyst.analysis._
 import org.apache.spark.sql.catalyst.catalog._
 import org.json4s._
 import org.json4s.JsonAST.JString
@@ -45,6 +47,8 @@ object ExportMetadata {
   case class CatalogTables(database: String, tables: Seq[CatalogTable])
 
   case class CatalogStat(entityType: String, count: Int, database: Option[String], table: Option[String])
+  
+  case class NotExportedTable(database: String, table: String, error: String)
 
   def ConvertToJsonStringList(objs: List[Object]):List[String] = {
 
@@ -80,7 +84,7 @@ object ExportMetadata {
     df.write.mode(SaveMode.Overwrite).text(filePath);
   }
 
-  def ExportCatalogObjectsToFile(databases: List[CatalogDatabase], tables: List[CatalogTables], partitions: List[CatalogPartitions], stats: List[CatalogStat], outputDirectory: String) : Unit = {
+  def ExportCatalogObjectsToFile(databases: List[CatalogDatabase], tables: List[CatalogTables], partitions: List[CatalogPartitions], stats: List[CatalogStat], notExportedTables: List[NotExportedTable], outputDirectory: String) : Unit = {
     val jsonStringForDbs = ConvertToJsonStringList(databases)
     WriteToFile(jsonStringForDbs, outputDirectory.trim() + "/databases")
     println("Databases are exported to: " + outputDirectory.trim() + "/databases "+ Calendar.getInstance().getTime())
@@ -95,6 +99,9 @@ object ExportMetadata {
 
     val jsonStringForStats = ConvertToJsonStringList(stats);
     WriteToFile(jsonStringForStats, outputDirectory.trim() + "/catalogObjectStats")
+    
+    val jsonStringForNotExportedTables = ConvertToJsonStringList(notExportedTables);
+    WriteToFile(jsonStringForNotExportedTables, outputDirectory.trim() + "/notExportedTables")
   }
 
   def ExportCatalogObjectFromMetadataStore(outputDirecoty: String, databaseNames: String):Unit = {
@@ -103,27 +110,41 @@ object ExportMetadata {
     var dbBuffer = new ListBuffer[CatalogDatabase]()
     var tableBuffer = new ListBuffer[CatalogTables]()
     var partitionBuffer = new ListBuffer[CatalogPartitions]()
+    var notExportedTableBuffer = new ListBuffer[NotExportedTable]()
 
     var dbNames = spark.sharedState.externalCatalog.listDatabases()
 
     var exportedDbName:Seq[String] = Seq()
     if (databaseNames.nonEmpty) {
-      exportedDbName = databaseNames.split(";").filter(_.nonEmpty)
+      exportedDbName = databaseNames.split(";").filter(_.nonEmpty).map(db => db.trim())
     }
 
     // get databases
     var tableIds = Map[String, Seq[String]]()
+    var totalTableCount:Int = 0
     dbNames.foreach( dbName => {
       if (exportedDbName.contains("*") || exportedDbName.contains(dbName)) {
-        dbBuffer += spark.sharedState.externalCatalog.getDatabase(dbName)
-        val tableNames = spark.sharedState.externalCatalog.listTables(dbName)
+        try {
+          dbBuffer += spark.sharedState.externalCatalog.getDatabase(dbName)
+          val tableNames = spark.sharedState.externalCatalog.listTables(dbName)
 
-        // Update table id map
-        tableIds.put(dbName, tableNames)
+          // Update table id map
+          tableIds.put(dbName, tableNames)
+          totalTableCount += tableNames.size
+        } catch {
+          case noSuchDbEx: NoSuchDatabaseException => {
+            println("Ignore not exists database '" + dbName + "' ex: " + noSuchDbEx)
+          }
+          case ex:Exception => {
+            println("Failed to get database db = '" + dbName + "' with unexpected exception. ex: " + ex);
+            throw ex;
+          }
+        }
       }
     })
 
-    println(dbNames.size + " databases get from metastore. "+ Calendar.getInstance().getTime())
+    println(dbBuffer.size + " databases get from metastore. "+ Calendar.getInstance().getTime())
+    println("Totally " + totalTableCount + " tables will be exported.")
 
     var tableCount = 0;
     var partitionCount = 0;
@@ -131,29 +152,60 @@ object ExportMetadata {
       var dbName = tableId._1
       var tables = new ListBuffer[CatalogTable]()
 
-      for(tableName <- tableId._2) {
-        val table = spark.sharedState.externalCatalog.getTable(dbName, tableName)
-        tables += table
-        tableCount += 1
+      for(tableName <- tableId._2) {        
+        try
+        {          
+          val table = spark.sharedState.externalCatalog.getTable(dbName, tableName)        
+        
+          tables += table
+          tableCount += 1
 
-        if (table.partitionColumnNames.nonEmpty){
-          //org.apache.spark.sql.catalyst.catalog.ExternalCatalogWithListener
-          //override def listPartitions(db: String,table: String,partialSpec: Option[CatalogTypes.TablePartitionSpec] = None): scala.Seq[CatalogTablePartition]
-          val tablePartitions =  spark.sharedState.externalCatalog.listPartitions(dbName, tableName)
-          partitionCount += tablePartitions.size
+          if (table.partitionColumnNames.nonEmpty){
+            //org.apache.spark.sql.catalyst.catalog.ExternalCatalogWithListener
+            //override def listPartitions(db: String,table: String,partialSpec: Option[CatalogTypes.TablePartitionSpec] = None): scala.Seq[CatalogTablePartition]
+            val tablePartitions =  spark.sharedState.externalCatalog.listPartitions(dbName, tableName)
+            partitionCount += tablePartitions.size
 
-          if (tablePartitions.nonEmpty) {
+            if (tablePartitions.nonEmpty) {
 
-            for (group <- tablePartitions.toList.grouped(maxObjectCount)) {
-              partitionBuffer += CatalogPartitions(table.identifier.database.get, table.identifier.table, group.toSeq)
+              for (group <- tablePartitions.toList.grouped(maxObjectCount)) {
+                partitionBuffer += CatalogPartitions(table.identifier.database.get, table.identifier.table, group.toSeq)
+              }
             }
           }
-        }
 
-        if (tableCount > 0 && tableCount%100 == 0) {
-          println(tableCount + " tables get from metastore. "+ Calendar.getInstance().getTime())
-          println(partitionCount + " partitions get from metastore. "+ Calendar.getInstance().getTime())
+          if (tableCount > 0 && tableCount%100 == 0) {
+            println(tableCount + " tables get from metastore. "+ Calendar.getInstance().getTime())
+            println(partitionCount + " partitions get from metastore. "+ Calendar.getInstance().getTime())
+          }
         }
+        catch
+          {
+            case sparkEx: org.apache.spark.SparkException => {
+              var msg = sparkEx.getMessage
+              if (SkipExportTablesWithUnrecognizedType && msg.contains("Cannot recognize hive type string")) {
+                println("Skip to export table. db = '" + dbName + "' table = '" + tableName + "'. ex: " + sparkEx);
+                notExportedTableBuffer += NotExportedTable(dbName, tableName, msg)
+              } else {
+                throw sparkEx
+              }
+            }
+            case argEx:IllegalArgumentException => {
+              var msg = argEx.getMessage
+              if (SkipExportTablesWithUnrecognizedType && msg.contains("Failed to convert the JSON string") && msg.contains("to a data type")) {
+                println("Skip to export table. db = '" + dbName + "' table = '" + tableName + "'. ex: " +  argEx);
+                notExportedTableBuffer += NotExportedTable(dbName, tableName, msg)
+              }
+            }
+            case noSuchTableEx: NoSuchTableException => {
+              println("Ignore not exists table. db = '" + dbName + "' table = '" + tableName + "'. ex: " + noSuchTableEx)
+              notExportedTableBuffer += NotExportedTable(dbName, tableName, noSuchTableEx.getMessage)
+            }
+            case ex:Exception => {
+              println("Failed to get table db = " + dbName + " table = " + tableName + " with unexpected exception. ex: " + ex);
+              throw ex;
+            }
+          }
       }
 
       for (group <- tables.toList.grouped(maxObjectCount)) {
@@ -163,13 +215,14 @@ object ExportMetadata {
 
     println(tableCount + " tables get from metastore. "+ Calendar.getInstance().getTime())
     println(partitionCount + " partitions get from metastore. "+ Calendar.getInstance().getTime())
+    println("skip export " + notExportedTableBuffer.size + " tables due to failed to read them. " + Calendar.getInstance().getTime())
 
     // Sum database count
     var statBuffer = new ListBuffer[CatalogStat];
     statBuffer.append(CatalogStat(DatabaseType, dbBuffer.size, None, None))
 
     // Sum table count
-    var totalTableCount = 0;
+    totalTableCount = 0;
     tableBuffer.groupBy(tbls => tbls.database).foreach(group => {
       var tblcount = 0;
       group._2.foreach(tbls => {
@@ -192,7 +245,7 @@ object ExportMetadata {
     })
     statBuffer.append(new CatalogStat(PartitionType, totablPartitionCount, None, None))
 
-    ExportCatalogObjectsToFile(dbBuffer.toList, tableBuffer.toList, partitionBuffer.toList, statBuffer.toList, outputDirecoty)
+    ExportCatalogObjectsToFile(dbBuffer.toList, tableBuffer.toList, partitionBuffer.toList, statBuffer.toList, notExportedTableBuffer.toList, outputDirecoty)
   }
 
 }
