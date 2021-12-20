@@ -9,13 +9,13 @@
 </head>
 <body>
 	<div class="container">
-		<h1>Generating OPENROWSET statement for Cosmos DB documents</h1>
-		<div class="form-group row">
+		<h1>Generating OPENROWSET WITH clause for Cosmos DB documents</h1>
+		<!-- div class="form-group row">
 			<label for="container" class="col-sm-2 col-form-label">Enter container name:</label>
 			<div class="col-sm-10">
 				<input name="container" id="container" type="text" placeholder="Enter container name here" value="Family"/>
 			</div>
-		</div>
+		</div -->
 		<div class="form-group">
 			<label for="document">Enter a sample of a document from your container:</label>
 			<br/>
@@ -181,7 +181,7 @@ class Generator {
 	query() {
 		var sql = "";
 		if(this.col == null) {
-		var sql = "SELECT * \nFROM OPENROWSET(PROVIDER = 'CosmosDB',\n\t\t--> Insert account, database, region, and key values here when you execute the query\n\t\t,CONNECTION='" + connectionstring + "',\n\t\tOBJECT='" + collection +"')\n\tWITH (\n";
+		var sql = "SELECT * FROM OPENROWSET(...)\n\tWITH (\n";
 		sql += this.indent(1) + this.columns.join(",\n"+this.indent(1));;
 		sql += "\n" + this.indent() + ") AS " + this.qoute_identifier(this.alias) + " ";
 		} else {
@@ -204,26 +204,26 @@ var connectionstring;
 var collection;
 
 function createSQL() {
-	connectionstring = "account={account};database={db};region={region like westus2};key={key}";
-	collection =  document.querySelector("#container").value; //'People';
+	//connectionstring = "account={account};database={db};region={region like westus2};key={key}";
+	//collection =  document.querySelector("#container").value; //'People';
 	var doc =  eval("("+document.querySelector("#document").value+")");
 
 
-
+/*
 	if(collection == "") {
 		alert("Enter collection");
 		return;
 	}
-
+*/
 	if(doc == "") {
-		alert("Enter sample document");
+		alert("Enter a sample document");
 		return;
 	}
 
 	var g = new Generator(collection, null, null, 0);
 	g.generate(doc, []);
-	document.querySelector("#sql").innerHTML = "--NOTE: To optimize performance, try to replace types with smaller - for example VARCHAR(MAX)/VARCHAR(256) with VARCHAR(100), etc.";
-	document.querySelector("#sql").innerHTML += "--NOTE: This is best effort type mapping. Sometime you would need to replace FLOAT with VARCHAR(400), BIGINT wiht FLOAT or vice versa.";
+	document.querySelector("#sql").innerHTML = "--NOTE: To optimize performance, try to replace the column types with the smaller ones- for example VARCHAR(MAX)/VARCHAR(256) with VARCHAR(100), etc.";
+	document.querySelector("#sql").innerHTML += "--NOTE: This is a best effort type mapping. Sometime you would need to replace FLOAT with VARCHAR(400), BIGINT wiht FLOAT or vice versa.";
 	document.querySelector("#sql").innerHTML += g.toString();
 }
   </script>
