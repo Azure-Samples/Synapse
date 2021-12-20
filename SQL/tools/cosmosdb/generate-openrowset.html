@@ -220,8 +220,8 @@ function createSQL() {
 
 	var g = new Generator(collection, null, null, 0);
 	g.generate(doc, []);
-	document.querySelector("#sql").innerHTML = "--NOTE: To optimize performance, try to replace the column types with the smaller ones- for example VARCHAR(MAX)/VARCHAR(256) with VARCHAR(100), etc.";
-	document.querySelector("#sql").innerHTML += "--NOTE: This is a best effort type mapping. Sometime you would need to replace FLOAT with VARCHAR(400), BIGINT wiht FLOAT or vice versa.";
+	document.querySelector("#sql").innerHTML = "--NOTE: To optimize performance, try to replace the column types with the smaller ones- for example VARCHAR(MAX)/VARCHAR(256) with VARCHAR(100), etc.\n";
+	document.querySelector("#sql").innerHTML += "--NOTE: This is a best effort type mapping. Sometime you would need to replace FLOAT with VARCHAR(400), BIGINT wiht FLOAT or vice versa.\n";
 	document.querySelector("#sql").innerHTML += g.toString();
 }
   </script>
