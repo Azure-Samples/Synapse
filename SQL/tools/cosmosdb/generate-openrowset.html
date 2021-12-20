@@ -205,16 +205,14 @@ var collection;
 
 function createSQL() {
 	//connectionstring = "account={account};database={db};region={region like westus2};key={key}";
-	//collection =  document.querySelector("#container").value; //'People';
+	collection =  document.querySelector("#container").value; //'People';
 	var doc =  eval("("+document.querySelector("#document").value+")");
 
-
-/*
 	if(collection == "") {
 		alert("Enter collection");
 		return;
 	}
-*/
+
 	if(doc == "") {
 		alert("Enter a sample document");
 		return;
