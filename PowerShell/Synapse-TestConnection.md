@@ -1,5 +1,5 @@
-[3:59 PM] Sergio Fonseca
-## SummaryScript to test Synapse connectivity endpoints and Ports needed
+## Script to test Synapse connectivity endpoints and Ports needed
+
 This script does not really try to connect to endpoint, just check the ports. For full test you can use https://docs.microsoft.com/en-us/azure/synapse-analytics/troubleshoot/troubleshoot-synapse-studio-powershell
 For SQL connectivity test use https://github.com/Azure/SQL-Connectivity-Checker/blob/master/AzureSQLConnectivityChecker.ps1 - Check Windows HOST File entries
 - Check DNS configuration
