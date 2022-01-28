@@ -2,23 +2,29 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "name": {
+        "workspaceName": {
             "type": "String",
             "metadata": {
-                "description": "The name of the workspace."
+                "description": "The name of the Workspace."
             }
         },
-        "storage": {
+        "storageAccountName": {
             "type": "String",
             "metadata": {
-                "description": "The name of the storage. If not provided, the workspace name will be used."
+                "description": "The name of the primary ADLS Gen2 Storage Account. If not provided, the workspace name will be used."
             }
         },
         "sqlAdministratorLogin": {
-            "type": "String"
+            "type": "String",
+            "metadata": {
+                "description": "Provide the user name for SQL server login."
+            }
         },
         "sqlAdministratorPassword": {
-            "type": "SecureString"
+            "type": "SecureString",
+            "metadata": {
+                "description": "The password for the SQL server. Visit https://aka.ms/azuresqlserverpasswordpolicy for password policy."
+            }
         },
         "tagValues": {
             "defaultValue": {"Created with":"Synapse Azure Resource Manager deploment template"},
@@ -33,7 +39,7 @@
         }
     },
     "variables": {
-        "dataLakeStorageName": "[if(empty(parameters('storage')), replace(tolower(parameters('name')),'-',''), tolower(parameters('storage')))]",
+        "dataLakeStorageName": "[if(empty(parameters('storageAccountName')), replace(tolower(parameters('workspaceName')),'-',''), tolower(parameters('storageAccountName')))]",
         "cmkUriStripVersion": "[if(empty(parameters('cmkUri')), '', substring(parameters('cmkUri'), 0, lastIndexOf(parameters('cmkUri'), '/')))]",
         "withCmk": {
             "cmk": {
@@ -58,7 +64,7 @@
               },
               "parameters":{
                 "storageAccount":{"value": "[variables('dataLakeStorageName')]"},
-                "workspaceContainer":{"value": "[tolower(parameters('name'))]"}
+                "workspaceContainer":{"value": "[tolower(parameters('workspaceName'))]"}
               }
             }
         },
@@ -73,11 +79,11 @@
                 "contentVersion": "1.0.0.0"
               },
               "parameters":{
-                "name":{"value": "[tolower(parameters('name'))]"},
+                "name":{"value": "[tolower(parameters('workspaceName'))]"},
                 "sqlAdministratorLogin":{"value": "[parameters('sqlAdministratorLogin')]"},
                 "sqlAdministratorPassword":{"value": "[parameters('sqlAdministratorPassword')]"},
                 "defaultDataLakeStorageAccountName":{"value": "[variables('dataLakeStorageName')]"},
-                "defaultDataLakeStorageFilesystemName":{"value": "[tolower(parameters('name'))]"},
+                "defaultDataLakeStorageFilesystemName":{"value": "[tolower(parameters('workspaceName'))]"},
                 "tagValues":{"value": "[parameters('tagValues')]"},
                 "encryption":{"value": "[variables('encryption')]"}
               }
