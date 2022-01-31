@@ -23,20 +23,7 @@
         "sqlAdministratorPassword": {
             "type": "SecureString",
             "metadata": {
-                "description": "The passwords must meet the following guidelines:
-                                    <ul>
-                                    <li> The password does not contain the account name of the user.</li>
-                                    <li> The password is at least eight characters long.</li>
-                                    <li> The password contains characters from three of the following four categories:</li>
-                                    <ul>
-                                        <li>Latin uppercase letters (A through Z)</li>
-                                        <li>Latin lowercase letters (a through z)</li>
-                                        <li>Base 10 digits (0 through 9)</li>
-                                        <li>Non-alphanumeric characters such as: exclamation point (!), dollar sign ($), number sign (#), or percent (%).</li>
-                                    </ul>
-                                    </ul>
-                                    Passwords can be up to 128 characters long. Use passwords that are as long and complex as possible.
-                                    Visit <a href=https://aka.ms/azuresqlserverpasswordpolicy>aka.ms/azuresqlserverpasswordpolicy</a> for more details."
+                "description": "The passwords must meet the following guidelines:<ul><li> The password does not contain the account name of the user.</li><li> The password is at least eight characters long.</li><li> The password contains characters from three of the following four categories:</li><ul><li>Latin uppercase letters (A through Z)</li><li>Latin lowercase letters (a through z)</li><li>Base 10 digits (0 through 9)</li><li>Non-alphanumeric characters such as: exclamation point (!), dollar sign ($), number sign (#), or percent (%).</li></ul></ul> Passwords can be up to 128 characters long. Use passwords that are as long and complex as possible. Visit <a href=https://aka.ms/azuresqlserverpasswordpolicy>aka.ms/azuresqlserverpasswordpolicy</a> for more details."
             }
         },
         "tagValues": {
