@@ -17,13 +17,13 @@
         "sqlAdministratorLogin": {
             "type": "String",
             "metadata": {
-                "description": "Provide the user name for SQL server login."
+                "description": "Provide the user name for SQL login."
             }
         },
         "sqlAdministratorPassword": {
             "type": "SecureString",
             "metadata": {
-                "description": "The password for the SQL server. Visit https://aka.ms/azuresqlserverpasswordpolicy for password policy."
+                "description": "The password for the SQL admin login. Visit <a href=https://aka.ms/azuresqlserverpasswordpolicy>aka.ms/azuresqlserverpasswordpolicy</a> for password policy."
             }
         },
         "tagValues": {
