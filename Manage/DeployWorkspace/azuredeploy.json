@@ -2,23 +2,29 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "name": {
+        "workspaceName": {
             "type": "String",
             "metadata": {
-                "description": "The name of the workspace."
+                "description": "The name of the Workspace."
             }
         },
-        "storage": {
+        "storageAccountName": {
             "type": "String",
             "metadata": {
-                "description": "The name of the storage. If not provided, the workspace name will be used."
+                "description": "The name of the primary ADLS Gen2 Storage Account. If not provided, the workspace name will be used."
             }
         },
         "sqlAdministratorLogin": {
-            "type": "String"
+            "type": "String",
+            "metadata": {
+                "description": "Provide the user name for SQL login."
+            }
         },
         "sqlAdministratorPassword": {
-            "type": "SecureString"
+            "type": "SecureString",
+            "metadata": {
+                "description": "The passwords must meet the following guidelines:<ul><li> The password does not contain the account name of the user.</li><li> The password is at least eight characters long.</li><li> The password contains characters from three of the following four categories:</li><ul><li>Latin uppercase letters (A through Z)</li><li>Latin lowercase letters (a through z)</li><li>Base 10 digits (0 through 9)</li><li>Non-alphanumeric characters such as: exclamation point (!), dollar sign ($), number sign (#), or percent (%).</li></ul></ul> Passwords can be up to 128 characters long. Use passwords that are as long and complex as possible. Visit <a href=https://aka.ms/azuresqlserverpasswordpolicy>aka.ms/azuresqlserverpasswordpolicy</a> for more details."
+            }
         },
         "tagValues": {
             "defaultValue": {"Created with":"Synapse Azure Resource Manager deploment template"},
@@ -33,7 +39,7 @@
         }
     },
     "variables": {
-        "dataLakeStorageName": "[if(empty(parameters('storage')), replace(tolower(parameters('name')),'-',''), tolower(parameters('storage')))]",
+        "dataLakeStorageName": "[if(empty(parameters('storageAccountName')), replace(tolower(parameters('workspaceName')),'-',''), tolower(parameters('storageAccountName')))]",
         "cmkUriStripVersion": "[if(empty(parameters('cmkUri')), '', substring(parameters('cmkUri'), 0, lastIndexOf(parameters('cmkUri'), '/')))]",
         "withCmk": {
             "cmk": {
@@ -58,7 +64,7 @@
               },
               "parameters":{
                 "storageAccount":{"value": "[variables('dataLakeStorageName')]"},
-                "workspaceContainer":{"value": "[tolower(parameters('name'))]"}
+                "workspaceContainer":{"value": "[tolower(parameters('workspaceName'))]"}
               }
             }
         },
@@ -73,11 +79,11 @@
                 "contentVersion": "1.0.0.0"
               },
               "parameters":{
-                "name":{"value": "[tolower(parameters('name'))]"},
+                "name":{"value": "[tolower(parameters('workspaceName'))]"},
                 "sqlAdministratorLogin":{"value": "[parameters('sqlAdministratorLogin')]"},
                 "sqlAdministratorPassword":{"value": "[parameters('sqlAdministratorPassword')]"},
                 "defaultDataLakeStorageAccountName":{"value": "[variables('dataLakeStorageName')]"},
-                "defaultDataLakeStorageFilesystemName":{"value": "[tolower(parameters('name'))]"},
+                "defaultDataLakeStorageFilesystemName":{"value": "[tolower(parameters('workspaceName'))]"},
                 "tagValues":{"value": "[parameters('tagValues')]"},
                 "encryption":{"value": "[variables('encryption')]"}
               }
