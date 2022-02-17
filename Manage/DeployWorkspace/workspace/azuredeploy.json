@@ -72,9 +72,23 @@
             "type": "bool",
             "defaultValue": true
         },
+        "defaultAdlsGen2AccountResourceId": {
+            "type": "string",
+            "defaultValue": ""
+        },
+         "managedVirtualNetwork": {
+            "type": "string",
+            "allowedValues": [
+                "default",
+                ""
+            ]
+        },
         "isNewFileSystemOnly": {
             "type": "bool",
             "defaultValue": false
+        },
+        "createManagedPrivateEndpoint": {
+            "type": "bool"
         }
     },
     "variables": {
@@ -83,56 +97,47 @@
     },
     "resources": [
         {
-            "type": "Microsoft.Synapse/workspaces",
             "apiVersion": "2021-06-01",
             "name": "[parameters('name')]",
             "location": "[resourceGroup().location]",
-            "tags": "[parameters('tagValues')]",
+            "type": "Microsoft.Synapse/workspaces",
             "identity": {
                 "type": "SystemAssigned"
             },
             "properties": {
                 "defaultDataLakeStorage": {
                     "accountUrl": "[variables('defaultDataLakeStorageAccountUrl')]",
-                    "filesystem": "[parameters('defaultDataLakeStorageFilesystemName')]"
-                },
-                "virtualNetworkProfile": {
-                    "computeSubnetId": ""
+                    "filesystem": "[parameters('defaultDataLakeStorageFilesystemName')]",
+                    "resourceId": "[parameters('defaultAdlsGen2AccountResourceId')]",
+                    "createManagedPrivateEndpoint": "[parameters('createManagedPrivateEndpoint')]"
                 },
                 "sqlAdministratorLogin": "[parameters('sqlAdministratorLogin')]",
                 "sqlAdministratorLoginPassword": "[parameters('sqlAdministratorPassword')]",
                 "encryption": "[parameters('encryption')]",
-                "managedResourceGroupName": "[parameters('managedResourceGroupName')]"
+                "managedResourceGroupName": "[parameters('managedResourceGroupName')]",
+                "managedVirtualNetwork": "[parameters('managedVirtualNetwork')]"
             },
             "resources": [
                 {
-                    "type": "firewallrules",
                     "condition": "[parameters('allowAllConnections')]",
                     "apiVersion": "2021-06-01",
-                    "name": "allowAll",
-                    "location": "[resourceGroup().location]",
                     "dependsOn": [
                         "[concat('Microsoft.Synapse/workspaces/', parameters('name'))]"
                     ],
+                    "location": "[resourceGroup().location]",
+                    "name": "allowAll",
                     "properties": {
                         "startIpAddress": "0.0.0.0",
                         "endIpAddress": "255.255.255.255"
-                    }
-                },
-                {
-                    "apiVersion": "2021-06-01",
-                    "dependsOn": [
-                        "[concat('Microsoft.Synapse/workspaces/', parameters('name'))]"
-                    ],
-                    "location": "[resourceGroup().location]",
-                    "name": "default",
-                    "type": "managedIdentitySqlControlSettings"
+                    },
+                    "type": "firewallrules"
                 }
             ],
             "dependsOn": [
                 "[concat('Microsoft.Storage/storageAccounts/', parameters('defaultDataLakeStorageAccountName'))]",
                 "[concat('Microsoft.Resources/deployments/', parameters('defaultDataLakeStorageFilesystemName'))]"
-            ]
+            ],
+            "tags": "[parameters('tagValues')]"
         },
         {
             "type": "Microsoft.Resources/deployments",
@@ -167,7 +172,7 @@
                 "subscriptionId": "[parameters('storageSubscriptionID')]"
             }
         },
-        {
+        { 
             "condition": "[parameters('isNewFileSystemOnly')]",
             "apiVersion": "2019-05-01",
             "name": "[parameters('defaultDataLakeStorageFilesystemName')]",
