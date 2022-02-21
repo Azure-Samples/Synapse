@@ -76,19 +76,13 @@
             "type": "string",
             "defaultValue": ""
         },
-         "managedVirtualNetwork": {
-            "type": "string",
-            "allowedValues": [
-                "default",
-                ""
-            ]
-        },
         "isNewFileSystemOnly": {
             "type": "bool",
             "defaultValue": false
         },
         "createManagedPrivateEndpoint": {
-            "type": "bool"
+            "type": "bool",
+            "defaultValue": false
         }
     },
     "variables": {
@@ -115,7 +109,6 @@
                 "sqlAdministratorLoginPassword": "[parameters('sqlAdministratorPassword')]",
                 "encryption": "[parameters('encryption')]",
                 "managedResourceGroupName": "[parameters('managedResourceGroupName')]",
-                "managedVirtualNetwork": "[parameters('managedVirtualNetwork')]"
             },
             "resources": [
                 {
