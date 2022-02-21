@@ -126,10 +126,6 @@
                     "type": "firewallrules"
                 }
             ],
-            "dependsOn": [
-                "[concat('Microsoft.Storage/storageAccounts/', parameters('defaultDataLakeStorageAccountName'))]",
-                "[concat('Microsoft.Resources/deployments/', parameters('defaultDataLakeStorageFilesystemName'))]"
-            ],
             "tags": "[parameters('tagValues')]"
         },
         {
