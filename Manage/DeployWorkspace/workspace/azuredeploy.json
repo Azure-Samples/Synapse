@@ -108,7 +108,7 @@
                 "sqlAdministratorLogin": "[parameters('sqlAdministratorLogin')]",
                 "sqlAdministratorLoginPassword": "[parameters('sqlAdministratorPassword')]",
                 "encryption": "[parameters('encryption')]",
-                "managedResourceGroupName": "[parameters('managedResourceGroupName')]",
+                "managedResourceGroupName": "[parameters('managedResourceGroupName')]"
             },
             "resources": [
                 {
