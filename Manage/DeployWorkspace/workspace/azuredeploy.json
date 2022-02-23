@@ -132,6 +132,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-05-01",
             "name": "storageRoleDeploymentResource",
+            "condition": "[parameters('setSbdcRbacOnStorageAccount')]",
             "dependsOn": [
                 "[concat('Microsoft.Synapse/workspaces/', parameters('name'))]"
             ],
@@ -144,7 +145,6 @@
                     "variables": {},
                     "resources": [
                         {    
-                            "condition": "[parameters('setSbdcRbacOnStorageAccount')]",
                             "type": "Microsoft.Storage/storageAccounts/blobServices/containers/providers/roleAssignments",
                             "apiVersion": "2018-09-01-preview",
                             "name": "[concat(parameters('defaultDataLakeStorageAccountName'), '/default/', parameters('defaultDataLakeStorageFilesystemName'), '/Microsoft.Authorization/',  guid(concat(resourceGroup().id, '/', variables('storageBlobDataContributorRoleID'), '/', parameters('name'))))]",
