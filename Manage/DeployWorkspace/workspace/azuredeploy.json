@@ -93,7 +93,7 @@
         {
             "apiVersion": "2021-06-01",
             "name": "[parameters('name')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('storageLocation')]",
             "type": "Microsoft.Synapse/workspaces",
             "identity": {
                 "type": "SystemAssigned"
@@ -117,7 +117,7 @@
                     "dependsOn": [
                         "[concat('Microsoft.Synapse/workspaces/', parameters('name'))]"
                     ],
-                    "location": "[resourceGroup().location]",
+                    "location": "[parameters('storageLocation')]",
                     "name": "allowAll",
                     "properties": {
                         "startIpAddress": "0.0.0.0",
@@ -128,7 +128,7 @@
             ],
             "tags": "[parameters('tagValues')]"
         },
-        {
+         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-05-01",
             "name": "storageRoleDeploymentResource",
@@ -143,23 +143,23 @@
                     "parameters": {},
                     "variables": {},
                     "resources": [
-                        {
+                        {    
                             "condition": "[parameters('setSbdcRbacOnStorageAccount')]",
-                            "type": "Microsoft.Storage/storageAccounts/providers/roleAssignments",
+                            "type": "Microsoft.Storage/storageAccounts/blobServices/containers/providers/roleAssignments",
                             "apiVersion": "2018-09-01-preview",
-                            "name": "[concat(parameters('defaultDataLakeStorageAccountName'), '/Microsoft.Authorization/',  guid(concat(resourceGroup().id, '/', variables('storageBlobDataContributorRoleID'), '/', parameters('name'), '/', parameters('storageRoleUniqueId'))))]",
+                            "name": "[concat(parameters('defaultDataLakeStorageAccountName'), '/default/', parameters('defaultDataLakeStorageFilesystemName'), '/Microsoft.Authorization/',  guid(concat(resourceGroup().id, '/', variables('storageBlobDataContributorRoleID'), '/', parameters('name'))))]",
                             "location": "[parameters('storageLocation')]",
                             "properties": {
                                 "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', variables('storageBlobDataContributorRoleID'))]",
-                                "principalId": "[reference(concat('Microsoft.Synapse/workspaces/', parameters('name')), '2021-06-01', 'Full').identity.principalId]",
+                                "principalId": "[reference(concat('Microsoft.Synapse/workspaces/', parameters('name')), '2019-06-01-preview', 'Full').identity.principalId]",
                                 "principalType": "ServicePrincipal"
                             }
                         }
                     ]
-                },
-                "resourceGroup": "[parameters('storageResourceGroupName')]",
-                "subscriptionId": "[parameters('storageSubscriptionID')]"
-            }
+                }
+            },
+            "subscriptionId": "[parameters('storageSubscriptionID')]",
+            "resourceGroup": "[parameters('storageResourceGroupName')]"
         },
         { 
             "condition": "[parameters('isNewFileSystemOnly')]",
