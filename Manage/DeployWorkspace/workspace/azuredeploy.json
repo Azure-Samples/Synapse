@@ -103,6 +103,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-05-01",
             "name": "storageRoleDeploymentResource",
+            "condition": "[parameters('setSbdcRbacOnStorageAccount')]",
             "dependsOn": [
                 "[concat('Microsoft.Synapse/workspaces/', parameters('name'))]"
             ],
