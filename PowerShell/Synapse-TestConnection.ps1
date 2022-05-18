@@ -3,36 +3,52 @@
     Author: Sergio Fonseca
     Twitter @FonsecaSergio
     Email: sergio.fonseca@microsoft.com
-    Last Updated: 2022-01-21
+    Last Updated: 2022-05-17
 
 .SYNOPSIS   
     TEST SYNAPSE ENDPOINTS AND PORTS NEEDED
+
+    - Check all Windows HOST File entries
+    - Check DNS configuration
+    - Check name resolution for all possible endpoints used by Synapse and compare it with public DNS
+    - Check if ports needed are open (1433 / 443)
+    - Check Internet and Self Hosted IR proxy that change name resolution from local machine to proxy
     
     This script does not really try to connect to endpoint, just check the ports. For full test you can use
         https://docs.microsoft.com/en-us/azure/synapse-analytics/troubleshoot/troubleshoot-synapse-studio-powershell
 
     For SQL connectivity test use
-        https://github.com/Azure/SQL-Connectivity-Checker/blob/master/AzureSQLConnectivityChecker.ps1
+        https://github.com/Azure/SQL-Connectivity-Checker/
+
+    Script available at
+     - https://github.com/Azure-Samples/Synapse/blob/main/PowerShell/Synapse-TestConnection.ps1
+     - Last dev version from
+        https://github.com/FonsecaSergio/ScriptCollection/blob/master/Powershell/Synapse-TestConnection.ps1
+
 
 .PARAMETER WorkspaceName
 
 .DESCRIPTION
-    - Check all Windows HOST File entries
-    - Check DNS configuration
-    - Check name resolution for all possible endpoints used by Synapse and compare it with public DNS
-    - Check if ports needed are open (1433 / 1443 / 443)
-
 #UPDATES
     - 2021-11-04 - Name resolution now also looks to host files to check if HOST file entry match Public DNS entry
     - 2022-01-21 - Shows note when open dns / cx dns name resultion fail
                  - Fix for when name resultion fails "No such host is known". Sample workspaces conected to former SQL DW does not resolve SERVERNAME.sql.azuresynapse.net
+    - 2022-04-14 - 1443 port NOT needed anymore. Portal using only 443 now - documented in march https://docs.microsoft.com/en-us/azure/synapse-analytics/security/synapse-workspace-ip-firewall#connect-to-azure-synapse-from-your-own-network
+                 - Improve message cx and public dns ips are not same
+                 - Add method to get browser proxy and SHIR proxy settings
+
+
+#KNOW ISSUES / TO DO
+    - Need to improve / test on linux machines
+	
+	
 
 #> 
 
 using namespace System.Net
 
 param (
-    [string]$WorkspaceName = "xpto"
+    [string]$WorkspaceName = "XPTO"
 )
 
 Clear-Host
@@ -280,8 +296,6 @@ Write-Host "  ------------------------------------------------------------------
 Write-Host "  TEST PORTS NEEDED"
 #1433
 $Results1433 = $SynapseSQLEndpoint.NAME, $SynapseServelessEndpoint.NAME, $SQLDatabaseEndpoint.NAME | Test-Port -Port 1433 -Timeout $TestPortConnectionTimeoutMs
-#1443
-$Results1443 = $SynapseSQLEndpoint.NAME, $SynapseServelessEndpoint.NAME | Test-Port -Port 1443 -Timeout $TestPortConnectionTimeoutMs
 #443
 $Results443 = $SynapseSQLEndpoint.NAME, $SynapseServelessEndpoint.NAME, $SynapseDevEndpoint.NAME, $SynapseStudioEndpoint.NAME, $AzureManagementEndpoint.NAME | Test-Port -Port 443 -Timeout $TestPortConnectionTimeoutMs
 
@@ -341,7 +355,33 @@ foreach ($DnsCxServerAddress in $DnsCxServerAddresses)
        
 }
 
+#####################################################################################
+Write-Host "  ----------------------------------------------------------------------------"
+Write-Host "  Computer Internet Settings - LOOK FOR PROXY SETTINGS"
 
+$IESettings = Get-ItemProperty -Path "Registry::HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings"
+
+if ($IESettings.ProxyEnable -eq 0) {
+    Write-Host "   > NO INTERNET PROXY ON SERVER / BROWSER"
+}
+else {
+    Write-Host "   > PROXY ENABLED ON SERVER $($IESettings.ProxyServer)" -ForegroundColor Red
+    Write-Host "   > PROXY EXCEPTIONS $($IESettings.ProxyOverride)" -ForegroundColor Red
+}
+
+#####################################################################################
+Write-Host "  ----------------------------------------------------------------------------"
+Write-Host "  SHIR Proxy Settings - Will fail if this is not SHIR machine"
+
+$ProxyEvents = Get-EventLog `
+    -LogName "Integration Runtime" `
+    -InstanceId "26" `
+    -Message "Http Proxy is set to*" `
+    -Newest 15
+
+$ProxyEvents | Select TimeGenerated, Message
+
+Write-Host "  ----------------------------------------------------------------------------"
 
 #####################################################################################
 Write-Host "  ----------------------------------------------------------------------------"
@@ -396,8 +436,8 @@ function Test-Endpoint {
             { Write-Host "      > CX NAME RESOLUTION DIDN'T WORK" -ForegroundColor Red }
             else {
                 if ($Endpoint.ENDPOINT_CX.IPAddress -eq $Endpoint.ENDPOINT_PUBLICDNS.IPAddress) 
-                { Write-Host "      > CX DNS SERVER AND PUBLIC DNS ARE SAME" -ForegroundColor Green }
-                else { Write-Host "      > CX DNS SERVER AND PUBLIC DNS ARE NOT SAME" -ForegroundColor Yellow }
+                { Write-Host "      > INFO: CX DNS SERVER AND PUBLIC DNS ARE SAME. That is not an issue. Just a notice that they are currently EQUAL" -ForegroundColor Green }
+                else { Write-Host "      > INFO: CX DNS SERVER AND PUBLIC DNS ARE NOT SAME. That is not an issue. Just a notice that they are currently DIFFERENT" -ForegroundColor Yellow }
     
                 if ($Endpoint.ENDPOINT_CX.Name -like "*.cloudapp.*" -or $Endpoint.ENDPOINT_CX.Name -like "*.control.*") 
                 { Write-Host "      > CX USING PUBLIC ENDPOINT" -ForegroundColor Cyan }
@@ -420,7 +460,7 @@ Test-Endpoint $AzureManagementEndpoint
 
 #####################################################################################
 Write-Host "  ----------------------------------------------------------------------------"
-Write-Host "  PORTS OPEN"
+Write-Host "  PORTS OPEN (Used CX DNS or Host File entry listed above)"
 
 <#
 .SYNOPSIS
@@ -443,10 +483,13 @@ function Test-Ports {
 
 Write-Host "   > 1433 --------------------------------------------------------------------"
 Test-Ports $Results1433
-Write-Host "   > 1443 --------------------------------------------------------------------"
-Test-Ports $Results1443
 Write-Host "   > 443 ---------------------------------------------------------------------"
 Test-Ports $Results443
 
 
+
+
 Write-Host "------------------------------------------------------------------------------" -ForegroundColor Yellow
+Write-Host "END OF SCRIPT" -ForegroundColor Yellow
+Write-Host "------------------------------------------------------------------------------" -ForegroundColor Yellow
+
