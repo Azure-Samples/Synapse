@@ -16,7 +16,7 @@
         },
         "sqlAdministratorLogin": {
             "type": "String",
-            "metadata": {
+             "metadata": {
                 "description": "Provide the user name for SQL login."
             }
         },
@@ -36,6 +36,10 @@
             "metadata": {
                 "description": "The uri to a key in your Key Vault to add a second layer of encryption on top of the default infrastructure encryption"
             }
+        },
+         "setSbdcRbacOnStorageAccount": {
+            "type": "bool",
+            "defaultValue": false
         }
     },
     "variables": {
@@ -82,6 +86,7 @@
                 "name":{"value": "[tolower(parameters('workspaceName'))]"},
                 "sqlAdministratorLogin":{"value": "[parameters('sqlAdministratorLogin')]"},
                 "sqlAdministratorPassword":{"value": "[parameters('sqlAdministratorPassword')]"},
+                "setSbdcRbacOnStorageAccount":{"value": "[parameters('setSbdcRbacOnStorageAccount')]"},
                 "defaultDataLakeStorageAccountName":{"value": "[variables('dataLakeStorageName')]"},
                 "defaultDataLakeStorageFilesystemName":{"value": "[tolower(parameters('workspaceName'))]"},
                 "tagValues":{"value": "[parameters('tagValues')]"},
