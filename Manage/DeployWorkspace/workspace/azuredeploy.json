@@ -25,7 +25,7 @@
             "type": "SecureString"
         },
         "tagValues": {
-            "defaultValue": {"Created with":"Synapse Azure Resource Manager deploment template"},
+            "defaultValue": { "Created with": "Synapse Azure Resource Manager deploment template" },
             "type": "Object"
         },
         "storageSubscriptionID": {
@@ -55,6 +55,34 @@
             "metadata": {
                 "description": "The encryption object containing your customer-managed key used for double encryption (optional)."
             }
+        },
+        "managedResourceGroupName": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "setSbdcRbacOnStorageAccount": {
+            "type": "bool",
+            "defaultValue": false
+        },
+        "storageRoleUniqueId": {
+            "type": "string",
+            "defaultValue": "[newGuid()]"
+        },
+        "allowAllConnections": {
+            "type": "bool",
+            "defaultValue": true
+        },
+        "defaultAdlsGen2AccountResourceId": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "isNewFileSystemOnly": {
+            "type": "bool",
+            "defaultValue": false
+        },
+        "createManagedPrivateEndpoint": {
+            "type": "bool",
+            "defaultValue": false
         }
     },
     "variables": {
@@ -63,43 +91,44 @@
     },
     "resources": [
         {
-            "type": "Microsoft.Synapse/workspaces",
-            "apiVersion": "2019-06-01-preview",
+            "apiVersion": "2021-06-01",
             "name": "[parameters('name')]",
-            "location": "[resourceGroup().location]",
-            "tags": "[parameters('tagValues')]",
+            "location": "[parameters('storageLocation')]",
+            "type": "Microsoft.Synapse/workspaces",
             "identity": {
                 "type": "SystemAssigned"
             },
             "properties": {
                 "defaultDataLakeStorage": {
                     "accountUrl": "[variables('defaultDataLakeStorageAccountUrl')]",
-                    "filesystem": "[parameters('defaultDataLakeStorageFilesystemName')]"
-                },
-                "virtualNetworkProfile": {
-                    "computeSubnetId": ""
+                    "filesystem": "[parameters('defaultDataLakeStorageFilesystemName')]",
+                    "resourceId": "[parameters('defaultAdlsGen2AccountResourceId')]",
+                    "createManagedPrivateEndpoint": "[parameters('createManagedPrivateEndpoint')]"
                 },
                 "sqlAdministratorLogin": "[parameters('sqlAdministratorLogin')]",
                 "sqlAdministratorLoginPassword": "[parameters('sqlAdministratorPassword')]",
-                "encryption": "[parameters('encryption')]"
+                "encryption": "[parameters('encryption')]",
+                "managedResourceGroupName": "[parameters('managedResourceGroupName')]"
             },
             "resources": [
                 {
-                    "type": "firewallrules",
-                    "apiVersion": "2019-06-01-preview",
-                    "name": "allowAll",
-                    "location": "[resourceGroup().location]",
+                    "condition": "[parameters('allowAllConnections')]",
+                    "apiVersion": "2021-06-01",
                     "dependsOn": [
                         "[concat('Microsoft.Synapse/workspaces/', parameters('name'))]"
                     ],
+                    "location": "[parameters('storageLocation')]",
+                    "name": "allowAll",
                     "properties": {
                         "startIpAddress": "0.0.0.0",
                         "endIpAddress": "255.255.255.255"
-                    }
+                    },
+                    "type": "firewallrules"
                 }
-            ]
+            ],
+            "tags": "[parameters('tagValues')]"
         },
-        {
+         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-05-01",
             "name": "storageRoleDeploymentResource",
@@ -115,7 +144,7 @@
                     "parameters": {},
                     "variables": {},
                     "resources": [
-                        {
+                        {    
                             "type": "Microsoft.Storage/storageAccounts/blobServices/containers/providers/roleAssignments",
                             "apiVersion": "2018-09-01-preview",
                             "name": "[concat(parameters('defaultDataLakeStorageAccountName'), '/default/', parameters('defaultDataLakeStorageFilesystemName'), '/Microsoft.Authorization/',  guid(concat(resourceGroup().id, '/', variables('storageBlobDataContributorRoleID'), '/', parameters('name'))))]",
@@ -131,6 +160,33 @@
             },
             "subscriptionId": "[parameters('storageSubscriptionID')]",
             "resourceGroup": "[parameters('storageResourceGroupName')]"
+        },
+        { 
+            "condition": "[parameters('isNewFileSystemOnly')]",
+            "apiVersion": "2019-05-01",
+            "name": "[parameters('defaultDataLakeStorageFilesystemName')]",
+            "type": "Microsoft.Resources/deployments",
+            "subscriptionId": "[parameters('storageSubscriptionID')]",
+            "resourceGroup": "[parameters('storageResourceGroupName')]",
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+                            "name": "[concat(parameters('defaultDataLakeStorageAccountName'), '/default/', parameters('defaultDataLakeStorageFilesystemName'))]",
+                            "apiVersion": "2018-02-01",
+                            "properties": {
+                                "publicAccess": "None"
+                            }
+                        }
+                    ]
+                }
+            }
         }
     ],
     "outputs": {}
