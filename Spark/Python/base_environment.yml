@@ -291,7 +291,7 @@ dependencies:
     - tb-nightly==1.14.0a20190603
     - tensorboard==2.3.0
     - tensorboard-plugin-wit==1.7.0
-    - tensorflow==2.0.0b1
+    - tensorflow==2.0.0
     - tensorflow-estimator==2.3.0
     - termcolor==1.1.0
     - textblob==0.15.3
