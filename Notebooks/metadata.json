@@ -8,6 +8,51 @@
             "types": ["PySpark"],
             "categories": ["Example"],
             "languages": ["PySpark"]
+        },
+        {
+            "title": "Data Exploration and ML Modeling - NYC taxi predict using Spark MLlib",
+            "path": "PySpark\\07 Data Exploration and ML Modeling - NYC taxi predict using Spark MLlib.ipynb",
+            "description": "The notebook ingests, visualizes, prepares and then trains a model based on an Open Dataset that tracks NYC Yellow Taxi trips and various attributes around them. The goal is to predict for a given trip whether there will be a trip or not.",
+            "tags": ["Spark MLlib", "Matplotlib", "Logistic Regression", "Machine Learning"],
+            "types": ["PySpark"],
+            "categories": ["Machine learning"],
+            "languages": ["PySpark"]
+        },
+        {
+            "title": "Getting Started with Hyperspace Indexing",
+            "path": "Scala\\Hitchhikers Guide to Hyperspace - Scala.ipynb",
+            "description": "This notebook shows you a tour of using Hyperspace indexing and how you could accelerate your Apache Spark workloads. It starts with an explanation of what indexing is and dives into how you can create, use and maintain indexes. In addition, you will also learn how to look at query plans and understand whether indexing is being utilized by Apache Spark.",
+            "tags": ["Spark", "Hyperspace Indexing", "Scala", "Incremental", "Hybrid-Scan", "Accelerate", "Join", "Filter", "Acceleration", "Fast", "Parquet", "JSON", "CSV", "Workload"],
+            "types": ["Scala"],
+            "categories": ["Querying"],
+            "languages": ["PySpark"]
+        },
+        {
+            "title": "Experimenting with DotNet for Spark Using CreateDataFrame",
+            "path": "Spark.NET C#\\Experimenting with DotNet for Spark Using CreateDataFrame.ipynb",
+            "description": "A Spark DataFrame is a distributed collection of data organized into named columns that provides operations to filter, group, or compute aggregates, and can be used with Spark SQL. It is conceptually equivalent to a table in a relational database or a data frame in R/Python, but with richer optimizations under the hood.",
+            "tags": ["C#", "Sample", "Spark.NET C#", "CreateDataFrame"],
+            "types": ["Spark.NET C#"],
+            "categories": ["Querying"],
+            "languages": ["PySpark"]
+        },
+        {
+            "title": "Getting Started with Hyperspace Indexing",
+            "path": "Spark.NET C#\\Hitchhikers Guide to Hyperspace - CSharp.ipynb",
+            "description": "This notebook shows you a tour of using Hyperspace indexing and how you could accelerate your Apache Spark workloads. It starts with an explanation of what indexing is and dives into how you can create, use and maintain indexes. In addition, you will also learn how to look at query plans and understand whether indexing is being utilized by Apache Spark.",
+            "tags": ["Spark", "Hyperspace Indexing", ".NET", "dotnet", "dotnet-core" , "Incremental", "Hybrid-Scan", "Accelerate", "Join", "Filter", "Acceleration", "Fast", "Parquet", "JSON", "CSV", "Workload"],
+            "types": ["Spark.NET C#"],
+            "categories": ["Querying"],
+            "languages": ["Spark.NET C#"]
+        },
+        {
+            "title": "User-Defined Functions with Complex Types in DotNet for Spark",
+            "path": "Spark.NET C#\\User-Defined Functions with Complex Types in DotNet for Spark.ipynb",
+            "description": "This notebook explains how to construct UDFs in C# and includes example functions, such as how to use UDFs with complex Row objects.",
+            "tags": ["C#", "Sample", "Spark.NET C#", "User-Defined Functions"],
+            "types": ["Spark.NET C#"],
+            "categories": ["Querying"],
+            "languages": ["Spark.NET C#"]
         }
     ]
 }
