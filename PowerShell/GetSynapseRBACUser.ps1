@@ -1,4 +1,4 @@
-﻿<#   
+<#   
 .NOTES     
     Author: Charith Caldera
     LinkedIn: https://www.linkedin.com/in/charith-caldera-52590a10b/
@@ -17,7 +17,14 @@ Clear-Host
 function GetASynapseRoleDefinition{
     param($roleid)
 
-    Get-AzSynapseRoleDefinition -id $roleid -WorkspaceName $workspacename
+    try
+    {
+        Get-AzSynapseRoleDefinition -id $roleid -WorkspaceName $workspacename -ErrorAction:SilentlyContinue  
+    }
+    catch
+    {
+        Write-Host "Error Occured while getting Synapse RBAC Definitions"
+    }
     
 }
 
@@ -26,19 +33,23 @@ function GetASynapseRoleDefinition{
 function GetSynapseRBACUsers{
     
     $profile = Get-AzADUser -UserPrincipalName $username
-    $roleassignment = Get-AzSynapseRoleAssignment -WorkspaceName $workspacename |?{$_.ObjectId -eq $profile.id}
-    if($roleassignment)
+    $roleassignments = Get-AzSynapseRoleAssignment -WorkspaceName $workspacename |?{$_.ObjectId -eq $profile.id}
+    if($roleassignments)
     {
-       Write-Host "AAD Users Identified :" -ForegroundColor Green
-       Write-Host " "
-       Write-Host "    Username                 :" $username
-       Write-Host "    Role Assignment Id       :" $roleassignment.RoleAssignmentId
-       Write-Host "    Role Definition Id       :" $roleassignment.RoleDefinitionId
-       $rolename = GetASynapseRoleDefinition $roleassignment.RoleDefinitionId 
-       Write-Host "    Synapse Role             :" $rolename.Name
-       Write-Host "    Principal Type           :" $roleassignment.principalType
-       Write-Host "    Scope                    :" $roleassignment.Scope
-       Write-Host " "
+
+        foreach($roleassignment in $roleassignments)
+        {
+            Write-Host "AAD Users Identified :" -ForegroundColor Green
+            Write-Host " "
+            Write-Host "    Username                 :" $username
+            Write-Host "    Role Assignment Id       :" $roleassignment.RoleAssignmentId
+            Write-Host "    Role Definition Id       :" $roleassignment.RoleDefinitionId
+            $rolename = GetASynapseRoleDefinition $roleassignment.RoleDefinitionId 
+            Write-Host "    Synapse Role             :" $rolename.Name
+            Write-Host "    Principal Type           :" $roleassignment.principalType
+            Write-Host "    Scope                    :" $roleassignment.Scope
+            Write-Host " "
+        }
     } 
 
 }
@@ -47,19 +58,22 @@ function GetSynapseRBACUsers{
 function GetSynapseRBACGroups{
     
     $profile = Get-AzADGroup -DisplayName $username
-    $roleassignment = Get-AzSynapseRoleAssignment -WorkspaceName $workspacename |?{$_.ObjectId -eq $profile.id}
-    if($roleassignment)
+    $roleassignments = Get-AzSynapseRoleAssignment -WorkspaceName $workspacename |?{$_.ObjectId -eq $profile.id}
+    if($roleassignments)
     {
-       Write-Host "AAD Groups Identified:" -ForegroundColor Green
-       Write-Host " "
-       Write-Host "    AAD Group Name           :" $username
-       Write-Host "    Role Assignment Id       :" $roleassignment.RoleAssignmentId
-       Write-Host "    Role Definition Id       :" $roleassignment.RoleDefinitionId
-       $rolename = GetASynapseRoleDefinition $roleassignment.RoleDefinitionId 
-       Write-Host "    Synapse Role             :" $rolename.Name
-       Write-Host "    Principal Type           :" $roleassignment.principalType
-       Write-Host "    Scope                    :" $roleassignment.Scope
-       Write-Host " "
+        foreach($roleassignment in $roleassignments)
+        {
+            Write-Host "AAD Groups Identified:" -ForegroundColor Green
+            Write-Host " "
+            Write-Host "    AAD Group Name           :" $username
+            Write-Host "    Role Assignment Id       :" $roleassignment.RoleAssignmentId
+            Write-Host "    Role Definition Id       :" $roleassignment.RoleDefinitionId
+            $rolename = GetASynapseRoleDefinition $roleassignment.RoleDefinitionId 
+            Write-Host "    Synapse Role             :" $rolename.Name
+            Write-Host "    Principal Type           :" $roleassignment.principalType
+            Write-Host "    Scope                    :" $roleassignment.Scope
+            Write-Host " "
+        }
     } 
 
 }
@@ -68,19 +82,22 @@ function GetSynapseRBACGroups{
 function GetSynapseRBACSPs{
     
     $profile = Get-AzADServicePrincipal -DisplayName $username
-    $roleassignment = Get-AzSynapseRoleAssignment -WorkspaceName $workspacename |?{$_.ObjectId -eq $profile.id}
-    if($roleassignment)
+    $roleassignments = Get-AzSynapseRoleAssignment -WorkspaceName $workspacename |?{$_.ObjectId -eq $profile.id}
+    if($roleassignments)
     {
-       Write-Host "Service Principals Identified:" -ForegroundColor Green
-       Write-Host " "
-       Write-Host "    Service Principal Name   :" $username
-       Write-Host "    Role Assignment Id       :" $roleassignment.RoleAssignmentId
-       Write-Host "    Role Definition Id       :" $roleassignment.RoleDefinitionId
-       $rolename = GetASynapseRoleDefinition $roleassignment.RoleDefinitionId 
-       Write-Host "    Synapse Role             :" $rolename.Name
-       Write-Host "    Principal Type           :" $roleassignment.principalType
-       Write-Host "    Scope                    :" $roleassignment.Scope
-       Write-Host " "
+        foreach($roleassignment in $roleassignments)
+        {
+            Write-Host "Service Principals Identified:" -ForegroundColor Green
+            Write-Host " "
+            Write-Host "    Service Principal Name   :" $username
+            Write-Host "    Role Assignment Id       :" $roleassignment.RoleAssignmentId
+            Write-Host "    Role Definition Id       :" $roleassignment.RoleDefinitionId
+            $rolename = GetASynapseRoleDefinition $roleassignment.RoleDefinitionId 
+            Write-Host "    Synapse Role             :" $rolename.Name
+            Write-Host "    Principal Type           :" $roleassignment.principalType
+            Write-Host "    Scope                    :" $roleassignment.Scope
+            Write-Host " "
+        }
     } 
 
 }
