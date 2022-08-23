@@ -1,4 +1,4 @@
-﻿<#   
+<#   
 .NOTES     
     Author: Charith Caldera
     LinkedIn: https://www.linkedin.com/in/charith-caldera-52590a10b/
@@ -19,7 +19,7 @@ function GetASynapseRoleDefinition{
 
     try
     {
-        Get-AzSynapseRoleDefinition -id $roleid -WorkspaceName $workspacename -ErrorAction:SilentlyContinue
+        Get-AzSynapseRoleDefinition -id $roleid -WorkspaceName $workspacename -ErrorAction:SilentlyContinue  
     }
     catch
     {
@@ -34,26 +34,26 @@ function GetSynapseRBACUsers{
     {
         foreach($profile in $profiles)
         {
-    
-        
             $aduser = Get-AzADUser -ObjectId $profile.ObjectId -ErrorAction:SilentlyContinue
-            if($aduser)
+            $assignments = $profile |?{$_.ObjectId -eq $aduser.Id}
+
+            foreach ($assignment in $assignments)
             {
-                $assignments = Get-AzSynapseRoleAssignment -WorkspaceName $workspacename |?{$_.ObjectId -eq $profile.ObjectId}
                 Write-Host "----------------------------------------"
                 Write-Host " "
-                Write-Host "AAD User Identified :" -ForegroundColor Green
+                Write-Host "AAD User Identified:" -ForegroundColor Green
                 Write-Host " "
                 Write-Host "  User object Found on Object ID" $profile.ObjectId -ForegroundColor Cyan
-                Write-Host "    AAD User Principal Name  :" $aduser.UserPrincipalName
-                Write-Host "    Role Assignment Id       :" $assignments.RoleAssignmentId
-                Write-Host "    Role Definition Id       :" $assignments.RoleDefinitionId
-                $rolename = GetASynapseRoleDefinition $assignments.RoleDefinitionId 
-                Write-Host "    Synapse Role             :" $rolename.Name
-                Write-Host "    Principal Type           :" $assignments.principalType
-                Write-Host "    Scope                    :" $assignments.Scope
+                Write-Host "    AAD User Name             :" $aduser.DisplayName
+                Write-Host "    Role Assignment Id        :" $assignment.RoleAssignmentId
+                Write-Host "    Role Definition Id        :" $assignment.RoleDefinitionId
+                $rolename = GetASynapseRoleDefinition $assignment.RoleDefinitionId 
+                Write-Host "    Synapse Role              :" $rolename.Name
+                Write-Host "    Principal Type            :" $assignment.principalType
+                Write-Host "    Scope                     :" $assignment.Scope
                 Write-Host " "
-            } 
+            }
+
         }
     }
     catch
@@ -68,26 +68,26 @@ function GetSynapseRBACGroups{
     {
         foreach($profile in $profiles)
         {
-    
-        
             $adgroup = Get-AzADGroup -ObjectId $profile.ObjectId -ErrorAction:SilentlyContinue
-            if($adgroup)
+            $assignments = $profile |?{$_.ObjectId -eq $adgroup.Id}
+
+            foreach ($assignment in $assignments)
             {
-                $assignments = Get-AzSynapseRoleAssignment -WorkspaceName $workspacename |?{$_.ObjectId -eq $profile.ObjectId}
                 Write-Host "----------------------------------------"
                 Write-Host " "
                 Write-Host "AAD Group Identified:" -ForegroundColor Green
                 Write-Host " "
                 Write-Host "  Group object Found on Object ID" $profile.ObjectId -ForegroundColor Cyan
                 Write-Host "    AAD Group Name            :" $adgroup.DisplayName
-                Write-Host "    Role Assignment Id        :" $assignments.RoleAssignmentId
-                Write-Host "    Role Definition Id        :" $assignments.RoleDefinitionId
-                $rolename = GetASynapseRoleDefinition $assignments.RoleDefinitionId 
+                Write-Host "    Role Assignment Id        :" $assignment.RoleAssignmentId
+                Write-Host "    Role Definition Id        :" $assignment.RoleDefinitionId
+                $rolename = GetASynapseRoleDefinition $assignment.RoleDefinitionId 
                 Write-Host "    Synapse Role              :" $rolename.Name
-                Write-Host "    Principal Type            :" $assignments.principalType
-                Write-Host "    Scope                     :" $assignments.Scope
+                Write-Host "    Principal Type            :" $assignment.principalType
+                Write-Host "    Scope                     :" $assignment.Scope
                 Write-Host " "
-            } 
+            }
+
         }
     }
     catch
@@ -102,26 +102,26 @@ function GetSynapseRBACSPs{
     {
         foreach($profile in $profiles)
         {
-    
-        
             $adsps = Get-AzADServicePrincipal -ObjectId $profile.ObjectId -ErrorAction:SilentlyContinue
-            if($adsps)
+            $assignments = $profile |?{$_.ObjectId -eq $adsps.Id}
+
+            foreach ($assignment in $assignments)
             {
-                $assignments = Get-AzSynapseRoleAssignment -WorkspaceName $workspacename |?{$_.ObjectId -eq $profile.ObjectId}
                 Write-Host "----------------------------------------"
                 Write-Host " "
                 Write-Host "Service Principal Identified:" -ForegroundColor Green
                 Write-Host " "
                 Write-Host "  Service Principal Found on Object ID" $profile.ObjectId -ForegroundColor Cyan
-                Write-Host "    AAD Group Name            :" $adsps.DisplayName
-                Write-Host "    Role Assignment Id        :" $assignments.RoleAssignmentId
-                Write-Host "    Role Definition Id        :" $assignments.RoleDefinitionId
-                $rolename = GetASynapseRoleDefinition $assignments.RoleDefinitionId 
+                Write-Host "    Service Principal Name    :" $adsps.DisplayName
+                Write-Host "    Role Assignment Id        :" $assignment.RoleAssignmentId
+                Write-Host "    Role Definition Id        :" $assignment.RoleDefinitionId
+                $rolename = GetASynapseRoleDefinition $assignment.RoleDefinitionId 
                 Write-Host "    Synapse Role              :" $rolename.Name
-                Write-Host "    Principal Type            :" $assignments.principalType
-                Write-Host "    Scope                     :" $assignments.Scope
+                Write-Host "    Principal Type            :" $assignment.principalType
+                Write-Host "    Scope                     :" $assignment.Scope
                 Write-Host " "
-            } 
+            }
+
         }
     }
     catch
@@ -140,7 +140,7 @@ $workspacenameob = Get-AzSynapseWorkspace -WorkspaceName $workspacename -ErrorAc
 
 if($workspacenameob.Name)
     {
-        $profiles = Get-AzSynapseRoleAssignment -WorkspaceName $workspacenameob.Name | select ObjectId
+        $profiles = Get-AzSynapseRoleAssignment -WorkspaceName $workspacenameob.Name
         Write-Host " "
 
         if(GetSynapseRBACUsers)
