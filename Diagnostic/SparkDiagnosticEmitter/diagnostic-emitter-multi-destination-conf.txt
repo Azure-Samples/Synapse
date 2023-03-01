@@ -1,0 +1,15 @@
+spark.synapse.diagnostic.emitters MyDestination1,MyDestination2
+
+spark.synapse.diagnostic.emitter.MyDestination1.type AzureStorage
+spark.synapse.diagnostic.emitter.MyDestination1.categories Log,EventLog,Metrics
+spark.synapse.diagnostic.emitter.MyDestination1.uri https://<my-blob-storage>.blob.core.windows.net/<container-name>/<folder-name>
+spark.synapse.diagnostic.emitter.MyDestination1.auth AccessKey
+spark.synapse.diagnostic.emitter.MyDestination1.secret.keyVault <key-vault-name>
+spark.synapse.diagnostic.emitter.MyDestination1.secret.keyVault.secretName <key-vault-secret-name>
+
+spark.synapse.diagnostic.emitters MyDestination2
+spark.synapse.diagnostic.emitter.MyDestination2.type AzureLogAnalytics
+spark.synapse.diagnostic.emitter.MyDestination2.categories Log,EventLog,Metrics
+spark.synapse.diagnostic.emitter.MyDestination2.workspaceId <azure-log-analytics-workspace-id>
+spark.synapse.diagnostic.emitter.MyDestination2.secret.keyVault <key-vault-name>
+spark.synapse.diagnostic.emitter.MyDestination2.secret.keyVault.secretName <key-vault-secret-name-for-log-analytics-key>

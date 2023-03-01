@@ -1,0 +1,13 @@
+{
+    "data": [
+        {
+            "title": "exampleForParameter",
+            "path": "PySpark\\exampleForParameter.ipynb",
+            "description": "This notebook provides examples to show how to handle parameters for automation test.",
+            "tags": ["Example"],
+            "types": ["PySpark"],
+            "categories": ["Example"],
+            "languages": ["PySpark"]
+        }
+    ]
+}
