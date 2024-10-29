@@ -1,0 +1,8 @@
+runtime_version: '1.2'
+spark_conf:
+  - spark.fabric.pools.skipStarterPools: 'true'
+  - spark.synapse.diagnostic.emitters: MyEventHub
+  - spark.synapse.diagnostic.emitter.MyEventHub.type: AzureEventHub
+  - spark.synapse.diagnostic.emitter.MyEventHub.categories: Log,EventLog,Metrics
+  - spark.synapse.diagnostic.emitter.MyEventHub.secret.keyVault: <AZURE_KEY_VAULT_NAME>
+  - spark.synapse.diagnostic.emitter.MyEventHub.secret.keyVault.secretName: <AZURE_KEY_VAULT_SECRET_KEY_NAME>
