@@ -1,0 +1,8 @@
+runtime_version: '1.2'
+spark_conf:
+  - spark.fabric.pools.skipStarterPools: 'true'
+  - spark.synapse.diagnostic.emitters: MyEventHub
+  - spark.synapse.diagnostic.emitter.MyEventHub.type: AzureEventHub
+  - spark.synapse.diagnostic.emitter.MyEventHub.categories: Log,EventLog,Metrics
+  - spark.synapse.diagnostic.emitter.MyDestination1.secret: >-
+      <connection-string>
