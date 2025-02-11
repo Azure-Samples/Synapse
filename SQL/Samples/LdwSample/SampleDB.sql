@@ -14,8 +14,6 @@ DROP VIEW IF EXISTS json.Books
 GO
 DROP VIEW IF EXISTS csv.YellowTaxi
 GO
-DROP VIEW IF EXISTS cosmosdb.Ecdc
-GO
 IF (EXISTS(SELECT * FROM sys.external_tables WHERE name = 'Population')) BEGIN
     DROP EXTERNAL TABLE csv.Population
 END
@@ -43,8 +41,6 @@ GO
 DROP SCHEMA IF EXISTS csv;
 GO
 DROP SCHEMA IF EXISTS json;
-GO
-DROP SCHEMA IF EXISTS cosmosdb;
 GO
 DROP SCHEMA IF EXISTS delta;
 GO
@@ -77,12 +73,6 @@ IF EXISTS
    (SELECT * FROM sys.credentials
    WHERE name = 'https://sqlondemandstorage.blob.core.windows.net')
    DROP CREDENTIAL [https://sqlondemandstorage.blob.core.windows.net]
-GO
-
-IF EXISTS
-   (SELECT * FROM sys.credentials
-   WHERE name = 'MyCosmosDbAccountCredential')
-   DROP CREDENTIAL [MyCosmosDbAccountCredential]
 GO
 
 IF EXISTS
@@ -119,10 +109,6 @@ GO
 CREATE CREDENTIAL [https://sqlondemandstorage.blob.core.windows.net]
 WITH IDENTITY='SHARED ACCESS SIGNATURE',  
 SECRET = 'sv=2018-03-28&ss=bf&srt=sco&sp=rl&st=2019-10-14T12%3A10%3A25Z&se=2061-12-31T12%3A10%3A00Z&sig=KlSU2ullCscyTS0An0nozEpo4tO5JAgGBvw%2FJX2lguw%3D'
-GO
-
-CREATE CREDENTIAL MyCosmosDbAccountCredential
-WITH IDENTITY = 'SHARED ACCESS SIGNATURE', SECRET = 's5zarR2pT0JWH9k8roipnWxUYBegOuFGjJpSjGlR36y86cW0GQ6RaaG8kGjsRAQoWMw1QKTkkX8HQtFpJjC8Hg==';
 GO
 
 CREATE SCHEMA parquet;
@@ -191,17 +177,6 @@ WITH (
     FORMAT_TYPE = DELTA
 );
 GO
-
-CREATE OR ALTER VIEW cosmosdb.Ecdc
-AS SELECT *
-FROM OPENROWSET(
-      PROVIDER = 'CosmosDB',
-      CONNECTION = 'Account=synapselink-cosmosdb-sqlsample;Database=covid',
-      OBJECT = 'Ecdc',
-      SERVER_CREDENTIAL = 'MyCosmosDbAccountCredential'
-    ) with ( date_rep varchar(20), cases bigint, geo_id varchar(6) ) as rows
-GO
-
 
 CREATE EXTERNAL TABLE csv.population
 (
