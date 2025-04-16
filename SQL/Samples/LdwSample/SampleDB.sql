@@ -42,6 +42,8 @@ DROP SCHEMA IF EXISTS csv;
 GO
 DROP SCHEMA IF EXISTS json;
 GO
+DROP SCHEMA IF EXISTS cosmosdb;
+GO
 DROP SCHEMA IF EXISTS delta;
 GO
 IF (EXISTS(SELECT * FROM sys.external_data_sources WHERE name = 'SqlOnDemandDemo')) BEGIN
@@ -71,8 +73,8 @@ END
 
 IF EXISTS
    (SELECT * FROM sys.credentials
-   WHERE name = 'https://sqlondemandstorage.blob.core.windows.net')
-   DROP CREDENTIAL [https://sqlondemandstorage.blob.core.windows.net]
+   WHERE name = 'https://fabrictutorialdata.blob.core.windows.net')
+   DROP CREDENTIAL [https://fabrictutorialdata.blob.core.windows.net]
 GO
 
 IF EXISTS
@@ -93,22 +95,8 @@ GO
 --      This part creates required objects in sample database
 ------------------------------------------------------------------------------------------
 
--- create database-scoped credential for the containers in demo storage account
--- this credential will be used in OPENROWSET function with data source that uses relative file URL
-CREATE DATABASE SCOPED CREDENTIAL [sqlondemand]
-WITH IDENTITY='SHARED ACCESS SIGNATURE',  
-SECRET = 'sv=2022-11-02&ss=b&srt=co&sp=rl&se=2042-11-26T17:40:55Z&st=2024-11-24T09:40:55Z&spr=https&sig=DKZDuSeZhuCWP9IytWLQwu9shcI5pTJ%2Fw5Crw6fD%2BC8%3D'
-GO
 -- Create credential that will allow user to impersonate using Managed Identity assigned to workspace
 CREATE DATABASE SCOPED CREDENTIAL WorkspaceIdentity WITH IDENTITY = 'Managed Identity'
-GO
-
--- SQL logins only:
--- create server-scoped credential for the containers in demo storage account
--- SQL logins will use this credential in OPENROWSET function without data source that uses absolute file URL
-CREATE CREDENTIAL [https://sqlondemandstorage.blob.core.windows.net]
-WITH IDENTITY='SHARED ACCESS SIGNATURE',  
-SECRET = 'sv=2022-11-02&ss=b&srt=co&sp=rl&se=2042-11-26T17:40:55Z&st=2024-11-24T09:40:55Z&spr=https&sig=DKZDuSeZhuCWP9IytWLQwu9shcI5pTJ%2Fw5Crw6fD%2BC8%3D'
 GO
 
 CREATE SCHEMA parquet;
@@ -122,18 +110,14 @@ GO
 CREATE SCHEMA delta;
 GO
 
--- Create external data source secured using credential
-CREATE EXTERNAL DATA SOURCE SqlOnDemandDemo WITH (
-    LOCATION = 'https://sqlondemandstorage.blob.core.windows.net',
-    CREDENTIAL = sqlondemand
-);
+-- Create external data source
+CREATE EXTERNAL DATA SOURCE SqlOnDemandDemo 
+WITH ( LOCATION = 'https://fabrictutorialdata.blob.core.windows.net/sampledata/Synapse');
 GO
 
 -- Data source referencing Delta Lake folders
-CREATE EXTERNAL DATA SOURCE DeltaLakeStorage WITH (
-    LOCATION = 'https://sqlondemandstorage.blob.core.windows.net/delta-lake',
-    CREDENTIAL = sqlondemand
-);
+CREATE EXTERNAL DATA SOURCE DeltaLakeStorage 
+WITH (LOCATION = 'https://fabrictutorialdata.blob.core.windows.net/sampledata/Synapse/delta-lake');
 GO
 
 -- Create publicly available external data sources
