@@ -72,12 +72,6 @@ IF NOT EXISTS (SELECT * FROM sys.symmetric_keys) BEGIN
 END
 
 IF EXISTS
-   (SELECT * FROM sys.credentials
-   WHERE name = 'https://fabrictutorialdata.blob.core.windows.net')
-   DROP CREDENTIAL [https://fabrictutorialdata.blob.core.windows.net]
-GO
-
-IF EXISTS
    (SELECT * FROM sys.database_scoped_credentials
    WHERE name = 'sqlondemand')
    DROP DATABASE SCOPED CREDENTIAL [sqlondemand]
