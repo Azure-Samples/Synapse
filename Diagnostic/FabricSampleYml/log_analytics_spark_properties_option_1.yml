@@ -1,0 +1,9 @@
+runtime_version: '1.2'
+spark_conf:
+  - spark.fabric.pools.skipStarterPools: 'true'
+  - spark.synapse.diagnostic.emitters: LA
+  - spark.synapse.diagnostic.emitter.LA.type: AzureLogAnalytics
+  - spark.synapse.diagnostic.emitter.LA.categories: Log,EventLog,Metrics
+  - spark.synapse.diagnostic.emitter.LA.workspaceId: <LOG_ANALYTICS_WORKSPACE_ID>
+  - spark.synapse.diagnostic.emitter.LA.secret: >-
+      <LOG_ANALYTICS_WORKSPACE_KEY>

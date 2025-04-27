@@ -1,0 +1,10 @@
+runtime_version: '1.2'
+spark_conf:
+  - spark.fabric.pools.skipStarterPools: 'true'
+  - spark.synapse.diagnostic.emitters: MyStorageBlob
+  - spark.synapse.diagnostic.emitter.MyStorageBlob.type: AzureStorage
+  - spark.synapse.diagnostic.emitter.MyStorageBlob.categories: DriverLog,ExecutorLog,EventLog,Metrics
+  - spark.synapse.diagnostic.emitter.MyStorageBlob.uri: https://<my-blob-storage>.blob.core.windows.net/<container-name>/<folder-name>
+  - spark.synapse.diagnostic.emitter.MyStorageBlob.auth: AccessKey
+  - spark.synapse.diagnostic.emitter.MyStorageBlob.secret: >-
+      <storage-access-key>

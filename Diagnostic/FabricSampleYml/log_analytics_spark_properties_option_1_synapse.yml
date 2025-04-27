@@ -1,0 +1,7 @@
+runtime_version: '1.2'
+spark_conf:
+  - spark.fabric.pools.skipStarterPools: 'true'
+  - spark.logAnalytics.enabled: 'true'
+  - spark.logAnalytics.workspaceId: <LOG_ANALYTICS_WORKSPACE_ID>
+  - spark.logAnalytics.secret: >-
+      <LOG_ANALYTICS_WORKSPACE_KEY>
